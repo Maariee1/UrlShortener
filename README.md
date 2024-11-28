@@ -1,9 +1,9 @@
-# COBOL---PROJECT
-COBOL System Project
+# URL SHORTENER
+Data Structure and Algorithm System Project
 
 1. Open your terminal or command prompt
-2. Clone the repository using the following command: git clone https://github.com/Aron-Stephen-C/COBOL---PROJECT.git
-3. Navigate to the project folder: cd COBOL---PROJECT
+2. Clone the repository using the following command: git clone https://github.com/Maariee1/UrlShortener.git
+3. Navigate to the project folder: cd UrlShortener
 
 # Make Changes Locally
 
