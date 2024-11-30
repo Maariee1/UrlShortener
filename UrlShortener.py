@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import pyperclip
 
 window = Tk()
@@ -72,5 +73,20 @@ OpenLink.place(x=535,y=440)
 
 copyText = Button(window, text='COPY', command = copyText)
 copyText.place(x=920,y=392)
+
+# Dropdown menu
+label_dropdown = Label(window, 
+                       text='Select the number of links to shorten:',
+                       font=('Times New Roman', 15, 'bold'),
+                       fg='black',
+                       bg='#FBF4C4')
+label_dropdown.place(x=370, y=500)
+
+dropdown = ttk.Combobox(window, 
+                        values=[1, 2, 3], 
+                        font=('Times New Roman', 15))
+dropdown.current(0)  # Set default value
+dropdown.place(x=690, y=500)
+
 
 window.mainloop()
