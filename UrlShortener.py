@@ -73,5 +73,4 @@ OpenLink.place(x=535,y=440)
 copyText = Button(window, text='COPY', command = copyText)
 copyText.place(x=920,y=392)
 
-
 window.mainloop()
