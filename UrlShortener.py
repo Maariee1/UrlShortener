@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import pyperclip
 import customtkinter
+from PIL import Image, ImageTk
 
 window = Tk()
 window.title("G-URL Shortener")
@@ -28,6 +29,17 @@ def MainTab():
         entry.delete(0, END)  
         entry.insert(0, clipboard_text)
 
+    #Syntax to add image using Pil or pillow
+    # image = Image.open("GURL BG (2).png")
+    # image = image.resize((150, 100))
+    # photo = ImageTk.PhotoImage(image)
+
+    # style = ttk.Style()
+    # style.configure("Custom.TLabel", background='#FBF4C4')
+    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    # label.place(x=545, y=580)
+    # label.image = photo
+    
     #GENERATE LINK
     label = customtkinter.CTkLabel(window,
         font =('Consolas',17,'bold'), 
