@@ -174,7 +174,8 @@ def MainTab():
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
         width=100,
-        height=50)
+        height=50,
+        command=AboutUsButton)
     AboutUs.place(x=60, y=600)
 
     #TERMS AND CONDITION BUTTON
@@ -204,10 +205,10 @@ def TermButton():
     )
     label.place(x=480, y=300)
     
-    back_but = customtkinter.CTkButton(
+    Back_button1 = customtkinter.CTkButton(
         window,
         font =('Georgia',20,'bold'), 
-        text = 'Terms & Condition',
+        text = 'Back',
         corner_radius=300,
         fg_color='#21531C',  
         text_color='#FBF4C4',  
@@ -215,7 +216,34 @@ def TermButton():
         width=100,
         height=50,
         command=MainTab)
-    back_but.place(x=960, y=600)
+    Back_button1.place(x=960, y=600)
+    
+#NEXT PAGE FOR ABOUT US
+def AboutUsButton():  
+    for widget in window.winfo_children():  # Clear existing widgets
+        widget.destroy()
+        
+    label = customtkinter.CTkLabel(
+        window,
+        font=('Consolas', 20, 'bold'), 
+        text='About Us',
+        text_color='black'
+    )
+    label.place(x=480, y=300)
+    
+    Back_button = customtkinter.CTkButton(
+        window,
+        font =('Georgia',20,'bold'), 
+        text = 'Back',
+        corner_radius=300,
+        fg_color='#21531C',  
+        text_color='#FBF4C4',  
+        hover_color='#3D6C38',
+        width=100,
+        height=50,
+        command=MainTab)
+    Back_button.place(x=960, y=600)
+
 
 MainTab()
     
