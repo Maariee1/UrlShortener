@@ -1,29 +1,61 @@
 import requests
-import os 
+import os
 
-def shorten_link(orig_url, url_name):
-  #galing tong API KEY sa cuttly para makapagshorten tayo ng links gamit yung website o domain nila 
-    API_KEY = "2f90b4e797b258ab9ca5b3777fb312f2d1f03"
-    BASE_URL = "https://cutt.ly/api/api.php"
-    
-    payload = {'key': API_KEY, 'short': orig_url, 'name': url_name}
-    request = requests.get(BASE_URL, params=payload)
-    data = request.json()
+# This code uses the tinyurl API due to some problems using cutt.ly API
 
-    print('')
+class URLShortener:
+    def __init__(self, api_key):
+        self.api_key = api_key
+        self.base_url = "https://api.tinyurl.com/create"
+        self.shortened_urls = {}  # Hashmap to store original and shortened URLs
 
-    try:
-        title = data['url']['title']
-        short_link = data['url']['shortLink']
+    def shorten_link(self, orig_url):
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "url": orig_url,
+            "domain": "tinyurl.com"
+        }
+        
+        response = requests.post(self.base_url, json=payload, headers=headers)
+        data = response.json()
+        
+        print('')
 
-        print('Title: ', title)
-        print('Link: ', short_link)
-    except:
-        status = data['url']['status']
-        print('Error Status: ', status)
+        try:
+            if 'data' in data and 'tiny_url' in data['data']:
+                short_link = data['data']['tiny_url']
+                self.shortened_urls[orig_url] = short_link  # Store in hashmap
+                print(f"\nShort Link: {short_link}\n")
+            else:
+                print(f"\nError: {data.get('errors', 'Unknown error occurred.')}\n")
+        except KeyError:
+            print('\nUnexpected Error Occurred: Missing expected keys in the response.\n')
 
-os.system('cls')
-link = input('Paste your link here: ')
-name = input('Enter your desired name for the link(Leave empty if not): ')
+    def bulk_shorten(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        num_of_urls = int(input("Select the number of links to shorten: "))
 
-shorten_link(link, name)
+        for i in range(num_of_urls):
+            print(f"\nURL {i + 1}:")
+            link = input("Paste your link here: ")
+            self.shorten_link(link)
+
+        self.display_shortened_urls()
+
+    def display_shortened_urls(self): # .txt file to store the original and shortened URLs 
+        if self.shortened_urls:
+            with open("URL Shortener/URLs.txt", "a") as file: # "a" stands for append, if "w" the newer inputs just overwrites the previous inputs by the user 
+                for orig_url, short_url in self.shortened_urls.items():
+                    line = f"{orig_url} ==>> {short_url}\n"
+                    file.write(line)
+        else:
+            print("\nNo URLs have been shortened yet.")
+
+# Main Execution
+if __name__ == "__main__":
+    API_KEY = "Vyf64pu9k3P8aciCbr6ODAZLH22zcpjUBnKSidRDSDBzOb9ZDCCouA9S6tup"
+    shortener = URLShortener(API_KEY)
+    shortener.bulk_shorten()
