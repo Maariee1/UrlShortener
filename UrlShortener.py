@@ -10,6 +10,8 @@ window.title("G-URL Shortener")
 window.configure(bg="#FBF4C4")
 window.geometry("1260x700")
 
+
+
 def MainTab():
     for widget in window.winfo_children():
         widget.destroy()
@@ -32,9 +34,9 @@ def MainTab():
         
     def dropdown_selection(event):
         selected_value = dropdown.get()
-        if selected_value in ['2', '3']:  
-            BlankPage()
-        
+        if selected_value in ['3']:  
+            BlankPage3()
+            
 
     # #Syntax to add image using Pil or pillow
     # image = Image.open("GURL BG (2).png")
@@ -279,18 +281,112 @@ def AboutUsButton():
         command=TermButton)
     GoTo_Terms.place(x=960, y=620)
     
-def BlankPage():  
+def BlankPage3():  
     for widget in window.winfo_children():
         widget.destroy()
-
-    label = customtkinter.CTkLabel(
-        window,
-        font=('Consolas', 20, 'bold'), 
-        text='Blank Page',
-        text_color='black'
-    )
-    label.place(x=480, y=300)
+        
+    def generateLink():
+        username = entry.get()
+        print('Musta' + username) #INSERT FUNCTIONALITY AND INVALID INPUTS
+        
+    def pasteText():
+        clipboard_text = pyperclip.paste()
+        entry.delete(0, END)  
+        entry.insert(0, clipboard_text)
     
+    def copyText():
+        text = entry1.get()
+        pyperclip.copy(text) 
+        
+    def OpenLink():
+        print('hello') #INSERT FUNCTIONALITY
+        
+    
+    #GENERATE LINK
+    label = customtkinter.CTkLabel(window,
+        font =('Consolas',17,'bold'), 
+        text = 'Paste your link below',
+        text_color='black')
+    label.place(x=370,y=195)
+    
+    entry = customtkinter.CTkEntry(
+        master=window,
+        placeholder_text="Enter your link here", 
+        placeholder_text_color='#2B7025',
+        font=('Times New Roman', 20),             
+        fg_color="#21531C",                       
+        text_color="white",                       
+        corner_radius=300,                         
+        width=570,                                
+        height=50                                 
+    )
+    entry.place(x=630, y=250, anchor='center')
+
+    generateLink_btn = customtkinter.CTkButton(
+        window,
+        font =('Georgia',20,'bold'), 
+        text = 'Generate Link',
+        corner_radius=300,
+        fg_color='#21531C',  
+        text_color='#FBF4C4',  
+        hover_color='#3D6C38',
+        width=100,
+        height=50, 
+        command = generateLink)
+    generateLink_btn.place(x=531,y=283)
+
+    pasteText_btn = customtkinter.CTkButton(
+        window,
+        text='PASTE',
+        corner_radius=100,
+        fg_color='#21531C',  
+        text_color='#FBF4C4',  
+        hover_color='#3D6C38',
+        width=45,
+        command= pasteText)
+    pasteText_btn.place(x=920,y=237)
+
+    #SHORTENED LINK
+    label1 = customtkinter.CTkLabel(window,
+        font =('Consolas',17,'bold'), 
+        text = 'Shortened Link',
+        text_color='black')
+    label1.place(x=370,y=360)
+
+    entry1 = customtkinter.CTkEntry(
+        master=window,
+        font=('Times New Roman', 20),             
+        fg_color="#21531C",                       
+        text_color="white",                       
+        corner_radius=300,                         
+        width=570,                                
+        height=50)
+    entry1.place(x=630,y=415,anchor='center')
+    
+    copyText_btn = customtkinter.CTkButton(
+        window,
+        text=' COPY ',
+        corner_radius=100,
+        fg_color='#21531C',  
+        text_color='#FBF4C4',  
+        hover_color='#3D6C38',
+        width=50,
+        command= copyText)
+    copyText_btn.place(x=920,y=403)
+
+    OpenLink_btn = customtkinter.CTkButton(
+        window,
+        font =('Georgia',18,'bold'), 
+        text = 'Open Shortened Link',
+        corner_radius=300,
+        fg_color='#21531C',  
+        text_color='#FBF4C4',  
+        hover_color='#3D6C38',
+        width=100,
+        height=48, 
+        command = OpenLink)
+    OpenLink_btn.place(x=506,y=448)
+
     Back_button = customtkinter.CTkButton(
         window,
         font=('Georgia', 20, 'bold'), 
