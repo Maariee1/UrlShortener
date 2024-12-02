@@ -232,30 +232,29 @@ def TermButton():
 def AboutUsButton():  
     for widget in window.winfo_children():  # Clear existing widgets
         widget.destroy()
-<<<<<<< HEAD
-    
+   
     # Quote of GURL    
-    # image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (2).png")
-    # image = image.resize((500, 200))
-    # photo = ImageTk.PhotoImage(image)
+    image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (2).png")
+    image = image.resize((500, 200))
+    photo = ImageTk.PhotoImage(image)
 
-    # style = ttk.Style()
-    # style.configure("Custom.TLabel", background='#FBF4C4')
-    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    # label.place(x=365, y=90)
-    # label.image = photo
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label.place(x=363, y=90)
+    label.image = photo
     
-    # #LOGO of GURL    
-    # image = Image.open("C:\\Users\\Ciara\\PYTHON\\UrlShortener\\GURL BG (2).png")
-    # image = image.resize((150, 100))
-    # photo = ImageTk.PhotoImage(image)
+    #LOGO of GURL    
+    image = Image.open("C:\\Users\\Ciara\\PYTHON\\UrlShortener\\GURL BG (2).png")
+    image = image.resize((150, 100))
+    photo = ImageTk.PhotoImage(image)
 
-    # style = ttk.Style()
-    # style.configure("Custom.TLabel", background='#FBF4C4')
-    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    # label.place(x=545, y=600)
-    # label.image = photo
-=======
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label.place(x=545, y=600)
+    label.image = photo
+
         
     label = customtkinter.CTkLabel(
         window,
@@ -264,7 +263,7 @@ def AboutUsButton():
         text_color='black'
     )
     label.place(x=480, y=300)
->>>>>>> 5f5c40f0b793c71b3b43d40e728f2c67e4992bb8
+
     
     # First Upper Left Box in About Us
     about_us_frame = customtkinter.CTkFrame(window, 
@@ -317,7 +316,7 @@ def AboutUsButton():
         width=120,
         height=50,
         command=MainTab)
-<<<<<<< HEAD
+
     Back_button.place(x=185, y=620)
     
     GoTo_Terms = customtkinter.CTkButton(
@@ -332,9 +331,6 @@ def AboutUsButton():
         height=50,
         command=TermButton)
     GoTo_Terms.place(x=890, y=620)
-=======
-    Back_button.place(x=960, y=600)
->>>>>>> 5f5c40f0b793c71b3b43d40e728f2c67e4992bb8
     
 def BlankPage3():  
     for widget in window.winfo_children():
