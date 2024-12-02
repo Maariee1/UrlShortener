@@ -235,26 +235,27 @@ def AboutUsButton():
         widget.destroy()
     
     #Quote of GURL    
-    # image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (2).png")
-    # image = image.resize((500, 200))
-    # photo = ImageTk.PhotoImage(image)
+    image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (2).png")
+    image = image.resize((500, 200))
+    photo = ImageTk.PhotoImage(image)
 
-    # style = ttk.Style()
-    # style.configure("Custom.TLabel", background='#FBF4C4')
-    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    # label.place(x=360, y=50)
-    # label.image = photo
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label.place(x=360, y=70)
+    label.image = photo
     
-    # #LOGO of GURL    
-    # image = Image.open("C:\\Users\\Ciara\\PYTHON\\UrlShortener\\GURL BG (2).png")
-    # image = image.resize((150, 100))
-    # photo = ImageTk.PhotoImage(image)
+    #LOGO of GURL    
+    image = Image.open("C:\\Users\\Ciara\\PYTHON\\UrlShortener\\GURL BG (2).png")
+    image = image.resize((150, 100))
+    photo = ImageTk.PhotoImage(image)
 
-    # style = ttk.Style()
-    # style.configure("Custom.TLabel", background='#FBF4C4')
-    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    # label.place(x=545, y=580)
-    # label.image = photo
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label.place(x=545, y=580)
+    label.image = photo
+    
     # First Upper Left Box in About Us
     about_us_frame = customtkinter.CTkFrame(window, 
                                             width=300, 
