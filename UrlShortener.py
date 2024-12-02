@@ -31,11 +31,13 @@ def MainTab():
         clipboard_text = pyperclip.paste()
         entry.delete(0, END)  
         entry.insert(0, clipboard_text)
-        
+
     def dropdown_selection(event):
         selected_value = dropdown.get()
-        if selected_value in ['3']:  
-            BlankPage3()
+        if selected_value == '2':
+            BlankPage2()
+        elif selected_value == '3':
+             BlankPage3()
             
 
     # #Syntax to add image using Pil or pillow
@@ -232,78 +234,28 @@ def TermButton():
 def AboutUsButton():  
     for widget in window.winfo_children():  # Clear existing widgets
         widget.destroy()
-   
-    # Quote of GURL    
-    image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (2).png")
-    image = image.resize((500, 200))
-    photo = ImageTk.PhotoImage(image)
+    
+    #Quote of GURL    
+    # image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (2).png")
+    # image = image.resize((500, 200))
+    # photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label.place(x=363, y=90)
-    label.image = photo
+    # style = ttk.Style()
+    # style.configure("Custom.TLabel", background='#FBF4C4')
+    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    # label.place(x=360, y=50)
+    # label.image = photo
     
-    #LOGO of GURL    
-    image = Image.open("C:\\Users\\Ciara\\PYTHON\\UrlShortener\\GURL BG (2).png")
-    image = image.resize((150, 100))
-    photo = ImageTk.PhotoImage(image)
+    # #LOGO of GURL    
+    # image = Image.open("C:\\Users\\Ciara\\PYTHON\\UrlShortener\\GURL BG (2).png")
+    # image = image.resize((150, 100))
+    # photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label.place(x=545, y=600)
-    label.image = photo
-
-        
-    label = customtkinter.CTkLabel(
-        window,
-        font=('Consolas', 20, 'bold'), 
-        text='About Us',
-        text_color='black'
-    )
-    label.place(x=480, y=300)
-
-    
-    # First Upper Left Box in About Us
-    about_us_frame = customtkinter.CTkFrame(window, 
-                                            width=300, 
-                                            height=100, 
-                                            corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame.place(x=105, y=75)
-    
-    # #Second Upper Right Box in About Us
-    about_us_frame1 = customtkinter.CTkFrame(window, 
-                                            width=300, 
-                                            height=100, 
-                                            corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame1.place(x=863, y=75)
-    
-    #Left Big Box
-    about_us_frame3 = customtkinter.CTkFrame(window, 
-                                            width=420, 
-                                            height=400, 
-                                            corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame3.place(x=45, y=190)
-    
-    #Right Big Box
-    about_us_frame3 = customtkinter.CTkFrame(window, 
-                                            width=420, 
-                                            height=400, 
-                                            corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame3.place(x=800, y=190)
-    
-    #Middle Big Box
-    about_us_frame3 = customtkinter.CTkFrame(window, 
-                                            width=300, 
-                                            height=250, 
-                                            corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame3.place(x=480, y=290)
+    # style = ttk.Style()
+    # style.configure("Custom.TLabel", background='#FBF4C4')
+    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    # label.place(x=545, y=580)
+    # label.image = photo
     
     Back_button = customtkinter.CTkButton(
         window,
@@ -313,11 +265,10 @@ def AboutUsButton():
         fg_color='#21531C',  
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
-        width=120,
+        width=100,
         height=50,
         command=MainTab)
-
-    Back_button.place(x=185, y=620)
+    Back_button.place(x=100, y=620)
     
     GoTo_Terms = customtkinter.CTkButton(
         window,
@@ -330,57 +281,215 @@ def AboutUsButton():
         width=100,
         height=50,
         command=TermButton)
-    GoTo_Terms.place(x=890, y=620)
+    GoTo_Terms.place(x=960, y=620)
+
+def BlankPage2():  
+    for widget in window.winfo_children():
+        widget.destroy()
+        
+    def generateLink():
+        print("Generate functionality to be implemented.")
+
+    def pasteText(entry):
+        clipboard_text = pyperclip.paste()
+        entry.delete(0, END)
+        entry.insert(0, clipboard_text)
+
+    def copyText(entry):
+        text = entry.get()
+        pyperclip.copy(text)
+
+    def OpenLink():
+        print("Open functionality to be implemented.")
+
+    # FIRST SET OF BOXES
+    label1 = customtkinter.CTkLabel(window,
+        font=('Consolas', 17, 'bold'),
+        text='Paste your link below',
+        text_color='black')
+    label1.place(x=50, y=215)
+
+    entry1 = customtkinter.CTkEntry(
+        master=window,
+        placeholder_text="Enter your link here",
+        placeholder_text_color='#2B7025',
+        font=('Times New Roman', 20),
+        fg_color="#21531C",
+        text_color="white",
+        corner_radius=300,
+        width=500,
+        height=50
+    )
+    entry1.place(x=290, y=270, anchor='center')
+
+    paste_btn1 = customtkinter.CTkButton(
+        window,
+        text='PASTE',
+        corner_radius=100,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#3D6C38',
+        width=45,
+        command=lambda: pasteText(entry1))
+    paste_btn1.place(x=550, y=255)
+
+    label_shortened1 = customtkinter.CTkLabel(window,
+        font=('Consolas', 17, 'bold'),
+        text='Shortened Link',
+        text_color='black')
+    label_shortened1.place(x=650, y=215)
+
+    entry_shortened1 = customtkinter.CTkEntry(
+        master=window,
+        font=('Times New Roman', 20),
+        fg_color="#21531C",
+        text_color="white",
+        corner_radius=300,
+        width=500,
+        height=50)
+    entry_shortened1.place(x=890, y=270, anchor='center')
+
+    copy_btn1 = customtkinter.CTkButton(
+        window,
+        text='COPY',
+        corner_radius=100,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#3D6C38',
+        width=50,
+        command=lambda: copyText(entry_shortened1))
+    copy_btn1.place(x=1150, y=255)
+
+    # SECOND SET OF BOXES
+    label2 = customtkinter.CTkLabel(window,
+        font=('Consolas', 17, 'bold'),
+        text='Paste your link below',
+        text_color='black')
+    label2.place(x=50, y=300)
+
+    entry2 = customtkinter.CTkEntry(
+        master=window,
+        placeholder_text="Enter your link here",
+        placeholder_text_color='#2B7025',
+        font=('Times New Roman', 20),
+        fg_color="#21531C",
+        text_color="white",
+        corner_radius=300,
+        width=500,
+        height=50
+    )
+    entry2.place(x=290, y=355, anchor='center')
+
+    paste_btn2 = customtkinter.CTkButton(
+        window,
+        text='PASTE',
+        corner_radius=100,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#3D6C38',
+        width=45,
+        command=lambda: pasteText(entry2))
+    paste_btn2.place(x=550, y=340)
+
+    label_shortened2 = customtkinter.CTkLabel(window,
+        font=('Consolas', 17, 'bold'),
+        text='Shortened Link',
+        text_color='black')
+    label_shortened2.place(x=650, y=300)
+
+    entry_shortened2 = customtkinter.CTkEntry(
+        master=window,
+        font=('Times New Roman', 20),
+        fg_color="#21531C",
+        text_color="white",
+        corner_radius=300,
+        width=500,
+        height=50)
+    entry_shortened2.place(x=890, y=355, anchor='center')
+
+    copy_btn2 = customtkinter.CTkButton(
+        window,
+        text='COPY',
+        corner_radius=100,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#3D6C38',
+        width=50,
+        command=lambda: copyText(entry_shortened2))
+    copy_btn2.place(x=1150, y=340)
+
+    # BOTTOM BUTTONS
+    generate_btn = customtkinter.CTkButton(
+        window,
+        font=('Georgia', 20, 'bold'),
+        text='Generate Link',
+        corner_radius=300,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#3D6C38',
+        width=150,
+        height=50,
+        command=generateLink)
+    generate_btn.place(x=200, y=500)
+
+    open_link_btn = customtkinter.CTkButton(
+        window,
+        font=('Georgia', 18, 'bold'),
+        text='Open Shortened Link',
+        corner_radius=300,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#3D6C38',
+        width=200,
+        height=50,
+        command=OpenLink)
+    open_link_btn.place(x=780, y=500)
+
+    back_btn = customtkinter.CTkButton(
+        window,
+        font=('Georgia', 20, 'bold'),
+        text='Back',
+        corner_radius=300,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#3D6C38',
+        width=100,
+        height=50,
+        command=MainTab)
+    back_btn.place(x=560, y=570)
+
     
 def BlankPage3():  
     for widget in window.winfo_children():
         widget.destroy()
         
-    def generateLink3():
-        username = entryP31.get(), entryP32.get(), entryP33.get()
+    def generateLink():
+        username = entry.get()
         print('Musta' + username) #INSERT FUNCTIONALITY AND INVALID INPUTS
         
-    def pasteText31():
+    def pasteText():
         clipboard_text = pyperclip.paste()
-        entryP31.delete(0, END)  
-        entryP31.insert(0, clipboard_text)
-        
-    def pasteText32():
-        clipboard_text = pyperclip.paste()
-        entryP32.delete(0, END)  
-        entryP32.insert(0, clipboard_text)
-        
-    def pasteText33():
-        clipboard_text = pyperclip.paste()
-        entryP33.delete(0, END)  
-        entryP33.insert(0, clipboard_text)
+        entry.delete(0, END)  
+        entry.insert(0, clipboard_text)
     
-    def copyText31():
-        text = entryC31.get()
-        pyperclip.copy(text)
-        
-    def copyText32():
-        text = entryC32.get()
-        pyperclip.copy(text) 
-    
-    def copyText33():
-        text = entryC33.get()
+    def copyText():
+        text = entry1.get()
         pyperclip.copy(text) 
         
-    def OpenLink3():
+    def OpenLink():
         print('hello') #INSERT FUNCTIONALITY
         
     
     #GENERATE LINK
     
     #FIRST PASTE LINK SET
-    labelP31 = customtkinter.CTkLabel(window,
+    label = customtkinter.CTkLabel(window,
         font =('Consolas',17,'bold'), 
         text = 'Paste your link below',
         text_color='black')
-    labelP31.place(x=50,y=200)
+    label.place(x=50,y=200)
     
-    entryP31 = customtkinter.CTkEntry(
+    entry = customtkinter.CTkEntry(
         master=window,
         placeholder_text="Enter your link here", 
         placeholder_text_color='#2B7025',
@@ -391,9 +500,9 @@ def BlankPage3():
         width=500,                                
         height=50                                 
     )
-    entryP31.place(x=290, y=255, anchor='center')
+    entry.place(x=290, y=255, anchor='center')
     
-    pasteText_btn31 = customtkinter.CTkButton(
+    pasteText_btn = customtkinter.CTkButton(
         window,
         text='PASTE',
         corner_radius=100,
@@ -401,17 +510,17 @@ def BlankPage3():
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
         width=45,
-        command= pasteText31)
-    pasteText_btn31.place(x=550,y=240)
+        command= pasteText)
+    pasteText_btn.place(x=550,y=240)
     
     #SECOND PASTE LINK SET
-    label32 = customtkinter.CTkLabel(window,
+    label = customtkinter.CTkLabel(window,
         font =('Consolas',17,'bold'), 
         text = 'Paste your link below',
         text_color='black')
-    label32.place(x=50,y=300)
+    label.place(x=50,y=300)
     
-    entryP32 = customtkinter.CTkEntry(
+    entry = customtkinter.CTkEntry(
         master=window,
         placeholder_text="Enter your link here", 
         placeholder_text_color='#2B7025',
@@ -422,9 +531,9 @@ def BlankPage3():
         width=500,                                
         height=50                                 
     )
-    entryP32.place(x=290, y=355, anchor='center')
+    entry.place(x=290, y=355, anchor='center')
     
-    pasteText_btn32 = customtkinter.CTkButton(
+    pasteText_btn = customtkinter.CTkButton(
         window,
         text='PASTE',
         corner_radius=100,
@@ -432,17 +541,17 @@ def BlankPage3():
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
         width=45,
-        command= pasteText32)
-    pasteText_btn32.place(x=550,y=340)
+        command= pasteText)
+    pasteText_btn.place(x=550,y=340)
     
     #THIRD PASTE LINK SET
-    label33 = customtkinter.CTkLabel(window,
+    label = customtkinter.CTkLabel(window,
         font =('Consolas',17,'bold'), 
         text = 'Paste your link below',
         text_color='black')
-    label33.place(x=50,y=400)
+    label.place(x=50,y=400)
     
-    entryP33 = customtkinter.CTkEntry(
+    entry = customtkinter.CTkEntry(
         master=window,
         placeholder_text="Enter your link here", 
         placeholder_text_color='#2B7025',
@@ -453,9 +562,9 @@ def BlankPage3():
         width=500,                                
         height=50                                 
     )
-    entryP33.place(x=290, y=455, anchor='center')
+    entry.place(x=290, y=455, anchor='center')
     
-    pasteText_btn33 = customtkinter.CTkButton(
+    pasteText_btn = customtkinter.CTkButton(
         window,
         text='PASTE',
         corner_radius=100,
@@ -463,8 +572,8 @@ def BlankPage3():
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
         width=45,
-        command= pasteText33)
-    pasteText_btn33.place(x=550,y=440)
+        command= pasteText)
+    pasteText_btn.place(x=550,y=440)
 
     generateLink_btn = customtkinter.CTkButton(
         window,
@@ -476,19 +585,19 @@ def BlankPage3():
         hover_color='#3D6C38',
         width=100,
         height=50, 
-        command = generateLink3)
+        command = generateLink)
     generateLink_btn.place(x=200,y=550)
 
     #SHORTENED LINK
     
     #FIRST COPY LINK SET
-    labelC31 = customtkinter.CTkLabel(window,
+    label1 = customtkinter.CTkLabel(window,
         font =('Consolas',17,'bold'), 
         text = 'Shortened Link',
         text_color='black')
-    labelC31.place(x=650,y=200)
+    label1.place(x=650,y=200)
 
-    entryC31 = customtkinter.CTkEntry(
+    entry1 = customtkinter.CTkEntry(
         master=window,
         font=('Times New Roman', 20),             
         fg_color="#21531C",                       
@@ -496,9 +605,9 @@ def BlankPage3():
         corner_radius=300,                         
         width=500,                                
         height=50)
-    entryC31.place(x=890,y=255,anchor='center')
+    entry1.place(x=890,y=255,anchor='center')
     
-    copyText_btn31 = customtkinter.CTkButton(
+    copyText_btn = customtkinter.CTkButton(
         window,
         text=' COPY ',
         corner_radius=100,
@@ -506,17 +615,17 @@ def BlankPage3():
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
         width=50,
-        command= copyText31)
-    copyText_btn31.place(x=1150,y=240)
+        command= copyText)
+    copyText_btn.place(x=1150,y=240)
     
     #SECOND COPY LINK SET
-    labelC32 = customtkinter.CTkLabel(window,
+    label1 = customtkinter.CTkLabel(window,
         font =('Consolas',17,'bold'), 
         text = 'Shortened Link',
         text_color='black')
-    labelC32.place(x=650,y=300)
+    label1.place(x=650,y=300)
 
-    entryC32 = customtkinter.CTkEntry(
+    entry1 = customtkinter.CTkEntry(
         master=window,
         font=('Times New Roman', 20),             
         fg_color="#21531C",                       
@@ -524,9 +633,9 @@ def BlankPage3():
         corner_radius=300,                         
         width=500,                                
         height=50)
-    entryC32.place(x=890,y=355,anchor='center')
+    entry1.place(x=890,y=355,anchor='center')
     
-    copyText_btn32 = customtkinter.CTkButton(
+    copyText_btn = customtkinter.CTkButton(
         window,
         text=' COPY ',
         corner_radius=100,
@@ -534,17 +643,17 @@ def BlankPage3():
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
         width=50,
-        command= copyText32)
-    copyText_btn32.place(x=1150,y=340)
+        command= copyText)
+    copyText_btn.place(x=1150,y=340)
     
     #THIRD COPY LINK SET
-    labelC33 = customtkinter.CTkLabel(window,
+    label1 = customtkinter.CTkLabel(window,
         font =('Consolas',17,'bold'), 
         text = 'Shortened Link',
         text_color='black')
-    labelC33.place(x=650,y=400)
+    label1.place(x=650,y=400)
 
-    entryC33 = customtkinter.CTkEntry(
+    entry1 = customtkinter.CTkEntry(
         master=window,
         font=('Times New Roman', 20),             
         fg_color="#21531C",                       
@@ -552,9 +661,9 @@ def BlankPage3():
         corner_radius=300,                         
         width=500,                                
         height=50)
-    entryC33.place(x=890,y=455,anchor='center')
+    entry1.place(x=890,y=455,anchor='center')
     
-    copyText_btn33 = customtkinter.CTkButton(
+    copyText_btn = customtkinter.CTkButton(
         window,
         text=' COPY ',
         corner_radius=100,
@@ -562,8 +671,8 @@ def BlankPage3():
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
         width=50,
-        command= copyText33)
-    copyText_btn33.place(x=1150,y=440)
+        command= copyText)
+    copyText_btn.place(x=1150,y=440)
 
     OpenLink_btn = customtkinter.CTkButton(
         window,
@@ -575,7 +684,7 @@ def BlankPage3():
         hover_color='#3D6C38',
         width=100,
         height=48, 
-        command = OpenLink3)
+        command = OpenLink)
     OpenLink_btn.place(x=780,y=550)
 
     Back_button = customtkinter.CTkButton(
