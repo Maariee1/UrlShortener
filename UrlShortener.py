@@ -230,14 +230,28 @@ def TermButton():
 def AboutUsButton():  
     for widget in window.winfo_children():  # Clear existing widgets
         widget.destroy()
-        
-    label = customtkinter.CTkLabel(
-        window,
-        font=('Consolas', 20, 'bold'), 
-        text='About Us',
-        text_color='black'
-    )
-    label.place(x=480, y=300)
+    
+    #Quote of GURL    
+    # image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (2).png")
+    # image = image.resize((500, 200))
+    # photo = ImageTk.PhotoImage(image)
+
+    # style = ttk.Style()
+    # style.configure("Custom.TLabel", background='#FBF4C4')
+    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    # label.place(x=360, y=50)
+    # label.image = photo
+    
+    # #LOGO of GURL    
+    # image = Image.open("C:\\Users\\Ciara\\PYTHON\\UrlShortener\\GURL BG (2).png")
+    # image = image.resize((150, 100))
+    # photo = ImageTk.PhotoImage(image)
+
+    # style = ttk.Style()
+    # style.configure("Custom.TLabel", background='#FBF4C4')
+    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    # label.place(x=545, y=580)
+    # label.image = photo
     
     Back_button = customtkinter.CTkButton(
         window,
@@ -250,7 +264,20 @@ def AboutUsButton():
         width=100,
         height=50,
         command=MainTab)
-    Back_button.place(x=960, y=600)
+    Back_button.place(x=100, y=620)
+    
+    GoTo_Terms = customtkinter.CTkButton(
+        window,
+        font =('Georgia',20,'bold'), 
+        text = 'Terms & Condition',
+        corner_radius=300,
+        fg_color='#21531C',  
+        text_color='#FBF4C4',  
+        hover_color='#3D6C38',
+        width=100,
+        height=50,
+        command=TermButton)
+    GoTo_Terms.place(x=960, y=620)
     
 def BlankPage():  
     for widget in window.winfo_children():
