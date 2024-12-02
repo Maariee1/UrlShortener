@@ -29,6 +29,12 @@ def MainTab():
         clipboard_text = pyperclip.paste()
         entry.delete(0, END)  
         entry.insert(0, clipboard_text)
+        
+    def dropdown_selection(event):
+        selected_value = dropdown.get()
+        if selected_value in ['2', '3']:  
+            BlankPage()
+        
 
     # #Syntax to add image using Pil or pillow
     # image = Image.open("GURL BG (2).png")
@@ -159,11 +165,12 @@ def MainTab():
     label_dropdown.place(x=420, y=528)
 
     dropdown = ttk.Combobox(window, 
-                            values=['--    --', 2, 3], 
+                            values=['--    --', '2', '3'], 
                             font=('Consolas', 10,'bold'),
                             style="Custom.TCombobox")
     dropdown.current(0)  # Set default value
     dropdown.place(x=678, y=530)
+    dropdown.bind('<<ComboboxSelected>>', dropdown_selection)
 
     #ABOUT US BUTTON
     AboutUs = customtkinter.CTkButton(
@@ -236,6 +243,31 @@ def AboutUsButton():
         window,
         font =('Georgia',20,'bold'), 
         text = 'Back',
+        corner_radius=300,
+        fg_color='#21531C',  
+        text_color='#FBF4C4',  
+        hover_color='#3D6C38',
+        width=100,
+        height=50,
+        command=MainTab)
+    Back_button.place(x=960, y=600)
+    
+def BlankPage():  
+    for widget in window.winfo_children():
+        widget.destroy()
+
+    label = customtkinter.CTkLabel(
+        window,
+        font=('Consolas', 20, 'bold'), 
+        text='Blank Page',
+        text_color='black'
+    )
+    label.place(x=480, y=300)
+    
+    Back_button = customtkinter.CTkButton(
+        window,
+        font=('Georgia', 20, 'bold'), 
+        text='Back',
         corner_radius=300,
         fg_color='#21531C',  
         text_color='#FBF4C4',  
