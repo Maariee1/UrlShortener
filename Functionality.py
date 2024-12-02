@@ -1,9 +1,8 @@
 import requests
 import os
+import pyperclip  # Import pyperclip for clipboard functionality
 
 # This code uses the tinyurl API due to some problems using cutt.ly API
-
-
 class URLShortener:
     def __init__(self, api_key):
         self.api_key = api_key
@@ -30,6 +29,7 @@ class URLShortener:
                 short_link = data['data']['tiny_url']
                 self.shortened_urls[orig_url] = short_link  # Store in hashmap
                 print(f"\nShort Link: {short_link}\n")
+                self.offer_copy_to_clipboard(short_link)  # Offer to copy to clipboard
             else:
                 print(f"\nError: {data.get('errors', 'Unknown error occurred.')}\n")
         except KeyError:
@@ -54,6 +54,19 @@ class URLShortener:
                     file.write(line)
         else:
             print("\nNo URLs have been shortened yet.")
+
+    def offer_copy_to_clipboard(self, short_url):
+        """Offer the user an option to copy the shortened URL to the clipboard."""
+        copy_choice = input("Do you want to copy the short link to the clipboard? (y/n): ").strip().lower()
+        if copy_choice == 'y':
+            self.copy_to_clipboard(short_url)
+            print("The short link has been copied to the clipboard.")
+        else:
+            print("Copying skipped.")
+
+    def copy_to_clipboard(self, short_url):
+        """Copy the shortened URL to the clipboard."""
+        pyperclip.copy(short_url)
 
 # Main Execution
 if __name__ == "__main__":
