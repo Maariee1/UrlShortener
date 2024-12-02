@@ -64,8 +64,8 @@ def MainTab():
                 short_link = shortener.shortened_urls[orig_url]
                 entry1.delete(0, END)
                 entry1.insert(0, short_link)
-                pyperclip.copy(short_link)
-                print("Shortened URL copied to clipboard!")
+                # pyperclip.copy(short_link)
+                # print("Shortened URL copied to clipboard!")
         else:
             entry1.delete(0, END)
             entry1.insert(0, "Please enter a valid URL!")
