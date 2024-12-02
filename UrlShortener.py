@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import pyperclip
 import customtkinter
+import webbrowser #For opening link sa website
 from PIL import Image, ImageTk
 
 window = Tk()
