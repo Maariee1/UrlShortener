@@ -233,7 +233,7 @@ def AboutUsButton():
     for widget in window.winfo_children():  # Clear existing widgets
         widget.destroy()
     
-    #Quote of GURL    
+    # Quote of GURL    
     # image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (2).png")
     # image = image.resize((500, 200))
     # photo = ImageTk.PhotoImage(image)
@@ -241,7 +241,7 @@ def AboutUsButton():
     # style = ttk.Style()
     # style.configure("Custom.TLabel", background='#FBF4C4')
     # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    # label.place(x=360, y=50)
+    # label.place(x=365, y=90)
     # label.image = photo
     
     # #LOGO of GURL    
@@ -252,8 +252,48 @@ def AboutUsButton():
     # style = ttk.Style()
     # style.configure("Custom.TLabel", background='#FBF4C4')
     # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    # label.place(x=545, y=580)
+    # label.place(x=545, y=600)
     # label.image = photo
+    
+    # First Upper Left Box in About Us
+    about_us_frame = customtkinter.CTkFrame(window, 
+                                            width=300, 
+                                            height=100, 
+                                            corner_radius=50, 
+                                            fg_color="#507C4C")
+    about_us_frame.place(x=105, y=75)
+    
+    # #Second Upper Right Box in About Us
+    about_us_frame1 = customtkinter.CTkFrame(window, 
+                                            width=300, 
+                                            height=100, 
+                                            corner_radius=50, 
+                                            fg_color="#507C4C")
+    about_us_frame1.place(x=863, y=75)
+    
+    #Left Big Box
+    about_us_frame3 = customtkinter.CTkFrame(window, 
+                                            width=420, 
+                                            height=400, 
+                                            corner_radius=50, 
+                                            fg_color="#507C4C")
+    about_us_frame3.place(x=45, y=190)
+    
+    #Right Big Box
+    about_us_frame3 = customtkinter.CTkFrame(window, 
+                                            width=420, 
+                                            height=400, 
+                                            corner_radius=50, 
+                                            fg_color="#507C4C")
+    about_us_frame3.place(x=800, y=190)
+    
+    #Middle Big Box
+    about_us_frame3 = customtkinter.CTkFrame(window, 
+                                            width=300, 
+                                            height=250, 
+                                            corner_radius=50, 
+                                            fg_color="#507C4C")
+    about_us_frame3.place(x=480, y=290)
     
     Back_button = customtkinter.CTkButton(
         window,
@@ -263,10 +303,10 @@ def AboutUsButton():
         fg_color='#21531C',  
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
-        width=100,
+        width=120,
         height=50,
         command=MainTab)
-    Back_button.place(x=100, y=620)
+    Back_button.place(x=185, y=620)
     
     GoTo_Terms = customtkinter.CTkButton(
         window,
@@ -279,7 +319,7 @@ def AboutUsButton():
         width=100,
         height=50,
         command=TermButton)
-    GoTo_Terms.place(x=960, y=620)
+    GoTo_Terms.place(x=890, y=620)
     
 def BlankPage3():  
     for widget in window.winfo_children():
