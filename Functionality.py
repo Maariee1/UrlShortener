@@ -71,7 +71,7 @@ if __name__ == "__main__":
     if urls:
         print(f"\nDetected {len(urls)} URLs. Processing...\n")
         # Shorten URLs simultaneously
-        shortener.shorten_links_simultaneously(urls)
+        shortener.shorten_links_simultaneously(urls)    
 
         # Ask the user if they want to open all links
         open_choice = input("\nWould you like to open all shortened links in your browser? (yes/no): ").strip().lower()
