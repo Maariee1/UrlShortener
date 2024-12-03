@@ -1,8 +1,8 @@
 import requests
 import os
-import pyperclip  # Import pyperclip for clipboard functionality
+import webbrowser  # Import for opening links in a browser
+from concurrent.futures import ThreadPoolExecutor  # Import for concurrent processing
 
-# This code uses the tinyurl API due to some problems using cutt.ly API
 class URLShortener:
     def __init__(self, api_key):
         self.api_key = api_key
@@ -15,61 +15,66 @@ class URLShortener:
             "Content-Type": "application/json"
         }
         payload = {
-            "url": orig_url,
+            "url": orig_url.strip(),
             "domain": "tinyurl.com"
         }
         
         response = requests.post(self.base_url, json=payload, headers=headers)
         data = response.json()
-        
-        print('')
 
-        try:
-            if 'data' in data and 'tiny_url' in data['data']:
-                short_link = data['data']['tiny_url']
-                self.shortened_urls[orig_url] = short_link  # Store in hashmap
-                print(f"\nShort Link: {short_link}\n")
-                self.offer_copy_to_clipboard(short_link)  # Offer to copy to clipboard
-            else:
-                print(f"\nError: {data.get('errors', 'Unknown error occurred.')}\n")
-        except KeyError:
-            print('\nUnexpected Error Occurred: Missing expected keys in the response.\n')
+        if 'data' in data and 'tiny_url' in data['data']:
+            short_link = data['data']['tiny_url']
+            self.shortened_urls[orig_url] = short_link  # Store in hashmap
+            print(f"Original URL: {orig_url} -> Short Link: {short_link}")
+        else:
+            error_message = data.get('errors', 'Unknown error occurred.')
+            print(f"Error shortening URL {orig_url}: {error_message}")
 
-    def bulk_shorten(self):
-        os.system('cls' if os.name == 'nt' else 'clear')
-        num_of_urls = int(input("Select the number of links to shorten: "))
-
-        for i in range(num_of_urls):
-            print(f"\nURL {i + 1}:")
-            link = input("Paste your link here: ")
-            self.shorten_link(link)
-
+    def shorten_links_simultaneously(self, urls):
+        """Shorten multiple URLs simultaneously using ThreadPoolExecutor."""
+        with ThreadPoolExecutor() as executor:
+            executor.map(self.shorten_link, urls)
         self.display_shortened_urls()
 
     def display_shortened_urls(self):  # .txt file to store the original and shortened URLs
         if self.shortened_urls:
-            with open("URL Shortener/URLs.txt", "a") as file:  # "a" stands for append, if "w" the newer inputs just overwrite the previous inputs by the user 
+            os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
+            with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
                 for orig_url, short_url in self.shortened_urls.items():
                     line = f"{orig_url} ==>> {short_url}\n"
                     file.write(line)
+            print("\nAll shortened URLs saved to 'URL Shortener/URLs.txt'.")
         else:
             print("\nNo URLs have been shortened yet.")
 
-    def offer_copy_to_clipboard(self, short_url):
-        """Offer the user an option to copy the shortened URL to the clipboard."""
-        copy_choice = input("Do you want to copy the short link to the clipboard? (y/n): ").strip().lower()
-        if copy_choice == 'y':
-            self.copy_to_clipboard(short_url)
-            print("The short link has been copied to the clipboard.")
+    def open_all_links(self):
+        """Open all shortened links in the default web browser."""
+        if self.shortened_urls:
+            print("\nOpening all shortened links in your default web browser...")
+            for short_url in self.shortened_urls.values():
+                webbrowser.open(short_url)
         else:
-            print("Copying skipped.")
-
-    def copy_to_clipboard(self, short_url):
-        """Copy the shortened URL to the clipboard."""
-        pyperclip.copy(short_url)
+            print("\nNo shortened URLs to open.")
 
 # Main Execution
 if __name__ == "__main__":
     API_KEY = "Vyf64pu9k3P8aciCbr6ODAZLH22zcpjUBnKSidRDSDBzOb9ZDCCouA9S6tup"
     shortener = URLShortener(API_KEY)
-    shortener.bulk_shorten()
+
+    # Input multiple URLs for simultaneous shortening
+    print("Enter your URLs separated by spaces, commas, or newlines:")
+    input_urls = input()
+    # Split the input into individual URLs using space, comma, or newline as delimiters
+    urls = [url.strip() for url in input_urls.replace(",", " ").split() if url.strip()]
+    
+    if urls:
+        print(f"\nDetected {len(urls)} URLs. Processing...\n")
+        # Shorten URLs simultaneously
+        shortener.shorten_links_simultaneously(urls)
+
+        # Ask the user if they want to open all links
+        open_choice = input("\nWould you like to open all shortened links in your browser? (yes/no): ").strip().lower()
+        if open_choice in ["yes", "y"]:
+            shortener.open_all_links()
+    else:
+        print("No valid URLs detected.")
