@@ -10,7 +10,6 @@ window.title("G-URL Shortener")
 window.configure(bg="#FBF4C4")
 window.geometry("1260x700")
 
-
 def MainTab():
     for widget in window.winfo_children():
         widget.destroy()
@@ -38,7 +37,6 @@ def MainTab():
         elif selected_value == '3':
              BlankPage3()
             
-
     # #Syntax to add image using Pil or pillow
     # image = Image.open("GURL BG (2).png")
     # image = image.resize((150, 100))
@@ -60,7 +58,6 @@ def MainTab():
     # label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
     # label1.pack()
     # label1.image = photo
-
     
     #GENERATE LINK
     label = customtkinter.CTkLabel(window,
@@ -518,7 +515,6 @@ def BlankPage3():
     def OpenLink():
         print('hello') #INSERT FUNCTIONALITY
         
-    
     #GENERATE LINK
     
     #FIRST PASTE LINK SET
@@ -738,7 +734,6 @@ def BlankPage3():
         height=50,
         command=MainTab)
     Back_button.place(x=560, y=620)
-
 
 MainTab()
     
