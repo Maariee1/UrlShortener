@@ -25,13 +25,14 @@ class URLShortener:
         if 'data' in data and 'tiny_url' in data['data']:
             short_link = data['data']['tiny_url']
             self.shortened_urls[orig_url] = short_link  # Store in hashmap
-            print(f"Original URL: {orig_url} -> Short Link: {short_link}")
+            print(f"Original URL: {orig_url}")
+            print(f"Short Link: {short_link}")
         else:
             error_message = data.get('errors', 'Unknown error occurred.')
             print(f"Error shortening URL {orig_url}: {error_message}")
 
     def shorten_links_simultaneously(self, urls):
-        """Shorten multiple URLs simultaneously using ThreadPoolExecutor."""
+        #Shorten multiple URLs simultaneously using ThreadPoolExecutor.
         with ThreadPoolExecutor() as executor:
             executor.map(self.shorten_link, urls)
         self.display_shortened_urls()
@@ -48,7 +49,7 @@ class URLShortener:
             print("\nNo URLs have been shortened yet.")
 
     def open_all_links(self):
-        """Open all shortened links in the default web browser."""
+        # Open all shortened links in the default web browser.
         if self.shortened_urls:
             print("\nOpening all shortened links in your default web browser...")
             for short_url in self.shortened_urls.values():
