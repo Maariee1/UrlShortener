@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import pyperclip
 import customtkinter
-import webbrowser  # Import for opening links in browser
+import webbrowser  # Import for opening links in a browser
 from PIL import Image, ImageTk
 from Functionality import URLShortener
 
