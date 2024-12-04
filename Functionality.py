@@ -2,6 +2,7 @@ import requests
 import os
 import webbrowser  # Import for opening links in a browser
 from concurrent.futures import ThreadPoolExecutor  # Import for concurrent processing
+os.system('cls')
 
 class URLShortener:
     def __init__(self, api_key):
@@ -32,7 +33,7 @@ class URLShortener:
             print(f"Error shortening URL {orig_url}: {error_message}")
 
     def shorten_links_simultaneously(self, urls):
-        #Shorten multiple URLs simultaneously using ThreadPoolExecutor.
+        # Shorten multiple URLs simultaneously using ThreadPoolExecutor.
         with ThreadPoolExecutor() as executor:
             executor.map(self.shorten_link, urls)
         self.display_shortened_urls()
@@ -57,17 +58,33 @@ class URLShortener:
         else:
             print("\nNo shortened URLs to open.")
 
+    @staticmethod
+    def get_limited_urls():
+        # Ask user how many URLs to input with a limit of 3.
+        while True:
+            try:
+                url_count = int(input("Select the number of links to shorten: "))
+                if 1 <= url_count <= 3:
+                    break
+                else:
+                    print("Please enter a number between 1 and 3.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+        
+        urls = []
+        for i in range(url_count):
+            url = input(f"Enter URL {i + 1}: ").strip()
+            urls.append(url)
+        return urls
+
 # Main Execution
 if __name__ == "__main__":
     API_KEY = "Vyf64pu9k3P8aciCbr6ODAZLH22zcpjUBnKSidRDSDBzOb9ZDCCouA9S6tup"
     shortener = URLShortener(API_KEY)
 
-    # Input multiple URLs for simultaneous shortening
-    print("Enter your URLs separated by spaces, commas, or newlines:")
-    input_urls = input()
-    # Split the input into individual URLs using space, comma, or newline as delimiters
-    urls = [url.strip() for url in input_urls.replace(",", " ").split() if url.strip()]
-    
+    # Input limited URLs
+    urls = shortener.get_limited_urls()
+
     if urls:
         print(f"\nDetected {len(urls)} URLs. Processing...\n")
         # Shorten URLs simultaneously
@@ -78,4 +95,4 @@ if __name__ == "__main__":
         if open_choice in ["yes", "y"]:
             shortener.open_all_links()
     else:
-        print("No valid URLs detected.")
+        print("No valid URLs detected.") 
