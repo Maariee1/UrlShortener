@@ -4,6 +4,7 @@ import webbrowser  # Import for opening links in a browser
 from concurrent.futures import ThreadPoolExecutor  # Import for concurrent processing
 os.system('cls')
 
+#Backend Code 
 class URLShortener:
     def __init__(self, api_key):
         self.api_key = api_key
