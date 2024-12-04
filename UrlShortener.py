@@ -255,20 +255,37 @@ def AboutUsButton():
     
     # First Upper Left Box in About Us
     about_us_frame = customtkinter.CTkFrame(window, 
-                                            width=300, 
-                                            height=100, 
+                                            width=350, 
+                                            height=80, 
                                             corner_radius=50, 
                                             fg_color="#507C4C")
-    about_us_frame.place(x=105, y=75)
-    
+    about_us_frame.place(x=81, y=80)
+    Label_for_box = customtkinter.CTkLabel(about_us_frame,
+                                           text="About the System",
+                                           text_color="#21531C",
+                                           width=290, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           fg_color="#FBF4C4",
+                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+    Label_for_box.place(relx=0.5, rely=0.5, anchor="center")
+           
     # #Second Upper Right Box in About Us
     about_us_frame1 = customtkinter.CTkFrame(window, 
-                                            width=300, 
-                                            height=100, 
+                                            width=350, 
+                                            height=80, 
                                             corner_radius=50, 
                                             fg_color="#507C4C")
-    about_us_frame1.place(x=863, y=75)
-    
+    about_us_frame1.place(x=834, y=80)
+    Label_for_box1 = customtkinter.CTkLabel(about_us_frame1,
+                                           text="About the Team",
+                                           text_color="#21531C",
+                                           width=290, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           fg_color="#FBF4C4",
+                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+    Label_for_box1.place(relx=0.5, rely=0.5, anchor="center")
     #Left Big Box
     about_us_frame3 = customtkinter.CTkFrame(window, 
                                             width=420, 
