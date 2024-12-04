@@ -37,27 +37,27 @@ def MainTab():
         elif selected_value == '3':
              BlankPage3()
             
-    #Syntax to add image using Pil or pillow
-    image = Image.open("GURL BG (2).png")
-    image = image.resize((150, 100))
-    photo = ImageTk.PhotoImage(image)
+    # #Syntax to add image using Pil or pillow
+    # image = Image.open("GURL BG (2).png")
+    # image = image.resize((150, 100))
+    # photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label.place(x=545, y=580)
-    label.image = photo
+    # style = ttk.Style()
+    # style.configure("Custom.TLabel", background='#FBF4C4')
+    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    # label.place(x=545, y=580)
+    # label.image = photo
     
-    #Gurl and quote
-    image = Image.open("GURL BG (6 x 2 in) (1).png")
-    image = image.resize((1270, 400))
-    photo = ImageTk.PhotoImage(image)
+    # #Gurl and quote
+    # image = Image.open("C:\\Users\\Ciara\\Downloads\\GURL BG (6 x 2 in) (1).png")
+    # image = image.resize((1270, 400))
+    # photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label1.pack()
-    label1.image = photo
+    # style = ttk.Style()
+    # style.configure("Custom.TLabel", background='#FBF4C4')
+    # label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    # label1.pack()
+    # label1.image = photo
     
     #GENERATE LINK
     label = customtkinter.CTkLabel(window,
