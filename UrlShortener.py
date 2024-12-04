@@ -2,28 +2,48 @@ from tkinter import *
 from tkinter import ttk
 import pyperclip
 import customtkinter
-import webbrowser #For opening link sa website
+import webbrowser  # Import for opening links in a browser
 from PIL import Image, ImageTk
+from Functionality import URLShortener
 
 window = Tk()
 window.title("G-URL Shortener")
 window.configure(bg="#FBF4C4")
 window.geometry("1260x700")
 
+API_KEY = "Vyf64pu9k3P8aciCbr6ODAZLH22zcpjUBnKSidRDSDBzOb9ZDCCouA9S6tup"
+shortener = URLShortener(API_KEY)
+
 def MainTab():
     for widget in window.winfo_children():
         widget.destroy()
         
     def generateLink():
-        username = entry.get()
-        print('Musta' + username) #INSERT FUNCTIONALITY AND INVALID INPUTS
+        orig_url = entry.get()
+        if orig_url.strip():
+            shortener.shorten_link(orig_url)
+            # Display the shortened URL in the shortened link entry
+            if orig_url in shortener.shortened_urls:
+                entry1.delete(0, END)
+                entry1.insert(0, shortener.shortened_urls[orig_url])
+        else:
+            print("Please enter a valid URL.")
         
     def copyText():
         text = entry1.get()
-        pyperclip.copy(text) 
+        if text:
+            pyperclip.copy(text)
+            print("Shortened link copied to clipboard.")
+        else:
+            print("No shortened link to copy.")
         
     def OpenLink():
-        print('hello') #INSERT FUNCTIONALITY
+        short_url = entry1.get()
+        if short_url.strip():
+            webbrowser.open(short_url)
+            print(f"Opening link: {short_url}")
+        else:
+            print("No shortened link to open.")
         
     def pasteText():
         clipboard_text = pyperclip.paste()
