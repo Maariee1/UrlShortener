@@ -275,43 +275,146 @@ def AboutUsButton():
     
     # First Upper Left Box in About Us
     about_us_frame = customtkinter.CTkFrame(window, 
-                                            width=300, 
-                                            height=100, 
+                                            width=350, 
+                                            height=80, 
                                             corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame.place(x=105, y=75)
-    
+                                            fg_color="#21531C")
+    about_us_frame.place(x=81, y=80)
+    Label_for_box = customtkinter.CTkLabel(about_us_frame,
+                                           text="About the System",
+                                           text_color="#21531C",
+                                           width=290, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           fg_color="#FBF4C4",
+                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+    Label_for_box.place(relx=0.5, rely=0.5, anchor="center")
+           
     # #Second Upper Right Box in About Us
     about_us_frame1 = customtkinter.CTkFrame(window, 
-                                            width=300, 
-                                            height=100, 
+                                            width=350, 
+                                            height=80, 
                                             corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame1.place(x=863, y=75)
-    
+                                            fg_color="#21531C")
+    about_us_frame1.place(x=834, y=80)
+    Label_for_box1 = customtkinter.CTkLabel(about_us_frame1,
+                                           text="About the Team",
+                                           text_color="#21531C",
+                                           width=290, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           fg_color="#FBF4C4",
+                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+    Label_for_box1.place(relx=0.5, rely=0.5, anchor="center")
     #Left Big Box
     about_us_frame3 = customtkinter.CTkFrame(window, 
                                             width=420, 
                                             height=400, 
                                             corner_radius=50, 
-                                            fg_color="#507C4C")
+                                            fg_color="#21531C")
     about_us_frame3.place(x=45, y=190)
+    #label achuchu left big box
+    Label_for_box3 = customtkinter.CTkLabel(about_us_frame3,
+                                           text="GURL SHORTENER",
+                                           text_color="#FBF4C4",
+                                           width=290, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+    Label_for_box3.place(x=50, y=1)
+    
+    Label_for_box3 = customtkinter.CTkLabel(about_us_frame3,
+                                           text="GURL is a powerful yet simple URL shortening tool\n"
+                                             "designed to transform long, complicated links into\n"
+                                             "concise, shareable ones. It offers a seamless\n"
+                                             "solution for quick and efficient navigation, making\n"
+                                             "it easier than ever to share links across platforms.\n"
+                                             "With GURL, turn long links into quick clicks and\n"
+                                             "enhance your online experience with effortless\n"
+                                             "accessibility.",
+                                           text_color="#FBF4C4",
+                                           width=350, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           justify='left',
+                                           font=("Bookman Old Style", 14,'bold'))  # Optional, to customize font and size
+    Label_for_box3.place(x=0, y=55)
+    Label_for_box3 = customtkinter.CTkLabel(about_us_frame3,
+                                           text="This system includes additional features such as the \n"
+                                             "“About Us” Page, which introduces the team behind \n"
+                                             "the project, and the “Terms and Conditions” Page, \n"
+                                             "indicating the policies for using the URL shortening \n"
+                                             "service. These additional features provide transparency \n"
+                                             "and build trust with users. Moreover, a user can enter \n"
+                                             "up to 3 URLs, and the system will generate 3 shortened \n"
+                                             "links that redirect to each website in their browser.",
+                                           text_color="#FBF4C4",
+                                           width=350, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           justify='left',
+                                           font=("Bookman Old Style", 13,'bold'))  # Optional, to customize font and size
+    Label_for_box3.place(x=0, y=220)
     
     #Right Big Box
-    about_us_frame3 = customtkinter.CTkFrame(window, 
+    about_us_frame4 = customtkinter.CTkFrame(window, 
                                             width=420, 
                                             height=400, 
                                             corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame3.place(x=800, y=190)
+                                            fg_color="#21531C")
+    about_us_frame4.place(x=800, y=190)
+    Label_for_box4 = customtkinter.CTkLabel(about_us_frame4,
+                                           text="GROUP - 8",
+                                           text_color="#FBF4C4",
+                                           width=290, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+    Label_for_box4.place(x=55, y=1)
+    Label_for_box4 = customtkinter.CTkLabel(about_us_frame4,
+                                           text="We are a team of second-year Information Technology\n"
+                                             "students from the Polytechnic University of the\n"
+                                             "Philippines, united by our shared passion for \n" 
+                                             "technology and innovation. As part of our academic\n"
+                                             "journey, we developed GURL - a Generated Uniform\n"
+                                             "Resource Locator aimed at providing a simple and\n"
+                                             "user-friendly way to shorten and manage URLs.\n"
+                                             "    \n"
+                                             "We are dedicated to creating a system that enhances\n"
+                                             "the browsing experience by making URLs more\n"
+                                             "manageable, and accessible. Our system allows users\n"
+                                             "to shorten long web addresses, making them easier to\n"
+                                             "share on social media, in emails, or for personal use.\n"
+                                             "Through this system, we aim to improve efficiency and\n"
+                                             "user convenience in managing online resources.\n",
+                                           text_color="#FBF4C4",
+                                           width=350, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           justify='left',
+                                           font=("Bookman Old Style", 13,'bold'))  # Optional, to customize font and size
+    Label_for_box4.place(x=0, y=55)
+    Label_for_box4 = customtkinter.CTkLabel(about_us_frame4,
+                                           text="Meet the team:\n" 
+                                             "    Vince Adrian Besa             Bench Brian Bualat\n"
+                                             "    Michael Maestre               Ciara Marie Condino\n" 
+                                             "    Karl Caya                          Rica  Salespara\n" 
+                                             "    Jan Alexa Gonato              Zcintilla Serquiña\n",
+                                           text_color="#FBF4C4",
+                                           width=350, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           justify='left',
+                                           font=("Bookman Old Style", 11,'bold'))  # Optional, to customize font and size
+    Label_for_box4.place(x=30, y=310)
     
     #Middle Big Box
-    about_us_frame3 = customtkinter.CTkFrame(window, 
+    about_us_frame5 = customtkinter.CTkFrame(window, 
                                             width=300, 
                                             height=250, 
                                             corner_radius=50, 
-                                            fg_color="#507C4C")
-    about_us_frame3.place(x=480, y=290)
+                                            fg_color="#21531C")
+    about_us_frame5.place(x=480, y=290)
     
     Back_button = customtkinter.CTkButton(
         window,
