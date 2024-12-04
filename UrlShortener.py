@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import pyperclip
 import customtkinter
-import webbrowser  # Import for opening links in browser
+import webbrowser  # Import for opening links in a browser
 from PIL import Image, ImageTk
 from Functionality import URLShortener
 
@@ -19,15 +19,19 @@ def MainTab():
         widget.destroy()
         
     def generateLink():
-        orig_url = entry.get()
-        if orig_url.strip():
-            shortener.shorten_link(orig_url)
+        orig_url = entry.get().strip()
+        if orig_url:
+            error_message = shortener.shorten_link(orig_url)
             # Display the shortened URL in the shortened link entry
-            if orig_url in shortener.shortened_urls:
+            if error_message:
+                entry1.delete(0, END)
+                entry1.insert(0, f"Error: {error_message}")
+            elif orig_url in shortener.shortened_urls:
                 entry1.delete(0, END)
                 entry1.insert(0, shortener.shortened_urls[orig_url])
         else:
-            print("Please enter a valid URL.")
+            entry1.delete(0, END)
+            entry1.insert("Please enter a valid URL.")
         
     def copyText():
         text = entry1.get()
