@@ -499,19 +499,69 @@ def BlankPage2():
     label1.image = photo    
         
     def generateLink():
-        print("Generate functionality to be implemented.")
+        orig_url1 = entry1.get().strip()
+        orig_url2 = entry2.get().strip()
+        if orig_url1:
+            error_message1 = shortener.shorten_link(orig_url1)
+        if orig_url2:
+            error_message = shortener.shorten_link(orig_url2)
+            # Display the shortened URL in the shortened link entry
+        if error_message1:
+                entry1.delete(0, END)
+                entry_shortened1.delete(0, END)
+                entry_shortened1.insert(0, f"Error: {"Invalid Url"}")
+        if error_message:
+                entry2.delete(0, END)
+                entry_shortened2.delete(0, END)
+                entry_shortened2.insert(0, f"Error: {"Invalid Url"}")               
+        if orig_url1 in shortener.shortened_urls:
+                entry_shortened1.delete(0, END)
+                entry_shortened1.insert(0, shortener.shortened_urls[orig_url1])
+        if orig_url2 in shortener.shortened_urls:
+                entry_shortened2.delete(0, END)
+                entry_shortened2.insert(0, shortener.shortened_urls[orig_url2])
 
-    def pasteText(entry):
+    def pasteText1(entry1):
         clipboard_text = pyperclip.paste()
-        entry.delete(0, END)
-        entry.insert(0, clipboard_text)
+        entry1.delete(0, END)
+        entry1.insert(0, clipboard_text)
 
-    def copyText(entry):
-        text = entry.get()
-        pyperclip.copy(text)
+    def pasteText2(entry2):
+        clipboard_text = pyperclip.paste()
+        entry2.delete(0, END)
+        entry2.insert(0, clipboard_text)
+
+    def copyText1():
+        text = entry_shortened1.get()
+        if text:
+            pyperclip.copy(text)
+            print("Shortened link copied to clipboard.")
+        else:
+            print("No shortened link to copy.")
+
+    def copyText2():
+        text = entry_shortened2.get()
+        if text:
+            pyperclip.copy(text)
+            print("Shortened link copied to clipboard.")
+        else:
+            print("No shortened link to copy.")
 
     def OpenLink():
-        print("Open functionality to be implemented.")
+        short_url1 = entry_shortened1.get()
+        short_url2 = entry_shortened2.get()
+
+        if short_url1 == "Invalid Url":
+            print("Link not valid to open!")
+        elif short_url1.strip():
+            webbrowser.open(short_url1)
+            print(f"Opening link: {short_url1}")
+
+        if short_url2 == "Invalid Url":
+            print("Link not valid to open!")
+        elif short_url2.strip():
+            webbrowser.open(short_url2)
+            print(f"Opening link: {short_url2}")
 
     # FIRST SET OF BOXES
     label1 = customtkinter.CTkLabel(window,
@@ -541,7 +591,7 @@ def BlankPage2():
         text_color='#FBF4C4',
         hover_color='#3D6C38',
         width=45,
-        command=lambda: pasteText(entry1))
+        command=lambda: pasteText1(entry1))
     paste_btn1.place(x=550, y=255)
 
     label_shortened1 = customtkinter.CTkLabel(window,
@@ -568,7 +618,7 @@ def BlankPage2():
         text_color='#FBF4C4',
         hover_color='#3D6C38',
         width=50,
-        command=lambda: copyText(entry_shortened1))
+        command=lambda: copyText1(entry_shortened1))
     copy_btn1.place(x=1150, y=255)
 
     # SECOND SET OF BOXES
@@ -599,7 +649,7 @@ def BlankPage2():
         text_color='#FBF4C4',
         hover_color='#3D6C38',
         width=45,
-        command=lambda: pasteText(entry2))
+        command=lambda: pasteText2(entry2))
     paste_btn2.place(x=550, y=340)
 
     label_shortened2 = customtkinter.CTkLabel(window,
@@ -626,7 +676,7 @@ def BlankPage2():
         text_color='#FBF4C4',
         hover_color='#3D6C38',
         width=50,
-        command=lambda: copyText(entry_shortened2))
+        command=lambda: copyText2(entry_shortened2))
     copy_btn2.place(x=1150, y=340)
 
     # BOTTOM BUTTONS
