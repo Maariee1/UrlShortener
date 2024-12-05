@@ -419,6 +419,32 @@ def AboutUsButton():
                                             corner_radius=50, 
                                             fg_color="#21531C")
     about_us_frame5.place(x=480, y=290)
+    Label_for_box5 = customtkinter.CTkLabel(about_us_frame5,
+                                            text="If you have any question or concerns,\n"
+                                            "you can contact us at:\n"
+                                            "\n"
+                                            "EMAIL ADDRESS:\n"
+                                            "contact.us.gurl@gmail.com\n"
+                                            "\n"
+                                            "CONTACT NUMBER:\n"
+                                            "Phone number: +63 905 521 4699\n",
+                                            text_color="#FBF4C4",
+                                            width=250, 
+                                            height=10,
+                                            corner_radius=50, 
+                                            justify='left',
+                                        font=("Bookman Old Style", 14,'bold'))  # Optional, to customize font and size
+    Label_for_box5.place(x=15, y=70)
+
+    Label_for_box6 = customtkinter.CTkLabel(about_us_frame5,
+                                            text="CONTACT US:",
+                                            text_color="#FBF4C4",
+                                            width=150, 
+                                            height=10,
+                                            corner_radius=50, 
+                                            justify='left',
+                                        font=("Bookman Old Style", 27,'bold'))  # Optional, to customize font and size
+    Label_for_box6.place(x=55, y=20)
     
     Back_button = customtkinter.CTkButton(
         window,
