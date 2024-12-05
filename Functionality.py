@@ -17,7 +17,7 @@ class URLShortener:
             "Content-Type": "application/json"
         }
         payload = {
-            "url": orig_url.strip(),
+            "url": orig_url,
             "domain": "tinyurl.com" 
         }
         
@@ -26,12 +26,11 @@ class URLShortener:
 
         if 'data' in data and 'tiny_url' in data['data']:
             short_link = data['data']['tiny_url']
-            self.shortened_urls[orig_url] = short_link  # Store in hashmap
-            print(f"Original URL: {orig_url}")
-            print(f"Short Link: {short_link}")
+            self.shortened_urls[orig_url] = short_link
+            return None  # No error
         else:
             error_message = data.get('errors', 'Unknown error occurred.')
-            print(f"Error shortening URL {orig_url}: {error_message}")
+            return error_message  # Return the error message
 
     def shorten_links_simultaneously(self, urls):
         # Shorten multiple URLs simultaneously using ThreadPoolExecutor.
