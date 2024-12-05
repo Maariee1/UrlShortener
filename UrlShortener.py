@@ -509,19 +509,11 @@ def BlankPage2():
         if error_message1:
                 entry1.delete(0, END)
                 entry_shortened1.delete(0, END)
-<<<<<<< Updated upstream
-                entry_shortened1.insert(0, "Error: Invalid Url")
-        if error_message:
-                entry2.delete(0, END)
-                entry_shortened2.delete(0, END)
-                entry_shortened2.insert(0, "Error: Invalid Url")               
-=======
                 entry_shortened1.insert(0, "Error: Invalid URL.")
         if error_message:
                 entry2.delete(0, END)
                 entry_shortened2.delete(0, END)
-                entry_shortened2.insert(0, "Error: Invalid URL.")             
->>>>>>> Stashed changes
+                entry_shortened2.insert(0, "Error: Invalid URL.")               
         if orig_url1 in shortener.shortened_urls:
                 entry_shortened1.delete(0, END)
                 entry_shortened1.insert(0, shortener.shortened_urls[orig_url1])
