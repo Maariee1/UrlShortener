@@ -229,15 +229,136 @@ def TermButton():
     for widget in window.winfo_children():  # Clear existing widgets
         widget.destroy()
     
-    label = customtkinter.CTkLabel(
-        window,
-        font=('Consolas', 20, 'bold'), 
-        text='Terms & Conditions Page',
-        text_color='black'
-    )
-    label.place(x=480, y=300)
+    #Quote of GURL    
+    image = Image.open("GURL BIG QUOTE.png")
+    image = image.resize((500, 200))
+    photo = ImageTk.PhotoImage(image)
+
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label.place(x=-70, y=30)
+    label.image = photo
     
-    Back_button1 = customtkinter.CTkButton(
+    terms_condition_frame = customtkinter.CTkFrame(window, 
+                                            width=1000, 
+                                            height=42, 
+                                            corner_radius=0, 
+                                            fg_color="#21531C")
+    terms_condition_frame.place(x=289, y=50)
+    
+    Label_for_tcf = customtkinter.CTkLabel(terms_condition_frame,
+                                           text="TERMS AND CONDITIONS",
+                                           text_color="#21531C",
+                                           width=290, 
+                                           height=60,
+                                           corner_radius=50, 
+                                           fg_color="#FBF4C4",
+                                           font=("Bookman Old Style", 25,'bold'))
+    Label_for_tcf.place(relx=0.5, rely=0.5, anchor="center")
+    
+    label1 = customtkinter.CTkLabel(
+        window,
+        font=('Consolas', 16, 'bold'), 
+        text="These Terms and Conditions represent a legally binding agreement\n"
+        "between you (the user) and GURL's Service Provider as you interact with\n"
+        "with service. When you make use of “GURL: Turn Long Links, To Quick Links\n"
+        "URL Shortener System, you consent to the following terms:",
+        text_color="#21531C"
+    )
+    label1.place(x=450, y=130)
+    
+    label2 = customtkinter.CTkLabel(
+        window,
+        font=('Consolas', 16, 'bold'), 
+        text="By using the Services, you acknowledge that you have read,\n"
+        "understood, and accept all of these Terms and Conditions. Using the\n"
+        "services is strictly prohibited if you do not agree to all of these Terms\n"
+        "and Conditions, and you must stop using such services right away.",
+        text_color="#21531C"
+    )
+    label2.place(x=305, y=600)
+    
+    label3 = customtkinter.CTkLabel(
+        window,
+        font=('Bookman Old Style', 20, 'bold'), 
+        text="USER RESPONSIBILITY",
+        text_color="#21531C"
+    )
+    label3.place(x=100, y=250)
+    
+    label4 = customtkinter.CTkLabel(
+        window,
+        font=('Bookman Old Style', 20, 'bold'), 
+        text="INTELLECTUAL PROPERTY",
+        text_color="#21531C"
+    )
+    label4.place(x=500, y=250)
+    
+    label5 = customtkinter.CTkLabel(
+        window,
+        font=('Bookman Old Style', 20, 'bold'), 
+        text="TERMINATION OF SERVICES",
+        text_color="#21531C"
+    )
+    label5.place(x=900, y=250)
+    
+    term1_frame = customtkinter.CTkFrame(window, 
+                                            width=350, 
+                                            height=280, 
+                                            corner_radius=50, 
+                                            fg_color="#21531C")
+    term1_frame.place(x=45, y=300)
+    
+    Label_for_term1 = customtkinter.CTkLabel(term1_frame,
+                                           text="Avoid abuse, harm, disrupt or\n"
+                                           "anything that can cause lag our\n"
+                                           "services or systems - for instance by:\n"
+                                           " \n"
+                                           "1. Spamming, hacking or\n"
+                                           "bypassing our systems\n"
+                                           " \n"
+                                           "2. Uploading viruses, malware,\n"
+                                           "or any malicious code",
+                                           text_color="#FBF4C4",
+                                           justify = 'left',
+                                           font=("Bookman Old Style", 16,'bold')) 
+    Label_for_term1.place(x=25, y=50)
+    
+    term2_frame = customtkinter.CTkFrame(window, 
+                                            width=350, 
+                                            height=280, 
+                                            corner_radius=50, 
+                                            fg_color="#21531C")
+    term2_frame.place(x=465, y=300)
+    
+    Label_for_term2 = customtkinter.CTkLabel(term2_frame,
+                                           text="You own your content, and you\n"
+                                           "provide us a limited license that\n"
+                                           "allows us to exploit it to achieve the\n"
+                                           "purpose of making the service.\n",
+                                           text_color="#FBF4C4",
+                                           justify = 'center',
+                                           font=("Bookman Old Style", 16,'bold')) 
+    Label_for_term2.place(x=25, y=100)
+    
+    term3_frame = customtkinter.CTkFrame(window, 
+                                            width=350, 
+                                            height=280, 
+                                            corner_radius=50, 
+                                            fg_color="#21531C")
+    term3_frame.place(x=880, y=300)
+    
+    Label_for_term3 = customtkinter.CTkLabel(term3_frame,
+                                           text="GURL reserves the right to terminate\n"
+                                           "your access to our services for\n"
+                                           "violations of these terms.\n",
+                                           text_color="#FBF4C4",
+                                           justify = 'center',
+                                           font=("Bookman Old Style", 16,'bold')) 
+    Label_for_term3.place(x=25, y=110)
+    
+    Back_button = customtkinter.CTkButton(
         window,
         font =('Georgia',20,'bold'), 
         text = 'Back',
@@ -245,10 +366,23 @@ def TermButton():
         fg_color='#21531C',  
         text_color='#FBF4C4',  
         hover_color='#3D6C38',
-        width=100,
+        width=120,
         height=50,
         command=MainTab)
-    Back_button1.place(x=960, y=600)
+    Back_button.place(x=100, y=620)
+    
+    GoTo_AboutUs = customtkinter.CTkButton(
+        window,
+        font =('Georgia',20,'bold'), 
+        text = 'About Us',
+        corner_radius=300,
+        fg_color='#21531C',  
+        text_color='#FBF4C4',  
+        hover_color='#3D6C38',
+        width=100,
+        height=50,
+        command=AboutUsButton)
+    GoTo_AboutUs.place(x=1025, y=620)
     
 #NEXT PAGE FOR ABOUT US
 def AboutUsButton():  
@@ -476,16 +610,16 @@ def BlankPage2():
     for widget in window.winfo_children():
         widget.destroy()
         
-    #Syntax to add image using Pil or pillow
-    image = Image.open("GURL LOGO.png")
-    image = image.resize((150, 120))
-    photo = ImageTk.PhotoImage(image)
+    # #Syntax to add image using Pil or pillow
+    # image = Image.open("GURL LOGO.png")
+    # image = image.resize((150, 120))
+    # photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label.place(x=535, y=595)
-    label.image = photo
+    # style = ttk.Style()
+    # style.configure("Custom.TLabel", background='#FBF4C4')
+    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    # label.place(x=535, y=595)
+    # label.image = photo
     
     #Gurl and quote
     image = Image.open("GURL QUOTE.png")
