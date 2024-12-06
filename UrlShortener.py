@@ -45,12 +45,13 @@ def MainTab():
             print("No shortened link to copy.")
         
     def OpenLink():
-        short_url = entry1.get()
-        if short_url.strip():
+        short_url = entry1.get().strip()
+        if not short_url or not shortener.is_valid_url(short_url):
+            entry1.delete(0, END)
+            entry1.insert(0, f"Error: Invalid URL.")
+        else:
             webbrowser.open(short_url)
             print(f"Opening link: {short_url}")
-        else:
-            print("No shortened link to open.")
         
     def pasteText():
         clipboard_text = pyperclip.paste()
