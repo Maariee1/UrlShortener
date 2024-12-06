@@ -7,3 +7,8 @@ https://www.youtube.com/watch?v=JY3BEc2j1NI&list=RDzuQTaBWMxFQ&index=5 ==>> http
 https://github.com/Maariee1/UrlShortener/blob/main/Functionality.py ==>> https://tinyurl.com/2cnnjhf2
 https://github.com/Maariee1/UrlShortener/blob/main/Functionality.py ==>> https://tinyurl.com/2cnnjhf2
 https://www.w3schools.com/python/default.asp ==>> https://tinyurl.com/54z7udb6
+https://www.youtube.com/watch?v=JY3BEc2j1NI&list=RDJY3BEc2j1NI&start_radio=1 ==>> https://tinyurl.com/y4vpv3tn
+https://github.com/Maariee1/UrlShortener/blob/main/UrlShortener.py ==>> https://tinyurl.com/bdfzusuy
+https://github.com/Maariee1/UrlShortener/blob/main/Functionality.py ==>> https://tinyurl.com/2cnnjhf2
+https://github.com/Maariee1/UrlShortener/blob/main/UrlShortener.py ==>> https://tinyurl.com/bdfzusuy
+https://github.com/Maariee1/UrlShortener/blob/main/Functionality.py ==>> https://tinyurl.com/2cnnjhf2

@@ -31,6 +31,7 @@ def MainTab():
             elif orig_url in shortener.shortened_urls:
                 entry1.delete(0, END)
                 entry1.insert(0, shortener.shortened_urls[orig_url])
+                shortener.display_shortened_urls()
         else:
             entry1.delete(0, END)
             entry1.insert("Please enter a valid URL.")
@@ -653,9 +654,11 @@ def BlankPage2():
         if orig_urll in shortener.shortened_urls:
                 entry_shortened1.delete(0, END)
                 entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
+                shortener.display_shortened_urls()
         if orig_url in shortener.shortened_urls:
                 entry_shortened2.delete(0, END)
                 entry_shortened2.insert(0, shortener.shortened_urls[orig_url])
+                shortener.display_shortened_urls()
 
     def pasteText1(entry1):
         clipboard_text = pyperclip.paste()
