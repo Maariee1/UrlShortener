@@ -6,7 +6,7 @@ import customtkinter
 from webbrowser import open as open_browser
 import re
 from PIL import Image, ImageTk
-from Functionality import URLShortener
+from Functionality import URLShortener, is_valid_url
 
 window = Tk()
 window.title("G-URL Shortener")
@@ -46,7 +46,8 @@ def MainTab():
         
     def OpenLink():
         short_url = entry1.get().strip()
-        if not short_url or not shortener.is_valid_url(short_url):
+        if not short_url or not is_valid_url(short_url):
+            print("Error: The URL is invalid or empty.")
             entry1.delete(0, END)
             entry1.insert(0, f"Error: Invalid URL.")
         else:
@@ -703,7 +704,7 @@ def BlankPage2():
         short_urll = entry_shortened1.get().strip()  
 
         if not short_urll or not is_valid_url(short_urll):
-            print("First link is invalid or empty.")
+            print("Error: First link is invalid or empty.")
         else:
             open_browser(short_urll)
             print(f"Opening link: {short_urll}")
@@ -712,7 +713,7 @@ def BlankPage2():
 
         # Validate the URL
         if not short_url or not is_valid_url(short_url):
-            print("Second link is invalid or empty.")
+            print("Error: Second link is invalid or empty.")
         else:
             open_browser(short_url)
             print(f"Opening link: {short_url}")
