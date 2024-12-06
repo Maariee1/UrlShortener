@@ -4,7 +4,6 @@ import pyperclip
 import customtkinter
 from webbrowser import open as open_browser
 import re
-import webbrowser  # Import for opening links in a browser
 from PIL import Image, ImageTk
 from Functionality import URLShortener
 
