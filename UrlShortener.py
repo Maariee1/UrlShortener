@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import ttk
 import pyperclip
 import customtkinter
+from webbrowser import open as open_browser
+import re
 import webbrowser  # Import for opening links in a browser
 from PIL import Image, ImageTk
 from Functionality import URLShortener
@@ -633,27 +635,27 @@ def BlankPage2():
     label1.image = photo    
         
     def generateLink():
-        orig_url1 = entry1.get().strip()
-        orig_url2 = entry2.get().strip()
-        if orig_url1:
-            error_message1 = shortener.shorten_link(orig_url1)
-        if orig_url2:
-            error_message = shortener.shorten_link(orig_url2)
+        orig_urll = entry1.get().strip()
+        orig_url = entry2.get().strip()
+        if orig_urll:
+            error_message1 = shortener.shorten_link(orig_urll)
+        if orig_url:
+            error_message = shortener.shorten_link(orig_url)
             # Display the shortened URL in the shortened link entry
         if error_message1:
                 entry1.delete(0, END)
                 entry_shortened1.delete(0, END)
-                entry_shortened1.insert(0, "Error: Invalid URL.")
+                entry_shortened1.insert(0, f"Error: {"Invalid Url"}")
         if error_message:
                 entry2.delete(0, END)
                 entry_shortened2.delete(0, END)
-                entry_shortened2.insert(0, "Error: Invalid URL.")               
-        if orig_url1 in shortener.shortened_urls:
+                entry_shortened2.insert(0, f"Error: {"Invalid Url"}")               
+        if orig_urll in shortener.shortened_urls:
                 entry_shortened1.delete(0, END)
-                entry_shortened1.insert(0, shortener.shortened_urls[orig_url1])
-        if orig_url2 in shortener.shortened_urls:
+                entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
+        if orig_url in shortener.shortened_urls:
                 entry_shortened2.delete(0, END)
-                entry_shortened2.insert(0, shortener.shortened_urls[orig_url2])
+                entry_shortened2.insert(0, shortener.shortened_urls[orig_url])
 
     def pasteText1(entry1):
         clipboard_text = pyperclip.paste()
@@ -663,7 +665,7 @@ def BlankPage2():
     def pasteText2(entry2):
         clipboard_text = pyperclip.paste()
         entry2.delete(0, END)
-        entry2.insert(0, clipboard_text)
+        entry2.insert(0, clipboard_text)   
 
     def copyText1():
         text = entry_shortened1.get()
@@ -674,28 +676,42 @@ def BlankPage2():
             print("No shortened link to copy.")
 
     def copyText2():
-        text = entry_shortened2.get()
-        if text:
-            pyperclip.copy(text)
+        text1 = entry_shortened2.get()
+        if text1:
+            pyperclip.copy(text1)
             print("Shortened link copied to clipboard.")
         else:
             print("No shortened link to copy.")
+            
+    def is_valid_url(url):
+        # Regex pattern for validating a URL
+        pattern = re.compile(
+            r'^(https?://)?'  # http:// or https:// (optional)
+            r'(www\.)?'       # www. (optional)
+            r'[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}'  # Domain
+            r'(:[0-9]+)?'     # Port (optional)
+            r'(/.*)?$'        # Path (optional)
+        )
+        return pattern.match(url) is not None
 
+    # OpenLink1 with URL validation
     def OpenLink():
-        short_url1 = entry_shortened1.get()
-        short_url2 = entry_shortened2.get()
+        short_urll = entry_shortened1.get().strip()  
 
-        if short_url1 == "Invalid Url":
-            print("Link not valid to open!")
-        elif short_url1.strip():
-            webbrowser.open(short_url1)
-            print(f"Opening link: {short_url1}")
+        if not short_urll or not is_valid_url(short_urll):
+            print("First link is invalid or empty.")
+        else:
+            open_browser(short_urll)
+            print(f"Opening link: {short_urll}")
+            
+        short_url = entry_shortened2.get().strip()  
 
-        if short_url2 == "Invalid Url":
-            print("Link not valid to open!")
-        elif short_url2.strip():
-            webbrowser.open(short_url2)
-            print(f"Opening link: {short_url2}")
+        # Validate the URL
+        if not short_url or not is_valid_url(short_url):
+            print("Second link is invalid or empty.")
+        else:
+            open_browser(short_url)
+            print(f"Opening link: {short_url}")
 
     # FIRST SET OF BOXES
     label1 = customtkinter.CTkLabel(window,
@@ -752,7 +768,7 @@ def BlankPage2():
         text_color='#FBF4C4',
         hover_color='#3D6C38',
         width=50,
-        command=lambda: copyText1(entry_shortened1))
+        command=copyText1)
     copy_btn1.place(x=1150, y=255)
 
     # SECOND SET OF BOXES
@@ -810,7 +826,7 @@ def BlankPage2():
         text_color='#FBF4C4',
         hover_color='#3D6C38',
         width=50,
-        command=lambda: copyText2(entry_shortened2))
+        command=copyText2)
     copy_btn2.place(x=1150, y=340)
 
     # BOTTOM BUTTONS
