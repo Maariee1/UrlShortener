@@ -709,7 +709,7 @@ def BlankPage2():
             open_browser(short_urll)
             print(f"Opening link: {short_urll}")
             
-        short_url = entry_shortened2.get().strip()  
+        short_url = entry_shortened2.get().strip()
 
         # Validate the URL
         if not short_url or not is_valid_url(short_url):
@@ -891,39 +891,105 @@ def BlankPage3():
     label1.image = photo  
         
     def generateLink3():
-        username = entryP31.get(), entryP32.get(), entryP33.get()
-        print('Musta' + username) #INSERT FUNCTIONALITY AND INVALID INPUTS
+        orig_url1 = entryP31.get().strip()
+        orig_url2 = entryP32.get().strip()
+        orig_url3 = entryP33.get().strip()
+
+        if orig_url1:
+            error_message1 = shortener.shorten_link(orig_url1)
+        if orig_url2:
+            error_message2 = shortener.shorten_link(orig_url2)
+        if orig_url3:
+            error_message3 = shortener.shorten_link(orig_url3)
+            # Display the shortened URL in the shortened link entry
+        if error_message1:
+                entryP31.delete(0, END)
+                entryC31.delete(0, END)
+                entryC31.insert(0, f"Error: Invalid URL.")
+        if error_message2:
+                entryP32.delete(0, END)
+                entryC32.delete(0, END)
+                entryC32.insert(0, f"Error: Invalid URL.")         
+        if error_message3:
+                entryP33.delete(0, END)
+                entryC33.delete(0, END)
+                entryC33.insert(0, f"Error: Invalid URL.")                    
+        if orig_url1 in shortener.shortened_urls:
+                entryC31.delete(0, END)
+                entryC31.insert(0, shortener.shortened_urls[orig_url1])
+                shortener.display_shortened_urls()
+        if orig_url2 in shortener.shortened_urls:
+                entryC32.delete(0, END)
+                entryC32.insert(0, shortener.shortened_urls[orig_url2])
+                shortener.display_shortened_urls()
+        if orig_url3 in shortener.shortened_urls:
+                entryC33.delete(0, END)
+                entryC33.insert(0, shortener.shortened_urls[orig_url3])
+                shortener.display_shortened_urls()
         
     def pasteText31():
-        clipboard_text = pyperclip.paste()
-        entryP31.delete(0, END)  
-        entryP31.insert(0, clipboard_text)
+        clipboard_text1 = pyperclip.paste()
+        entryP31.delete(0, END)
+        entryP31.insert(0, clipboard_text1)
         
     def pasteText32():
-        clipboard_text = pyperclip.paste()
-        entryP32.delete(0, END)  
-        entryP32.insert(0, clipboard_text)
+        clipboard_text2 = pyperclip.paste()
+        entryP32.delete(0, END)
+        entryP32.insert(0, clipboard_text2)  
         
     def pasteText33():
-        clipboard_text = pyperclip.paste()
+        clipboard_text3 = pyperclip.paste()
         entryP33.delete(0, END)  
-        entryP33.insert(0, clipboard_text)
+        entryP33.insert(0, clipboard_text3)
     
     def copyText31():
-        text = entryC31.get()
-        pyperclip.copy(text)
+        text1 = entryC31.get()
+        if text1:
+            pyperclip.copy(text1)
+            print("Shortened link copied to clipboard.")
+        else:
+            print("No shortened link to copy.")
          
     def copyText32():
-        text = entryC32.get()
-        pyperclip.copy(text) 
+        text2 = entryC32.get()
+        if text2:
+            pyperclip.copy(text2)
+            print("Shortened link copied to clipboard.")
+        else:
+            print("No shortened link to copy.")
     
     def copyText33():
-        text = entryC33.get()
-        pyperclip.copy(text) 
+        text3 = entryC33.get()
+        if text3:
+            pyperclip.copy(text3)
+            print("Shortened link copied to clipboard.")
+        else:
+            print("No shortened link to copy.")
         
     def OpenLink3():
-        print('hello') #INSERT FUNCTIONALITY
-        
+        short_url1 = entryC31.get().strip()  
+
+        if not short_url1 or not is_valid_url(short_url1):
+            print("Error: First link is invalid or empty.")
+        else:
+            open_browser(short_url1)
+            print(f"Opening link: {short_url1}")
+            
+        short_url2 = entryC32.get().strip()  
+
+        if not short_url1 or not is_valid_url(short_url2):
+            print("Error: Second link is invalid or empty.")
+        else:
+            open_browser(short_url2)
+            print(f"Opening link: {short_url2}")
+
+        short_url3 = entryC33.get().strip()  
+
+        if not short_url3 or not is_valid_url(short_url3):
+            print("Error: Third link is invalid or empty.")
+        else:
+            open_browser(short_url3)
+            print(f"Opening link: {short_url3}")
     
     #GENERATE LINK
     
