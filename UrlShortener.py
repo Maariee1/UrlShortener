@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import webbrowser
 import pyperclip
 import customtkinter
 from webbrowser import open as open_browser
@@ -644,11 +645,11 @@ def BlankPage2():
         if error_message1:
                 entry1.delete(0, END)
                 entry_shortened1.delete(0, END)
-                entry_shortened1.insert(0, f"Error: Invalid Url")
+                entry_shortened1.insert(0, f"Error: Invalid URL.")
         if error_message:
                 entry2.delete(0, END)
                 entry_shortened2.delete(0, END)
-                entry_shortened2.insert(0, f"Error: Invalid Url")               
+                entry_shortened2.insert(0, f"Error: Invalid URL.")               
         if orig_urll in shortener.shortened_urls:
                 entry_shortened1.delete(0, END)
                 entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
