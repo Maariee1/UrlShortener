@@ -1,17 +1,35 @@
 import requests
 import os
-import webbrowser  # Import for opening links in a browser
-from concurrent.futures import ThreadPoolExecutor  # Import for concurrent processing
+import webbrowser
+import re
+from concurrent.futures import ThreadPoolExecutor
+
 os.system('cls')
 
-#Backend Code 
+# Backend Code
+def is_valid_url(url):
+    # Regex pattern for validating a URL
+    pattern = re.compile(
+        r'^(https?://)?'  # http:// or https:// (optional)
+        r'(www\.)?'       # www. (optional)
+        r'[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}'  # Domain
+        r'(:[0-9]+)?'     # Port (optional)
+        r'(/.*)?$'        # Path (optional)
+    )
+    return pattern.match(url) is not None
+
 class URLShortener:
     def __init__(self, api_key):
         self.api_key = api_key
         self.base_url = "https://api.tinyurl.com/create"
-        self.shortened_urls = {}  # Hashmap to store original and shortened URLs
+        self.shortened_urls = {}  # Store valid original and shortened URLs
+        self.invalid_urls = []    # Store invalid URLs
 
     def shorten_link(self, orig_url):
+        if not is_valid_url(orig_url):
+            self.invalid_urls.append(orig_url)
+            return f"Invalid URL: {orig_url}"
+        
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
@@ -20,25 +38,33 @@ class URLShortener:
             "url": orig_url,
             "domain": "tinyurl.com" 
         }
-        
-        response = requests.post(self.base_url, json=payload, headers=headers)
-        data = response.json()
 
-        if 'data' in data and 'tiny_url' in data['data']:
-            short_link = data['data']['tiny_url']
-            self.shortened_urls[orig_url] = short_link
-            return None  # No error
-        else:
-            error_message = data.get('errors', 'Unknown error occurred.')
-            return error_message  # Return the error message
+        try:
+            response = requests.post(self.base_url, json=payload, headers=headers)
+            data = response.json()
+
+            if 'data' in data and 'tiny_url' in data['data']:
+                short_link = data['data']['tiny_url']
+                self.shortened_urls[orig_url] = short_link
+                return None  # No error
+            else:
+                error_message = data.get('errors', 'Unknown error occurred.')
+                return f"Error for {orig_url}: {error_message}"
+        except Exception as e:
+            return f"Failed to process {orig_url}: {e}"
 
     def shorten_links_simultaneously(self, urls):
         # Shorten multiple URLs simultaneously using ThreadPoolExecutor.
         with ThreadPoolExecutor() as executor:
-            executor.map(self.shorten_link, urls)
+            results = executor.map(self.shorten_link, urls)
+        
+        for result in results:
+            if result:
+                print(result)  # Print error messages
+
         self.display_shortened_urls()
 
-    def display_shortened_urls(self):  # .txt file to store the original and shortened URLs
+    def display_shortened_urls(self):
         if self.shortened_urls:
             os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
             with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -47,7 +73,12 @@ class URLShortener:
                     file.write(line)
             print("\nAll shortened URLs saved to 'URL Shortener/URLs.txt'.")
         else:
-            print("\nNo URLs have been shortened yet.")
+            print("\nNo valid URLs were shortened.")
+
+        if self.invalid_urls:
+            print("\nInvalid URLs:")
+            for url in self.invalid_urls:
+                print(f"- {url}")
 
     def open_all_links(self):
         # Open all shortened links in the default web browser.
@@ -88,11 +119,11 @@ if __name__ == "__main__":
     if urls:
         print(f"\nDetected {len(urls)} URLs. Processing...\n")
         # Shorten URLs simultaneously
-        shortener.shorten_links_simultaneously(urls)    
+        shortener.shorten_links_simultaneously(urls)
 
         # Ask the user if they want to open all links
         open_choice = input("\nWould you like to open all shortened links in your browser? (yes/no): ").strip().lower()
         if open_choice in ["yes", "y"]:
             shortener.open_all_links()
     else:
-        print("No valid URLs detected.") 
+        print("No valid URLs detected.")
