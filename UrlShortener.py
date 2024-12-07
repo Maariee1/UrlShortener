@@ -6,6 +6,8 @@ import customtkinter
 import re
 from PIL import Image, ImageTk
 from Functionality import URLShortener, is_valid_url
+from colorama import Fore, Style, init
+init()
 
 window = Tk()
 window.title("G-URL Shortener")
@@ -18,31 +20,38 @@ shortener = URLShortener(API_KEY)
 def MainTab():
     for widget in window.winfo_children():
         widget.destroy()
-        
+    
     def generateLink():
         orig_url = entry.get().strip()
         if orig_url:
             error_message = shortener.shorten_link(orig_url)
-            # Display the shortened URL in the shortened link entry
             if error_message:
                 entry1.delete(0, END)
-                entry1.insert(0, "Error: Invalid URL.")
+                entry1.insert(0, "Error: The URL provided is invalid.")
+                entry1.configure(text_color="red")  # Make error text red
+                print(Fore.RED + "Error: The URL provided is invalid." + Style.RESET_ALL)
             elif orig_url in shortener.shortened_urls:
                 entry1.delete(0, END)
                 entry1.insert(0, shortener.shortened_urls[orig_url])
-                shortener.display_shortened_urls()
+                entry1.configure(text_color="white")  
+                print(Fore.GREEN + "The URL has been shortened successfully." + Style.RESET_ALL)
         else:
             entry1.delete(0, END)
-            entry1.insert("Please enter a valid URL.")
-        
+            entry1.insert(0, "Error: Please enter a valid URL.")
+            entry1.configure(text_color="red")  # Make error text red
+            print(Fore.RED + "Error: Please enter a valid URL." + Style.RESET_ALL)
+
+
     def copyText():
         text = entry1.get()
-        if text:
+        if text and "Error" not in text:
             pyperclip.copy(text)
-            print("Shortened link copied to clipboard.")
+            entry1.configure(text_color="white")
+            print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            print("No shortened link to copy.")
-        
+            entry1.configure(text_color="red")  # Keep error messages red
+            print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)
+
     def OpenLink():
         short_url = entry1.get().strip()
         if not short_url or not is_valid_url(short_url):
@@ -539,7 +548,7 @@ def AboutUsButton():
     Label_for_box4 = customtkinter.CTkLabel(about_us_frame4,
                                            text="Meet the team:\n" 
                                              "    Vince Adrian Besa             Bench Brian Bualat\n"
-                                             "    Michael Maestre               Ciara Marie Condino\n" 
+                                             "    Michael Rua Maestre            Ciara Marie Condino\n" 
                                              "    Karl Caya                          Rica  Salespara\n" 
                                              "    Jan Alexa Gonato              Zcintilla Serquiña\n",
                                            text_color="#FBF4C4",
@@ -614,16 +623,16 @@ def BlankPage2():
     for widget in window.winfo_children():
         widget.destroy()
         
-    # #Syntax to add image using Pil or pillow
-    # image = Image.open("GURL LOGO.png")
-    # image = image.resize((150, 120))
-    # photo = ImageTk.PhotoImage(image)
+    #Syntax to add image using Pil or pillow
+        image = Image.open("GURL LOGO.png")
+        image = image.resize((150, 120))
+        photo = ImageTk.PhotoImage(image)
 
-    # style = ttk.Style()
-    # style.configure("Custom.TLabel", background='#FBF4C4')
-    # label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    # label.place(x=535, y=595)
-    # label.image = photo
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label.place(x=535, y=595)
+    label.image = photo
     
     #Gurl and quote
     image = Image.open("GURL QUOTE.png")
@@ -639,26 +648,31 @@ def BlankPage2():
     def generateLink():
         orig_urll = entry1.get().strip()
         orig_url = entry2.get().strip()
-        
-        error_message1 = shortener.shorten_link(orig_urll)    
-        error_message = shortener.shorten_link(orig_url)
-            # Display the shortened URL in the shortened link entry
+
+        error_message1 = shortener.shorten_link(orig_urll)
         if error_message1:
-                entry1.delete(0, END)
-                entry_shortened1.delete(0, END)
-                entry_shortened1.insert(0, f"Error: Invalid URL.")
+            entry_shortened1.delete(0, END)
+            entry_shortened1.insert(0, "Error: The URL provided is invalid.")
+            entry_shortened1.configure(text_color="red")  # Make error text red
+            print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
+        elif orig_urll in shortener.shortened_urls:
+            entry_shortened1.delete(0, END)
+            entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
+            entry_shortened1.configure(text_color="white") 
+            print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
+
+        error_message = shortener.shorten_link(orig_url)
         if error_message:
-                entry2.delete(0, END)
-                entry_shortened2.delete(0, END)
-                entry_shortened2.insert(0, f"Error: Invalid URL.")               
-        if orig_urll in shortener.shortened_urls:
-                entry_shortened1.delete(0, END)
-                entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
-                shortener.display_shortened_urls()
-        if orig_url in shortener.shortened_urls:
-                entry_shortened2.delete(0, END)
-                entry_shortened2.insert(0, shortener.shortened_urls[orig_url])
-                shortener.display_shortened_urls()
+            entry_shortened2.delete(0, END)
+            entry_shortened2.insert(0, "Error: The URL provided is invalid.")
+            entry_shortened2.configure(text_color="red")  # Make error text red
+            print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
+        elif orig_url in shortener.shortened_urls:
+            entry_shortened2.delete(0, END)
+            entry_shortened2.insert(0, shortener.shortened_urls[orig_url])
+            entry_shortened2.configure(text_color="white") 
+            print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
+
 
     def pasteText1(entry1):
         clipboard_text = pyperclip.paste()
@@ -672,19 +686,23 @@ def BlankPage2():
 
     def copyText1():
         text = entry_shortened1.get()
-        if text:
+        if text and "Error" not in text:
             pyperclip.copy(text)
-            print("Shortened link copied to clipboard.")
+            entry_shortened1.configure(text_color="white")
+            print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            print("No shortened link to copy.")
+            entry_shortened1.configure(text_color="red")  # Keep error messages red
+            print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)
 
     def copyText2():
         text1 = entry_shortened2.get()
-        if text1:
+        if text1 and "Error" not in text1:
             pyperclip.copy(text1)
-            print("Shortened link copied to clipboard.")
+            entry_shortened2.configure(text_color="white")
+            print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            print("No shortened link to copy.")
+            entry_shortened2.configure(text_color="red")  # Keep error messages red
+            print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)
             
     def is_valid_url(url):
         # Regex pattern for validating a URL
@@ -888,40 +906,47 @@ def BlankPage3():
     label1.pack()
     label1.image = photo  
         
-    def generateLink3():
+    def generateLink3():      
         orig_url1 = entryP31.get().strip()
         orig_url2 = entryP32.get().strip()
         orig_url3 = entryP33.get().strip()
 
         error_message1 = shortener.shorten_link(orig_url1)
-        error_message2 = shortener.shorten_link(orig_url2)
-        error_message3 = shortener.shorten_link(orig_url3)
-            # Display the shortened URL in the shortened link entry
         if error_message1:
-                entryP31.delete(0, END)
-                entryC31.delete(0, END)
-                entryC31.insert(0, f"Error: Invalid URL.")
+            entryC31.delete(0, END)
+            entryC31.insert(0, "Error: The URL provided is invalid.")
+            entryC31.configure(text_color="red")  # Make error text red
+            print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
+        elif orig_url1 in shortener.shortened_urls:
+            entryC31.delete(0, END)
+            entryC31.insert(0, shortener.shortened_urls[orig_url1])
+            entryC31.configure(text_color="white")  
+            print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
+
+        error_message2 = shortener.shorten_link(orig_url2)
         if error_message2:
-                entryP32.delete(0, END)
-                entryC32.delete(0, END)
-                entryC32.insert(0, f"Error: Invalid URL.")         
+            entryC32.delete(0, END)
+            entryC32.insert(0, "Error: The URL provided is invalid.")
+            entryC32.configure(text_color="red")  # Make error text red
+            print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
+        elif orig_url2 in shortener.shortened_urls:
+            entryC32.delete(0, END)
+            entryC32.insert(0, shortener.shortened_urls[orig_url2])
+            entryC32.configure(text_color="white")  
+            print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
+
+        error_message3 = shortener.shorten_link(orig_url3)
         if error_message3:
-                entryP33.delete(0, END)
-                entryC33.delete(0, END)
-                entryC33.insert(0, f"Error: Invalid URL.")                    
-        if orig_url1 in shortener.shortened_urls:
-                entryC31.delete(0, END)
-                entryC31.insert(0, shortener.shortened_urls[orig_url1])
-                shortener.display_shortened_urls()
-        if orig_url2 in shortener.shortened_urls:
-                entryC32.delete(0, END)
-                entryC32.insert(0, shortener.shortened_urls[orig_url2])
-                shortener.display_shortened_urls()
-        if orig_url3 in shortener.shortened_urls:
-                entryC33.delete(0, END)
-                entryC33.insert(0, shortener.shortened_urls[orig_url3])
-                shortener.display_shortened_urls()
-        
+            entryC33.delete(0, END)
+            entryC33.insert(0, "Error: The URL provided is invalid.")
+            entryC33.configure(text_color="red")  # Make error text red
+            print(Fore.RED + "Error: The third URL provided is invalid." + Style.RESET_ALL)
+        elif orig_url3 in shortener.shortened_urls:
+            entryC33.delete(0, END)
+            entryC33.insert(0, shortener.shortened_urls[orig_url3])
+            entryC33.configure(text_color="white")  
+            print(Fore.GREEN + "The third URL has been shortened successfully." + Style.RESET_ALL)
+
     def pasteText31():
         clipboard_text1 = pyperclip.paste()
         entryP31.delete(0, END)
@@ -937,29 +962,36 @@ def BlankPage3():
         entryP33.delete(0, END)  
         entryP33.insert(0, clipboard_text3)
     
+
     def copyText31():
         text1 = entryC31.get()
-        if text1:
+        if text1 and "Error" not in text1:
             pyperclip.copy(text1)
-            print("Shortened link copied to clipboard.")
+            entryC31.configure(text_color="white")
+            print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            print("No shortened link to copy.")
+            entryC31.configure(text_color="red")  # Keep error messages red
+            print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)
          
     def copyText32():
         text2 = entryC32.get()
-        if text2:
+        if text2 and "Error" not in text2:
             pyperclip.copy(text2)
-            print("Shortened link copied to clipboard.")
+            entryC32.configure(text_color="white")
+            print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            print("No shortened link to copy.")
-    
+            entryC32.configure(text_color="red")  # Keep error messages red
+            print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)       
+
     def copyText33():
         text3 = entryC33.get()
-        if text3:
+        if text3 and "Error" not in text3:
             pyperclip.copy(text3)
-            print("Shortened link copied to clipboard.")
+            entryC33.configure(text_color="white")
+            print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            print("No shortened link to copy.")
+            entryC33.configure(text_color="red")  # Keep error messages red
+            print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)       
         
     def OpenLink3():
         short_url1 = entryC31.get().strip()  
