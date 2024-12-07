@@ -3,7 +3,6 @@ from tkinter import ttk
 import webbrowser
 import pyperclip
 import customtkinter
-from webbrowser import open as open_browser
 import re
 from PIL import Image, ImageTk
 from Functionality import URLShortener, is_valid_url
@@ -640,10 +639,9 @@ def BlankPage2():
     def generateLink():
         orig_urll = entry1.get().strip()
         orig_url = entry2.get().strip()
-        if orig_urll:
-            error_message1 = shortener.shorten_link(orig_urll)
-        if orig_url:
-            error_message = shortener.shorten_link(orig_url)
+        
+        error_message1 = shortener.shorten_link(orig_urll)    
+        error_message = shortener.shorten_link(orig_url)
             # Display the shortened URL in the shortened link entry
         if error_message1:
                 entry1.delete(0, END)
@@ -706,7 +704,7 @@ def BlankPage2():
         if not short_urll or not is_valid_url(short_urll):
             print("Error: First link is invalid or empty.")
         else:
-            open_browser(short_urll)
+            webbrowser.open(short_urll)
             print(f"Opening link: {short_urll}")
             
         short_url = entry_shortened2.get().strip()
@@ -715,7 +713,7 @@ def BlankPage2():
         if not short_url or not is_valid_url(short_url):
             print("Error: Second link is invalid or empty.")
         else:
-            open_browser(short_url)
+            webbrowser.open(short_url)
             print(f"Opening link: {short_url}")
 
     # FIRST SET OF BOXES
@@ -895,12 +893,9 @@ def BlankPage3():
         orig_url2 = entryP32.get().strip()
         orig_url3 = entryP33.get().strip()
 
-        if orig_url1:
-            error_message1 = shortener.shorten_link(orig_url1)
-        if orig_url2:
-            error_message2 = shortener.shorten_link(orig_url2)
-        if orig_url3:
-            error_message3 = shortener.shorten_link(orig_url3)
+        error_message1 = shortener.shorten_link(orig_url1)
+        error_message2 = shortener.shorten_link(orig_url2)
+        error_message3 = shortener.shorten_link(orig_url3)
             # Display the shortened URL in the shortened link entry
         if error_message1:
                 entryP31.delete(0, END)
@@ -972,15 +967,15 @@ def BlankPage3():
         if not short_url1 or not is_valid_url(short_url1):
             print("Error: First link is invalid or empty.")
         else:
-            open_browser(short_url1)
+            webbrowser.open(short_url1)
             print(f"Opening link: {short_url1}")
             
         short_url2 = entryC32.get().strip()  
 
-        if not short_url1 or not is_valid_url(short_url2):
+        if not short_url2 or not is_valid_url(short_url2):
             print("Error: Second link is invalid or empty.")
         else:
-            open_browser(short_url2)
+            webbrowser.open(short_url2)
             print(f"Opening link: {short_url2}")
 
         short_url3 = entryC33.get().strip()  
@@ -988,7 +983,7 @@ def BlankPage3():
         if not short_url3 or not is_valid_url(short_url3):
             print("Error: Third link is invalid or empty.")
         else:
-            open_browser(short_url3)
+            webbrowser.open(short_url3)
             print(f"Opening link: {short_url3}")
     
     #GENERATE LINK
