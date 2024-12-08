@@ -55,12 +55,13 @@ def MainTab():
     def OpenLink():
         short_url = entry1.get().strip()
         if not short_url or not is_valid_url(short_url):
-            print("Error: The URL is invalid or empty.")
             entry1.delete(0, END)
-            entry1.insert(0, f"Error: Invalid URL.")
+            entry1.insert(0, "Error: The URL is invalid or empty.")
+            entry1.configure(text_color="red")  # Make the error message red in the GUI
+            print(Fore.RED + "Error: The URL is invalid or empty." + Style.RESET_ALL)
         else:
             webbrowser.open(short_url)
-            print(f"Opening link: {short_url}")
+            print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
         
     def pasteText():
         clipboard_text = pyperclip.paste()
@@ -717,22 +718,29 @@ def BlankPage2():
 
     # OpenLink1 with URL validation
     def OpenLink():
-        short_urll = entry_shortened1.get().strip()  
+        short_urll = entry_shortened1.get().strip()  # First link
+        short_url = entry_shortened2.get().strip()   # Second link
 
+        # Validate and open the first link
         if not short_urll or not is_valid_url(short_urll):
-            print("Error: First link is invalid or empty.")
+            entry_shortened1.delete(0, END)
+            entry_shortened1.insert(0, "Error: The URL is invalid or empty.")
+            entry_shortened1.configure(text_color="red")  # Make the error message red in the GUI
+            print(Fore.RED + "Error: The first URL is invalid or empty." + Style.RESET_ALL)
         else:
             webbrowser.open(short_urll)
-            print(f"Opening link: {short_urll}")
-            
-        short_url = entry_shortened2.get().strip()
+            print(Fore.GREEN + f"Opening link: {short_urll}" + Style.RESET_ALL)
 
-        # Validate the URL
+        # Validate and open the second link
         if not short_url or not is_valid_url(short_url):
-            print("Error: Second link is invalid or empty.")
+            entry_shortened2.delete(0, END)
+            entry_shortened2.insert(0, "Error: The URL is invalid or empty.")
+            entry_shortened2.configure(text_color="red")  # Make the error message red in the GUI
+            print(Fore.RED + "Error: The second URL is invalid or empty." + Style.RESET_ALL)
         else:
             webbrowser.open(short_url)
-            print(f"Opening link: {short_url}")
+            print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
+
 
     # FIRST SET OF BOXES
     label1 = customtkinter.CTkLabel(window,
@@ -994,29 +1002,40 @@ def BlankPage3():
             print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)       
         
     def OpenLink3():
-        short_url1 = entryC31.get().strip()  
+        short_url1 = entryC31.get().strip()  # First link
+        short_url2 = entryC32.get().strip()  # Second link
+        short_url3 = entryC33.get().strip()  # Third link
 
+        # Validate and open the first link
         if not short_url1 or not is_valid_url(short_url1):
-            print("Error: First link is invalid or empty.")
+            entryC31.delete(0, END)
+            entryC31.insert(0, "Error: The URL is invalid or empty.")
+            entryC31.configure(text_color="red")  # Make the error message red in the GUI
+            print(Fore.RED + "Error: The first URL is invalid or empty." + Style.RESET_ALL)
         else:
             webbrowser.open(short_url1)
-            print(f"Opening link: {short_url1}")
-            
-        short_url2 = entryC32.get().strip()  
+            print(Fore.GREEN + f"Opening link: {short_url1}" + Style.RESET_ALL)
 
+        # Validate and open the second link
         if not short_url2 or not is_valid_url(short_url2):
-            print("Error: Second link is invalid or empty.")
+            entryC32.delete(0, END)
+            entryC32.insert(0, "Error: The URL is invalid or empty.")
+            entryC32.configure(text_color="red")  # Make the error message red in the GUI
+            print(Fore.RED + "Error: The second URL is invalid or empty." + Style.RESET_ALL)
         else:
             webbrowser.open(short_url2)
-            print(f"Opening link: {short_url2}")
+            print(Fore.GREEN + f"Opening link: {short_url2}" + Style.RESET_ALL)
 
-        short_url3 = entryC33.get().strip()  
-
+        # Validate and open the third link
         if not short_url3 or not is_valid_url(short_url3):
-            print("Error: Third link is invalid or empty.")
+            entryC33.delete(0, END)
+            entryC33.insert(0, "Error: The URL is invalid or empty.")
+            entryC33.configure(text_color="red")  # Make the error message red in the GUI
+            print(Fore.RED + "Error: The third URL is invalid or empty." + Style.RESET_ALL)
         else:
             webbrowser.open(short_url3)
-            print(f"Opening link: {short_url3}")
+            print(Fore.GREEN + f"Opening link: {short_url3}" + Style.RESET_ALL)
+
     
     #GENERATE LINK
     
