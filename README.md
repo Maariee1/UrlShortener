@@ -5,6 +5,7 @@ Data Structure and Algorithm System Project
 1. To access the system:
 
   1.1 Click the “Run” button
+  
   1.2 Press Ctrl + Shift + ~ 
   
 3. Click the entry box
