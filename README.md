@@ -8,20 +8,22 @@ Data Structure and Algorithm System Project
   
   1.2 Press Ctrl + Shift + ~ 
   
-3. Click the entry box
+2. Click the entry box
 
-4. Input a link by: 
+3. Input a link by: 
 
-  4.1 Press + Control V
-  4.2 Click the “Paste” button
-   
-5. Click the “Generate Link” button 
-6. After generating the link, the shortened link will appear then the user can either:
-
-  6.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox 
-  6.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser 
+  3.1 Press + Control V
   
-7. Leave the “Dropdown Menu” button empty
+  3.2 Click the “Paste” button
+   
+4. Click the “Generate Link” button 
+5. After generating the link, the shortened link will appear then the user can either:
+
+  5.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox
+  
+  5.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser 
+  
+6. Leave the “Dropdown Menu” button empty
 
 
 
