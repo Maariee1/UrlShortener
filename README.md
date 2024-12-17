@@ -68,7 +68,7 @@ Data Structure and Algorithm System Project
 
 
 
-# BATCH LINK PROCESSING (3 Links)
+# BATCH PROCESSING (3 Links)
 1. To access the system: 
 
   1.1 Click the “Run” button
