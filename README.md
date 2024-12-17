@@ -28,24 +28,42 @@ Data Structure and Algorithm System Project
 
 
 # BATCH PROCESSING (2 Links)
-1. To access the system: 
+1. To access the system:
+  
   1.1 Click the “Run” button
+  
   1.2 Press Ctrl + Shift + ~ 
+  
 2. Click the “Dropdown Menu” button 
-  3. Click 2 
+
+3. Click 2
+
 4. Click the 1st entry box 
+
 5. Input the 1st link by: 
+  
   5.1 Press Control + V
+
   5.2 Click the “Paste” button
+
 6. Input the 2nd link by: 
+  
   6.1 Press Control + V
+
   6.2 Click the “Paste” button
+
 7. Click the “Generate Link” button 
+
 8. After generating the 1st link, the shortened link will appear at the 1st entry box then the user can either:
+  
   8.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox 
+  
   8.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser
+
 9. After generating the 2nd link, the shortened link will appear at the 2nd entry box then the user can either:
+  
   9.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox 
+  
   9.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser
 
 
