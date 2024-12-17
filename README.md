@@ -35,49 +35,49 @@ Data Structure and Algorithm System Project
 
 
 # BATCH PROCESSING (2 Links)
-1. To access the system:
-  
+1. To access the system: 
+
       1.1 Click the “Run” button
   
       1.2 Press Ctrl + Shift + ~ 
-  
+
 2. Click the "About Us" button then read and comprehend its contents 
 
 3. Click the "Terms & Condition" button then read and comprehend its contents
 
 4. Click the "Back" button
-   
-6. Click the “Dropdown Menu” button 
 
-7. Click 2
+5. Click the “Dropdown Menu” button 
 
-8. Click the 1st entry box
+6. Click 2
 
-9. Input the 1st link by: 
+7. Click the 1st entry box 
+
+8. Input the 1st link by: 
+  
+      8.1 Press Control + V
+  
+      8.2 Click the “Paste” button
+
+9. Input the 2nd link by: 
   
       9.1 Press Control + V
-
+  
       9.2 Click the “Paste” button
 
-10. Input the 2nd link by: 
+10. Click the “Generate Link” button 
+
+11. After generating the 1st link, the shortened link will appear at the 1st entry box then the user can either:
   
-      10.1 Press Control + V
+      11.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox 
+  
+      11.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser
 
-      10.2 Click the “Paste” button
-
-11. Click the “Generate Link” button 
-
-12. After generating the 1st link, the shortened link will appear at the 1st entry box then the user can either:
+12. After generating the 2nd link, the shortened link will appear at the 2nd entry box then the user can either:
   
       12.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox 
   
       12.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser
-
-13. After generating the 2nd link, the shortened link will appear at the 2nd entry box then the user can either:
-  
-      13.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox 
-  
-      13.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser
 
 
 
