@@ -51,7 +51,7 @@ Data Structure and Algorithm System Project
 
 7. Click 2
 
-8. Click the 1st entry box 
+8. Click the 1st entry box
 
 9. Input the 1st link by: 
   
