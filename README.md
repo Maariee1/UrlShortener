@@ -132,8 +132,8 @@ Data Structure and Algorithm System Project
   
       13.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser
 
-13. After generating the 3rd link, the shortened link will appear at the 3rd entry box then the user can either:
+14. After generating the 3rd link, the shortened link will appear at the 3rd entry box then the user can either:
   
-      13.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox 
+      14.1 Click the “Copy” Button then paste it to any Web browser such as Google Chrome, Microsoft Edge, or Mozilla Firefox 
   
-      13.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser
+      14.2 Click the “Open Shortened Link” button then it will appear to the user’s default Web browser
