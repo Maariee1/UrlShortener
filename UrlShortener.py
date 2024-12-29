@@ -3,6 +3,7 @@ from tkinter import ttk
 import webbrowser
 import pyperclip
 import customtkinter
+import os
 import re
 from PIL import Image, ImageTk
 from Functionality import URLShortener, is_valid_url
@@ -33,8 +34,17 @@ def MainTab():
             elif orig_url in shortener.shortened_urls:
                 entry1.delete(0, END)
                 entry1.insert(0, shortener.shortened_urls[orig_url])
-                entry1.configure(text_color="white")  
+                entry1.configure(text_color="white")
                 print(Fore.GREEN + "The URL has been shortened successfully." + Style.RESET_ALL)
+                if shortener.shortened_urls:
+                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
+                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
+                        for orig_url, short_url in shortener.shortened_urls.items():
+                            line = f"{orig_url} ==>> {short_url}\n"
+                            file.write(line)
+                    print("\nAll shortened URLs saved to 'URL Shortener/URLs.txt'.")
+                else:
+                    print("\nNo valid URLs were shortened.")
         else:
             entry1.delete(0, END)
             entry1.insert(0, "Error: Please enter a valid URL.")
@@ -660,7 +670,16 @@ def BlankPage2():
             entry_shortened1.delete(0, END)
             entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
             entry_shortened1.configure(text_color="white") 
-            print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
+            print("The first URL has been shortened successfully." + Style.RESET_ALL)
+            if shortener.shortened_urls:
+                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
+                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
+                        for orig_urll, short_url in shortener.shortened_urls.items():
+                            line = f"{orig_urll} ==>> {short_url}\n"
+                            file.write(line)
+                    print(Fore.GREEN + "The first shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+            else:
+                print(Fore.RED + "\nNo valid URLs were shortened.")
 
         error_message = shortener.shorten_link(orig_url)
         if error_message:
@@ -672,7 +691,16 @@ def BlankPage2():
             entry_shortened2.delete(0, END)
             entry_shortened2.insert(0, shortener.shortened_urls[orig_url])
             entry_shortened2.configure(text_color="white") 
-            print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
+            print(Fore.GREEN + "\nThe second URL has been shortened successfully." + Style.RESET_ALL)
+            if shortener.shortened_urls:
+                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
+                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
+                        for orig_url, short_url in shortener.shortened_urls.items():
+                            line = f"{orig_url} ==>> {short_url}\n"
+                            file.write(line)
+                    print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+            else:
+                print(Fore.RED + "\nNo valid URLs were shortened.")
 
 
     def pasteText1(entry1):
@@ -930,6 +958,15 @@ def BlankPage3():
             entryC31.insert(0, shortener.shortened_urls[orig_url1])
             entryC31.configure(text_color="white")  
             print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
+            if shortener.shortened_urls:
+                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
+                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
+                        for orig_url1, short_url in shortener.shortened_urls.items():
+                            line = f"{orig_url1} ==>> {short_url}\n"
+                            file.write(line)
+                    print("The first shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+            else:
+                print(Fore.RED + "\nNo valid URLs were shortened.")
 
         error_message2 = shortener.shorten_link(orig_url2)
         if error_message2:
@@ -942,6 +979,15 @@ def BlankPage3():
             entryC32.insert(0, shortener.shortened_urls[orig_url2])
             entryC32.configure(text_color="white")  
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
+            if shortener.shortened_urls:
+                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
+                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
+                        for orig_url2, short_url in shortener.shortened_urls.items():
+                            line = f"{orig_url2} ==>> {short_url}\n"
+                            file.write(line)
+                    print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+            else:
+                print(Fore.RED + "\nNo valid URLs were shortened.")
 
         error_message3 = shortener.shorten_link(orig_url3)
         if error_message3:
@@ -954,6 +1000,15 @@ def BlankPage3():
             entryC33.insert(0, shortener.shortened_urls[orig_url3])
             entryC33.configure(text_color="white")  
             print(Fore.GREEN + "The third URL has been shortened successfully." + Style.RESET_ALL)
+            if shortener.shortened_urls:
+                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
+                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
+                        for orig_url3, short_url in shortener.shortened_urls.items():
+                            line = f"{orig_url3} ==>> {short_url}\n"
+                            file.write(line)
+                    print("The third shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+            else:
+                print(Fore.RED + "\nNo valid URLs were shortened.")
 
     def pasteText31():
         clipboard_text1 = pyperclip.paste()
