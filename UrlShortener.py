@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, Frame, Scrollbar, Text, Toplevel
 import webbrowser
 import pyperclip
 import customtkinter
@@ -247,6 +247,115 @@ def MainTab():
         height=50,
         command=TermButton)
     TermsCondition.place(x=960, y=600)
+    
+    view_history_button = customtkinter.CTkButton(
+            window,
+            font=('Georgia', 12, 'bold'),
+            text='View History',
+            fg_color='#FBF4C4',#
+            text_color='#21531C',
+            hover='#FBF4C4',
+            command=lambda: HistoryButton()  # Link to the HistoryButton function
+        )
+    view_history_button.place(x=555, y=560)
+
+def delete_history(file_path, history_text):
+    try:
+        # Open the file in write mode to clear its contents
+        with open(file_path, "w") as file:
+            file.truncate(0)  # Truncate the file to remove all content
+        # Clear the text widget
+        history_text.delete(1.0, END)
+        history_text.insert('1.0', "All history has been deleted.")
+    except Exception as e:
+        history_text.insert('1.0', f"Error deleting history: {str(e)}")
+
+def HistoryButton():   
+    # URL History file path
+    file_path = "URL Shortener/URLs.txt"
+
+    # Create a new window for the history
+    history_window = Toplevel(window)
+    history_window.title("URL History")
+    history_window.geometry("950x580")
+    history_window.configure(bg="#FBF4C4")
+
+    # Add a title label
+    title_label = customtkinter.CTkLabel(
+        history_window,
+        text="History of Shortened URLs",
+        font=('Georgia', 20, 'bold'),
+        text_color='black'
+    )
+    title_label.pack(pady=10)
+
+    # Create a frame for the text and scrollbar
+    frame = Frame(history_window, bg="#FBF4C4")
+    frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+    # Add a scrollbar to the frame
+    scrollbar = Scrollbar(frame, orient="vertical")
+    scrollbar.pack(side="right", fill="y")
+
+    # Add a text widget to display the content
+    history_text = Text(
+        frame,
+        font=('Georgia', 12),
+        wrap='word',
+        bg="#FBF4C4",
+        fg="#21531C",
+        relief='flat',
+        yscrollcommand=scrollbar.set
+    )
+    history_text.pack(side="left", fill="both", expand=True)
+
+    # Connect the scrollbar to the text widget
+    scrollbar.config(command=history_text.yview)
+
+    # Read file content and add line numbers
+    try:
+        if os.path.exists(file_path):
+            with open(file_path, "r") as file:
+                history = file.readlines()
+                if history:
+                    for index, line in enumerate(history, start=1):
+                        # Prepend line number before the URL history content
+                        history_text.insert('end', f"{index}. {line.strip()}\n")
+                else:
+                    history_text.insert('1.0', "No history found in the file.")
+        else:
+            history_text.insert('1.0', "No history found. The file 'URLs.txt' does not exist.")
+    except Exception as e:
+        history_text.insert('1.0', f"Error reading history: {str(e)}")
+
+    button_frame = Frame(history_window, bg="#FBF4C4")
+    button_frame.pack(fill="x", padx=10, pady=10)
+
+    # Add the Close button to the left side
+    close_button = customtkinter.CTkButton(
+        button_frame,
+        text="Close",
+        font=('Georgia', 14, 'bold'),
+        corner_radius=300,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#21531C',
+        command=history_window.destroy
+    )
+    close_button.pack(side="left", padx=15)
+
+    # Add the Delete History button to the right side
+    delete_button = customtkinter.CTkButton(
+        button_frame,
+        text="Delete History",
+        font=('Georgia', 14, 'bold'),
+        corner_radius=300,
+        fg_color='#21531C',
+        text_color='#FBF4C4',
+        hover_color='#21531C',
+        command=lambda: delete_history(file_path, history_text)
+    )
+    delete_button.pack(side="right", padx=15)
     
 #NEXT PAGE FOR TERMS AND CONDITION
 def TermButton():  
