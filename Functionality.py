@@ -1,8 +1,8 @@
-import requests
-import os
-import webbrowser
-import re
-from concurrent.futures import ThreadPoolExecutor
+import requests # To send HTTP requests to TinyURL API
+import os 
+import webbrowser # Opens webpages in the default browser 
+import re # Provides regular executions for URL Validation 
+from concurrent.futures import ThreadPoolExecutor # Allows multiple URLs to be shortened all at the same time
 
 os.system('cls')
 
