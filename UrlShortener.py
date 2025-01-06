@@ -386,6 +386,20 @@ def HistoryButton():
         command=lambda: delete_history(file_path, history_text)
     )
     delete_button.pack(side="right", padx=20, pady=10)  # Positioned to the right
+    
+    # Load and resize the image
+    image = Image.open("GURL LOGO.png")
+    image = image.resize((150, 90))
+    photo = ImageTk.PhotoImage(image)
+
+    # Add the image label to the history window
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    logo_label = ttk.Label(history_window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+
+    # Place the logo at the bottom center of the window
+    logo_label.place(relx=0.5, rely=0.9, anchor="center")
+    logo_label.image = photo  # Keep a reference to the image
 
 #NEXT PAGE FOR TERMS AND CONDITION
 def TermButton():  
