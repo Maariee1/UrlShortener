@@ -28,14 +28,18 @@ def MainTab():
         if orig_url:
             error_message = shortener.shorten_link(orig_url)
             if error_message:
+                entry1.configure(state='normal')  # Temporarily make it editable to insert text
                 entry1.delete(0, END)
                 entry1.insert(0, "Error: The URL provided is invalid.")
                 entry1.configure(text_color="red")  # Make error text red
+                entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.RED + "Error: The URL provided is invalid." + Style.RESET_ALL)
             elif orig_url in shortener.shortened_urls:
+                entry1.configure(state='normal')  # Temporarily make it editable to insert text
                 entry1.delete(0, END)
                 entry1.insert(0, shortener.shortened_urls[orig_url])
                 entry1.configure(text_color="white")
+                entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.GREEN + "The URL has been shortened successfully." + Style.RESET_ALL)
                 if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -47,11 +51,12 @@ def MainTab():
                 else:
                     print("\nNo valid URLs were shortened.")
         else:
+            entry1.configure(state='normal')  # Temporarily make it editable to insert text
             entry1.delete(0, END)
             entry1.insert(0, "Error: Please enter a valid URL.")
             entry1.configure(text_color="red")  # Make error text red
+            entry1.configure(state='readonly')  # Make it readonly again
             print(Fore.RED + "Error: Please enter a valid URL." + Style.RESET_ALL)
-
 
     def copyText():
         text = entry1.get()
@@ -149,7 +154,7 @@ def MainTab():
         text_color="white",                       
         corner_radius=300,                         
         width=570,                                
-        height=50                                 
+        height=50,                                
     )
     entry.place(x=630, y=250, anchor='center')
 
@@ -167,7 +172,8 @@ def MainTab():
         text_color="white",                       
         corner_radius=300,                         
         width=570,                                
-        height=50)
+        height=50,
+        state='readonly')
     entry1.place(x=630,y=415,anchor='center')
 
     OpenLink = customtkinter.CTkButton(
