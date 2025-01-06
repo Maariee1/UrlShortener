@@ -92,26 +92,26 @@ def MainTab():
              BlankPage3()
             
     #Syntax to add image using Pil or pillow
-    image = Image.open("GURL LOGO.png")
-    image = image.resize((150, 100))
-    photo = ImageTk.PhotoImage(image)
+    #image = Image.open("GURL LOGO.png")
+    #image = image.resize((150, 100))
+    #photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label.place(x=545, y=580)
-    label.image = photo
+    #style = ttk.Style()
+    #style.configure("Custom.TLabel", background='#FBF4C4')
+    #label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    #label.place(x=545, y=580)
+    #label.image = photo
     
     #Gurl and quote
-    image = Image.open("GURL QUOTE.png")
-    image = image.resize((1270, 400))
-    photo = ImageTk.PhotoImage(image)
+    #image = Image.open("GURL QUOTE.png")
+    #image = image.resize((1270, 400))
+    #photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label1.pack()
-    label1.image = photo
+    #style = ttk.Style()
+    #style.configure("Custom.TLabel", background='#FBF4C4')
+    #label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    #label1.pack()
+    #label1.image = photo
     
     #GENERATE LINK
     label = customtkinter.CTkLabel(window,
@@ -788,41 +788,46 @@ def BlankPage2():
         widget.destroy()
         
     #Syntax to add image using Pil or pillow
-        image = Image.open("GURL LOGO.png")
-        image = image.resize((150, 120))
-        photo = ImageTk.PhotoImage(image)
+        #image = Image.open("GURL LOGO.png")
+        #image = image.resize((150, 120))
+        #photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label.place(x=535, y=595)
-    label.image = photo
+    #style = ttk.Style()
+    #style.configure("Custom.TLabel", background='#FBF4C4')
+    #label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    #label.place(x=535, y=595)
+    #label.image = photo
     
     #Gurl and quote
-    image = Image.open("GURL QUOTE.png")
-    image = image.resize((1290, 450))
-    photo = ImageTk.PhotoImage(image)
+    #image = Image.open("GURL QUOTE.png")
+    #image = image.resize((1290, 450))
+    #photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label1.pack()
-    label1.image = photo    
-        
+    #style = ttk.Style()
+    #style.configure("Custom.TLabel", background='#FBF4C4')
+    #label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    #label1.pack()
+    #label1.image = photo    
+
     def generateLink():
         orig_urll = entry1.get().strip()
         orig_url = entry2.get().strip()
 
+    # Process first URL
         error_message1 = shortener.shorten_link(orig_urll)
         if error_message1:
+            entry_shortened1.configure(state="normal")  # Temporarily enable editing
             entry_shortened1.delete(0, END)
             entry_shortened1.insert(0, "Error: The URL provided is invalid.")
-            entry_shortened1.configure(text_color="red")  # Make error text red
+            entry_shortened1.configure(text_color="red")
+            entry_shortened1.configure(state="disabled")  # Make read-only
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
         elif orig_urll in shortener.shortened_urls:
+            entry_shortened1.configure(state="normal")  # Temporarily enable editing
             entry_shortened1.delete(0, END)
             entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
-            entry_shortened1.configure(text_color="white") 
+            entry_shortened1.configure(text_color="white")
+            entry_shortened1.configure(state="disabled")  # Make read-only
             print("The first URL has been shortened successfully." + Style.RESET_ALL)
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -834,17 +839,23 @@ def BlankPage2():
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
+    # Process second URL
         error_message = shortener.shorten_link(orig_url)
         if error_message:
+            entry_shortened2.configure(state="normal")  # Temporarily enable editing
             entry_shortened2.delete(0, END)
             entry_shortened2.insert(0, "Error: The URL provided is invalid.")
-            entry_shortened2.configure(text_color="red")  # Make error text red
+            entry_shortened2.configure(text_color="red")
+            entry_shortened2.configure(state="disabled")  # Make read-only
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
         elif orig_url in shortener.shortened_urls:
+            entry_shortened2.configure(state="normal")  # Temporarily enable editing
             entry_shortened2.delete(0, END)
             entry_shortened2.insert(0, shortener.shortened_urls[orig_url])
-            entry_shortened2.configure(text_color="white") 
-            print(Fore.GREEN + "\nThe second URL has been shortened successfully." + Style.RESET_ALL)
+            entry_shortened2.configure(text_color="white")
+            entry_shortened2.configure(state="disabled")  # Make read-only
+            print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
+
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -854,6 +865,7 @@ def BlankPage2():
                     print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
+
 
 
     def pasteText1(entry1):
@@ -1085,15 +1097,15 @@ def BlankPage3():
         widget.destroy()
     
     #Gurl and quote
-    image = Image.open("GURL QUOTE.png")
-    image = image.resize((1290, 450))
-    photo = ImageTk.PhotoImage(image)
+    #image = Image.open("GURL QUOTE.png")
+    #image = image.resize((1290, 450))
+    #photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label1.pack()
-    label1.image = photo  
+    #style = ttk.Style()
+    #style.configure("Custom.TLabel", background='#FBF4C4')
+    #label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    #label1.pack()
+    #label1.image = photo  
         
     def generateLink3():      
         orig_url1 = entryP31.get().strip()
@@ -1102,14 +1114,18 @@ def BlankPage3():
 
         error_message1 = shortener.shorten_link(orig_url1)
         if error_message1:
+            entryC31.configure(state="normal")  # Enable editing
             entryC31.delete(0, END)
             entryC31.insert(0, "Error: The URL provided is invalid.")
             entryC31.configure(text_color="red")  # Make error text red
+            entryC31.configure(state="disabled")  # Disable editing
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
         elif orig_url1 in shortener.shortened_urls:
+            entryC31.configure(state="normal")  # Enable editing
             entryC31.delete(0, END)
             entryC31.insert(0, shortener.shortened_urls[orig_url1])
             entryC31.configure(text_color="white")  
+            entryC31.configure(state="disabled")  # Disable editing
             print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -1123,14 +1139,18 @@ def BlankPage3():
 
         error_message2 = shortener.shorten_link(orig_url2)
         if error_message2:
+            entryC32.configure(state="normal")
             entryC32.delete(0, END)
             entryC32.insert(0, "Error: The URL provided is invalid.")
             entryC32.configure(text_color="red")  # Make error text red
+            entryC32.configure(state="disabled")
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
         elif orig_url2 in shortener.shortened_urls:
+            entryC32.configure(state="normal")
             entryC32.delete(0, END)
             entryC32.insert(0, shortener.shortened_urls[orig_url2])
-            entryC32.configure(text_color="white")  
+            entryC32.configure(text_color="white")
+            entryC32.configure(state="disabled")
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -1144,14 +1164,18 @@ def BlankPage3():
 
         error_message3 = shortener.shorten_link(orig_url3)
         if error_message3:
+            entryC33.configure(state="normal")
             entryC33.delete(0, END)
             entryC33.insert(0, "Error: The URL provided is invalid.")
             entryC33.configure(text_color="red")  # Make error text red
+            entryC33.configure(state="disabled")
             print(Fore.RED + "Error: The third URL provided is invalid." + Style.RESET_ALL)
         elif orig_url3 in shortener.shortened_urls:
+            entryC33.configure(state="normal")
             entryC33.delete(0, END)
             entryC33.insert(0, shortener.shortened_urls[orig_url3])
-            entryC33.configure(text_color="white")  
+            entryC33.configure(text_color="white")
+            entryC33.configure(state="disabled")  
             print(Fore.GREEN + "The third URL has been shortened successfully." + Style.RESET_ALL)
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -1162,6 +1186,7 @@ def BlankPage3():
                     print("The third shortened URL has been saved to 'URL Shortener/URLs.txt'.")
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
+
 
     def pasteText31():
         clipboard_text1 = pyperclip.paste()
