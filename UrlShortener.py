@@ -403,7 +403,7 @@ def MainTab():
             hover='#FBF4C4',
             command=lambda: HistoryButton()  # Link to the HistoryButton function
         )
-    view_history_button.place(x=505, y=560)
+    view_history_button.place(x=495, y=560)
 
 def delete_history(file_path, history_text):
     try:
