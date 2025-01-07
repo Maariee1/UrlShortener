@@ -139,7 +139,7 @@ def MainTab():
     def show_analytics():
         analytics_window = Toplevel(window)
         analytics_window.title("URL Analytics")
-        analytics_window.geometry("600x400")
+        analytics_window.geometry("1260x700")
         analytics_window.configure(bg="#FBF4C4")
 
         title_label = customtkinter.CTkLabel(
@@ -927,26 +927,26 @@ def BlankPage2():
         widget.destroy()
         
     #Syntax to add image using Pil or pillow
-        #image = Image.open("GURL LOGO.png")
-        #image = image.resize((150, 120))
-        #photo = ImageTk.PhotoImage(image)
+    image = Image.open("GURL LOGO.png")
+    image = image.resize((150, 120))
+    photo = ImageTk.PhotoImage(image)
 
-    #style = ttk.Style()
-    #style.configure("Custom.TLabel", background='#FBF4C4')
-    #label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    #label.place(x=535, y=595)
-    #label.image = photo
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label.place(x=535, y=595)
+    label.image = photo
     
-    #Gurl and quote
-    #image = Image.open("GURL QUOTE.png")
-    #image = image.resize((1290, 450))
-    #photo = ImageTk.PhotoImage(image)
+    # Gurl and quote
+    image = Image.open("GURL QUOTE.png")
+    image = image.resize((1290, 450))
+    photo = ImageTk.PhotoImage(image)
 
-    #style = ttk.Style()
-    #style.configure("Custom.TLabel", background='#FBF4C4')
-    #label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    #label1.pack()
-    #label1.image = photo    
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label1.pack()
+    label1.image = photo    
 
     def generateLink():
         orig_urll = entry1.get().strip()
@@ -1273,15 +1273,15 @@ def BlankPage3():
         widget.destroy()
     
     #Gurl and quote
-    #image = Image.open("GURL QUOTE.png")
-    #image = image.resize((1290, 450))
-    #photo = ImageTk.PhotoImage(image) 
+    image = Image.open("GURL QUOTE.png")
+    image = image.resize((1290, 450))
+    photo = ImageTk.PhotoImage(image) 
 
-    #style = ttk.Style()
-    #style.configure("Custom.TLabel", background='#FBF4C4')
-    #label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    #label1.pack()
-    #label1.image = photo  
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label1.pack()
+    label1.image = photo  
         
     def generateLink3():      
         orig_url1 = entryP31.get().strip()
@@ -1499,8 +1499,6 @@ def BlankPage3():
                 url_usage_count[short_url3] = 1
             # Save the updated usage count 
             save_url_usage_count() 
-    
-    #GENERATE LINK
     
     #FIRST PASTE LINK SET
     labelP31 = customtkinter.CTkLabel(window,
