@@ -951,6 +951,7 @@ def BlankPage2():
     def generateLink():
         orig_urll = entry1.get().strip()
         orig_url = entry2.get().strip()
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Process first URL
         error_message1 = shortener.shorten_link(orig_urll)
@@ -961,6 +962,8 @@ def BlankPage2():
             entry_shortened1.configure(text_color="red")
             entry_shortened1.configure(state="disabled")  # Make read-only
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
+            stats["total_invalid_urls"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_urll, "success": False})
         elif orig_urll in shortener.shortened_urls:
             entry_shortened1.configure(state="normal")  # Temporarily enable editing
             entry_shortened1.delete(0, END)
@@ -968,6 +971,8 @@ def BlankPage2():
             entry_shortened1.configure(text_color="white")
             entry_shortened1.configure(state="disabled")  # Make read-only
             print("The first URL has been shortened successfully." + Style.RESET_ALL)
+            stats["total_urls_shortened"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_urll, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -987,6 +992,8 @@ def BlankPage2():
             entry_shortened2.configure(text_color="red")
             entry_shortened2.configure(state="disabled")  # Make read-only
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
+            stats["total_invalid_urls"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": False})
         elif orig_url in shortener.shortened_urls:
             entry_shortened2.configure(state="normal")  # Temporarily enable editing
             entry_shortened2.delete(0, END)
@@ -994,7 +1001,8 @@ def BlankPage2():
             entry_shortened2.configure(text_color="white")
             entry_shortened2.configure(state="disabled")  # Make read-only
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
-
+            stats["total_urls_shortened"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1005,7 +1013,24 @@ def BlankPage2():
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
+            month_key = datetime.now().strftime("%Y-%m")
+            day_key = datetime.now().strftime("%Y-%m-%d")
+            if month_key not in stats["monthly_usage"]:
+                stats["monthly_usage"][month_key] = {"successful": 0, "failed": 0}
+            if day_key not in stats["daily_usage"]:
+                stats["daily_usage"][day_key] = {"successful": 0, "failed": 0}
+            
+            if error_message1:
+                stats["monthly_usage"][month_key]["failed"] += 1
+                stats["daily_usage"][day_key]["failed"] += 1
+            elif error_message:
+                stats["monthly_usage"][month_key]["failed"] += 1
+                stats["daily_usage"][day_key]["failed"] += 1
+            else:
+                stats["monthly_usage"][month_key]["successful"] += 1
+                stats["daily_usage"][day_key]["successful"] += 1
 
+            save_url_usage_count()
 
     def pasteText1(entry1):
         clipboard_text = pyperclip.paste()
@@ -1062,7 +1087,13 @@ def BlankPage2():
         else:
             webbrowser.open(short_urll)
             print(Fore.GREEN + f"Opening link: {short_urll}" + Style.RESET_ALL)
-
+            # Increments the usage count
+            if short_urll in url_usage_count:
+                url_usage_count[short_urll] += 1
+            else: 
+                url_usage_count[short_urll] = 1
+            # Save the updated usage count 
+            save_url_usage_count() 
         # Validate and open the second link
         if not short_url or not is_valid_url(short_url):
             entry_shortened2.delete(0, END)
@@ -1072,7 +1103,13 @@ def BlankPage2():
         else:
             webbrowser.open(short_url)
             print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
-
+            # Increments the usage count
+            if short_url in url_usage_count:
+                url_usage_count[short_url] += 1
+            else: 
+                url_usage_count[short_url] = 1
+            # Save the updated usage count 
+            save_url_usage_count() 
 
     # FIRST SET OF BOXES
     label1 = customtkinter.CTkLabel(window,
@@ -1250,6 +1287,7 @@ def BlankPage3():
         orig_url1 = entryP31.get().strip()
         orig_url2 = entryP32.get().strip()
         orig_url3 = entryP33.get().strip()
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         error_message1 = shortener.shorten_link(orig_url1)
         if error_message1:
@@ -1259,6 +1297,8 @@ def BlankPage3():
             entryC31.configure(text_color="red")  # Make error text red
             entryC31.configure(state="disabled")  # Disable editing
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
+            stats["total_invalid_urls"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_url1, "success": False})
         elif orig_url1 in shortener.shortened_urls:
             entryC31.configure(state="normal")  # Enable editing
             entryC31.delete(0, END)
@@ -1266,6 +1306,8 @@ def BlankPage3():
             entryC31.configure(text_color="white")  
             entryC31.configure(state="disabled")  # Disable editing
             print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
+            stats["total_urls_shortened"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_url1, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1284,6 +1326,8 @@ def BlankPage3():
             entryC32.configure(text_color="red")  # Make error text red
             entryC32.configure(state="disabled")
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
+            stats["total_invalid_urls"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_url2, "success": False})
         elif orig_url2 in shortener.shortened_urls:
             entryC32.configure(state="normal")
             entryC32.delete(0, END)
@@ -1291,6 +1335,8 @@ def BlankPage3():
             entryC32.configure(text_color="white")
             entryC32.configure(state="disabled")
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
+            stats["total_urls_shortened"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_url2, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1309,6 +1355,8 @@ def BlankPage3():
             entryC33.configure(text_color="red")  # Make error text red
             entryC33.configure(state="disabled")
             print(Fore.RED + "Error: The third URL provided is invalid." + Style.RESET_ALL)
+            stats["total_invalid_urls"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_url3, "success": False})
         elif orig_url3 in shortener.shortened_urls:
             entryC33.configure(state="normal")
             entryC33.delete(0, END)
@@ -1316,6 +1364,8 @@ def BlankPage3():
             entryC33.configure(text_color="white")
             entryC33.configure(state="disabled")  
             print(Fore.GREEN + "The third URL has been shortened successfully." + Style.RESET_ALL)
+            stats["total_urls_shortened"] += 1
+            stats["url_history"].append({"timestamp": timestamp, "url": orig_url3, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1326,6 +1376,27 @@ def BlankPage3():
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
+            month_key = datetime.now().strftime("%Y-%m")
+            day_key = datetime.now().strftime("%Y-%m-%d")
+            if month_key not in stats["monthly_usage"]:
+                stats["monthly_usage"][month_key] = {"successful": 0, "failed": 0}
+            if day_key not in stats["daily_usage"]:
+                stats["daily_usage"][day_key] = {"successful": 0, "failed": 0}
+            
+            if error_message1:
+                stats["monthly_usage"][month_key]["failed"] += 1
+                stats["daily_usage"][day_key]["failed"] += 1
+            elif error_message2:
+                stats["monthly_usage"][month_key]["failed"] += 1
+                stats["daily_usage"][day_key]["failed"] += 1
+            elif error_message3:
+                stats["monthly_usage"][month_key]["failed"] += 1
+                stats["daily_usage"][day_key]["failed"] += 1
+            else:
+                stats["monthly_usage"][month_key]["successful"] += 1
+                stats["daily_usage"][day_key]["successful"] += 1
+
+            save_url_usage_count()
 
     def pasteText31():
         clipboard_text1 = pyperclip.paste()
@@ -1387,6 +1458,13 @@ def BlankPage3():
         else:
             webbrowser.open(short_url1)
             print(Fore.GREEN + f"Opening link: {short_url1}" + Style.RESET_ALL)
+            # Increments the usage count
+            if short_url1 in url_usage_count:
+                url_usage_count[short_url1] += 1
+            else: 
+                url_usage_count[short_url1] = 1
+            # Save the updated usage count 
+            save_url_usage_count() 
 
         # Validate and open the second link
         if not short_url2 or not is_valid_url(short_url2):
@@ -1397,6 +1475,13 @@ def BlankPage3():
         else:
             webbrowser.open(short_url2)
             print(Fore.GREEN + f"Opening link: {short_url2}" + Style.RESET_ALL)
+            # Increments the usage count
+            if short_url2 in url_usage_count:
+                url_usage_count[short_url2] += 1
+            else: 
+                url_usage_count[short_url2] = 1
+            # Save the updated usage count 
+            save_url_usage_count() 
 
         # Validate and open the third link
         if not short_url3 or not is_valid_url(short_url3):
@@ -1407,7 +1492,13 @@ def BlankPage3():
         else:
             webbrowser.open(short_url3)
             print(Fore.GREEN + f"Opening link: {short_url3}" + Style.RESET_ALL)
-
+            # Increments the usage count
+            if short_url3 in url_usage_count:
+                url_usage_count[short_url3] += 1
+            else: 
+                url_usage_count[short_url3] = 1
+            # Save the updated usage count 
+            save_url_usage_count() 
     
     #GENERATE LINK
     
