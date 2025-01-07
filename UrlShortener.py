@@ -1275,7 +1275,7 @@ def BlankPage3():
     #Gurl and quote
     #image = Image.open("GURL QUOTE.png")
     #image = image.resize((1290, 450))
-    #photo = ImageTk.PhotoImage(image)
+    #photo = ImageTk.PhotoImage(image) 
 
     #style = ttk.Style()
     #style.configure("Custom.TLabel", background='#FBF4C4')
