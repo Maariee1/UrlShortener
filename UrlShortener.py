@@ -134,7 +134,7 @@ def MainTab():
             else: 
                 url_usage_count[short_url] = 1
             # Save the updated usage count 
-            save_url_usage_count() 
+            save_url_usage_count()
 
     def show_analytics():
         analytics_window = Toplevel(window)
