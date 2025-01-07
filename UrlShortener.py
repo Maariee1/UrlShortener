@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk, Frame, Scrollbar, Text, Toplevel
+from tkinter import messagebox
 import webbrowser
 import pyperclip
 import customtkinter
@@ -27,14 +28,18 @@ def MainTab():
         if orig_url:
             error_message = shortener.shorten_link(orig_url)
             if error_message:
+                entry1.configure(state='normal')  # Temporarily make it editable to insert text
                 entry1.delete(0, END)
                 entry1.insert(0, "Error: The URL provided is invalid.")
                 entry1.configure(text_color="red")  # Make error text red
+                entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.RED + "Error: The URL provided is invalid." + Style.RESET_ALL)
             elif orig_url in shortener.shortened_urls:
+                entry1.configure(state='normal')  # Temporarily make it editable to insert text
                 entry1.delete(0, END)
                 entry1.insert(0, shortener.shortened_urls[orig_url])
                 entry1.configure(text_color="white")
+                entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.GREEN + "The URL has been shortened successfully." + Style.RESET_ALL)
                 if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -46,11 +51,12 @@ def MainTab():
                 else:
                     print("\nNo valid URLs were shortened.")
         else:
+            entry1.configure(state='normal')  # Temporarily make it editable to insert text
             entry1.delete(0, END)
             entry1.insert(0, "Error: Please enter a valid URL.")
             entry1.configure(text_color="red")  # Make error text red
+            entry1.configure(state='readonly')  # Make it readonly again
             print(Fore.RED + "Error: Please enter a valid URL." + Style.RESET_ALL)
-
 
     def copyText():
         text = entry1.get()
@@ -148,7 +154,7 @@ def MainTab():
         text_color="white",                       
         corner_radius=300,                         
         width=570,                                
-        height=50                                 
+        height=50,                                
     )
     entry.place(x=630, y=250, anchor='center')
 
@@ -166,7 +172,8 @@ def MainTab():
         text_color="white",                       
         corner_radius=300,                         
         width=570,                                
-        height=50)
+        height=50,
+        state='readonly')
     entry1.place(x=630,y=415,anchor='center')
 
     OpenLink = customtkinter.CTkButton(
@@ -261,37 +268,47 @@ def MainTab():
 
 def delete_history(file_path, history_text):
     try:
-        # Open the file in write mode to clear its contents
-        with open(file_path, "w") as file:
-            file.truncate(0)  # Truncate the file to remove all content
-        # Clear the text widget
-        history_text.delete(1.0, END)
-        history_text.insert('1.0', "All history has been deleted.")
+        # Confirm deletion
+        if messagebox.askyesno("Confirm Deletion", "Are you sure you want to delete all history?"):
+            # Open the file in write mode to clear its contents
+            with open(file_path, "w") as file:
+                file.truncate(0)  # Truncate the file to remove all content
+            # Clear the text widget
+            history_text.config(state='normal')  # Allow editing to clear the content
+            history_text.delete(1.0, END)  # Clear the text widget
+            history_text.insert('1.0', "All history has been deleted.")  # Insert confirmation message
+            history_text.config(state='disabled')  # Set back to read-only
     except Exception as e:
+        history_text.config(state='normal')
         history_text.insert('1.0', f"Error deleting history: {str(e)}")
+        history_text.config(state='disabled')
 
-def HistoryButton():   
+def HistoryButton():
     # URL History file path
     file_path = "URL Shortener/URLs.txt"
 
     # Create a new window for the history
     history_window = Toplevel(window)
     history_window.title("URL History")
-    history_window.geometry("950x580")
+    history_window.geometry("1000x600")
     history_window.configure(bg="#FBF4C4")
+
+    # Add gradient background effect to the top section
+    bg_frame = Frame(history_window, bg="#FBF4C4")  # Set background to #21531C for the area before history box
+    bg_frame.place(relx=0, rely=0, relwidth=1, relheight=1.0)  # Occupy top 100% of the window
 
     # Add a title label
     title_label = customtkinter.CTkLabel(
         history_window,
         text="History of Shortened URLs",
-        font=('Georgia', 20, 'bold'),
+        font=('Georgia', 28, 'bold'),
         text_color='black'
     )
-    title_label.pack(pady=10)
+    title_label.place(x=310,y=25)
 
-    # Create a frame for the text and scrollbar
-    frame = Frame(history_window, bg="#FBF4C4")
-    frame.pack(fill="both", expand=True, padx=10, pady=10)
+    # Create a custom frame for the text and scrollbar
+    frame = Frame(history_window, bg="#FFF3E0", relief="solid", borderwidth=2)
+    frame.place(relx=0.5, rely=0.4, anchor="center", width=850, height=300)
 
     # Add a scrollbar to the frame
     scrollbar = Scrollbar(frame, orient="vertical")
@@ -302,36 +319,49 @@ def HistoryButton():
         frame,
         font=('Georgia', 12),
         wrap='word',
-        bg="#FBF4C4",
-        fg="#21531C",
+        bg="#FFF8E1",
+        fg="#3E2723",
         relief='flat',
-        yscrollcommand=scrollbar.set
+        yscrollcommand=scrollbar.set,
+        padx=10,
+        pady=10,
     )
     history_text.pack(side="left", fill="both", expand=True)
 
     # Connect the scrollbar to the text widget
     scrollbar.config(command=history_text.yview)
 
-    # Read file content and add line numbers
+        # Read file content and add line numbers
     try:
         if os.path.exists(file_path):
             with open(file_path, "r") as file:
                 history = file.readlines()
+                # Temporarily set the state to 'normal' to insert content
+                history_text.config(state='normal')
+                
                 if history:
                     for index, line in enumerate(history, start=1):
                         # Prepend line number before the URL history content
                         history_text.insert('end', f"{index}. {line.strip()}\n")
                 else:
                     history_text.insert('1.0', "No history found in the file.")
+                
+                # After inserting the content, set the state back to 'disabled'
+                history_text.config(state='disabled')
         else:
+            history_text.config(state='normal')
             history_text.insert('1.0', "No history found. The file 'URLs.txt' does not exist.")
+            history_text.config(state='disabled')
     except Exception as e:
+        history_text.config(state='normal')
         history_text.insert('1.0', f"Error reading history: {str(e)}")
+        history_text.config(state='disabled')
 
+    # Add a button frame
     button_frame = Frame(history_window, bg="#FBF4C4")
-    button_frame.pack(fill="x", padx=10, pady=10)
+    button_frame.place(relx=0.5, rely=0.8, anchor="center")
 
-    # Add the Close button to the left side
+        # Add the Close button to the left side
     close_button = customtkinter.CTkButton(
         button_frame,
         text="Close",
@@ -339,10 +369,10 @@ def HistoryButton():
         corner_radius=300,
         fg_color='#21531C',
         text_color='#FBF4C4',
-        hover_color='#21531C',
+        hover_color='#3D6C38',  # Fixed hover color argument name
         command=history_window.destroy
     )
-    close_button.pack(side="left", padx=15)
+    close_button.pack(side="left", padx=20, pady=10)  # Positioned to the left
 
     # Add the Delete History button to the right side
     delete_button = customtkinter.CTkButton(
@@ -352,11 +382,25 @@ def HistoryButton():
         corner_radius=300,
         fg_color='#21531C',
         text_color='#FBF4C4',
-        hover_color='#21531C',
+        hover_color='#3D6C38',  # Fixed hover color argument name
         command=lambda: delete_history(file_path, history_text)
     )
-    delete_button.pack(side="right", padx=15)
+    delete_button.pack(side="right", padx=20, pady=10)  # Positioned to the right
     
+    # Load and resize the image
+    image = Image.open("GURL LOGO.png")
+    image = image.resize((150, 90))
+    photo = ImageTk.PhotoImage(image)
+
+    # Add the image label to the history window
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    logo_label = ttk.Label(history_window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+
+    # Place the logo at the bottom center of the window
+    logo_label.place(relx=0.5, rely=0.9, anchor="center")
+    logo_label.image = photo  # Keep a reference to the image
+
 #NEXT PAGE FOR TERMS AND CONDITION
 def TermButton():  
     for widget in window.winfo_children():  # Clear existing widgets
@@ -744,41 +788,46 @@ def BlankPage2():
         widget.destroy()
         
     #Syntax to add image using Pil or pillow
-        image = Image.open("GURL LOGO.png")
-        image = image.resize((150, 120))
-        photo = ImageTk.PhotoImage(image)
+        #image = Image.open("GURL LOGO.png")
+        #image = image.resize((150, 120))
+        #photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label.place(x=535, y=595)
-    label.image = photo
+    #style = ttk.Style()
+    #style.configure("Custom.TLabel", background='#FBF4C4')
+    #label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    #label.place(x=535, y=595)
+    #label.image = photo
     
     #Gurl and quote
-    image = Image.open("GURL QUOTE.png")
-    image = image.resize((1290, 450))
-    photo = ImageTk.PhotoImage(image)
+    #image = Image.open("GURL QUOTE.png")
+    #image = image.resize((1290, 450))
+    #photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label1.pack()
-    label1.image = photo    
-        
+    #style = ttk.Style()
+    #style.configure("Custom.TLabel", background='#FBF4C4')
+    #label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    #label1.pack()
+    #label1.image = photo    
+
     def generateLink():
         orig_urll = entry1.get().strip()
         orig_url = entry2.get().strip()
 
+    # Process first URL
         error_message1 = shortener.shorten_link(orig_urll)
         if error_message1:
+            entry_shortened1.configure(state="normal")  # Temporarily enable editing
             entry_shortened1.delete(0, END)
             entry_shortened1.insert(0, "Error: The URL provided is invalid.")
-            entry_shortened1.configure(text_color="red")  # Make error text red
+            entry_shortened1.configure(text_color="red")
+            entry_shortened1.configure(state="disabled")  # Make read-only
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
         elif orig_urll in shortener.shortened_urls:
+            entry_shortened1.configure(state="normal")  # Temporarily enable editing
             entry_shortened1.delete(0, END)
             entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
-            entry_shortened1.configure(text_color="white") 
+            entry_shortened1.configure(text_color="white")
+            entry_shortened1.configure(state="disabled")  # Make read-only
             print("The first URL has been shortened successfully." + Style.RESET_ALL)
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -790,17 +839,23 @@ def BlankPage2():
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
+    # Process second URL
         error_message = shortener.shorten_link(orig_url)
         if error_message:
+            entry_shortened2.configure(state="normal")  # Temporarily enable editing
             entry_shortened2.delete(0, END)
             entry_shortened2.insert(0, "Error: The URL provided is invalid.")
-            entry_shortened2.configure(text_color="red")  # Make error text red
+            entry_shortened2.configure(text_color="red")
+            entry_shortened2.configure(state="disabled")  # Make read-only
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
         elif orig_url in shortener.shortened_urls:
+            entry_shortened2.configure(state="normal")  # Temporarily enable editing
             entry_shortened2.delete(0, END)
             entry_shortened2.insert(0, shortener.shortened_urls[orig_url])
-            entry_shortened2.configure(text_color="white") 
-            print(Fore.GREEN + "\nThe second URL has been shortened successfully." + Style.RESET_ALL)
+            entry_shortened2.configure(text_color="white")
+            entry_shortened2.configure(state="disabled")  # Make read-only
+            print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
+
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -810,6 +865,7 @@ def BlankPage2():
                     print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
+
 
 
     def pasteText1(entry1):
@@ -1041,15 +1097,15 @@ def BlankPage3():
         widget.destroy()
     
     #Gurl and quote
-    image = Image.open("GURL QUOTE.png")
-    image = image.resize((1290, 450))
-    photo = ImageTk.PhotoImage(image)
+    #image = Image.open("GURL QUOTE.png")
+    #image = image.resize((1290, 450))
+    #photo = ImageTk.PhotoImage(image)
 
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label1.pack()
-    label1.image = photo  
+    #style = ttk.Style()
+    #style.configure("Custom.TLabel", background='#FBF4C4')
+    #label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    #label1.pack()
+    #label1.image = photo  
         
     def generateLink3():      
         orig_url1 = entryP31.get().strip()
@@ -1058,14 +1114,18 @@ def BlankPage3():
 
         error_message1 = shortener.shorten_link(orig_url1)
         if error_message1:
+            entryC31.configure(state="normal")  # Enable editing
             entryC31.delete(0, END)
             entryC31.insert(0, "Error: The URL provided is invalid.")
             entryC31.configure(text_color="red")  # Make error text red
+            entryC31.configure(state="disabled")  # Disable editing
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
         elif orig_url1 in shortener.shortened_urls:
+            entryC31.configure(state="normal")  # Enable editing
             entryC31.delete(0, END)
             entryC31.insert(0, shortener.shortened_urls[orig_url1])
             entryC31.configure(text_color="white")  
+            entryC31.configure(state="disabled")  # Disable editing
             print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -1079,14 +1139,18 @@ def BlankPage3():
 
         error_message2 = shortener.shorten_link(orig_url2)
         if error_message2:
+            entryC32.configure(state="normal")
             entryC32.delete(0, END)
             entryC32.insert(0, "Error: The URL provided is invalid.")
             entryC32.configure(text_color="red")  # Make error text red
+            entryC32.configure(state="disabled")
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
         elif orig_url2 in shortener.shortened_urls:
+            entryC32.configure(state="normal")
             entryC32.delete(0, END)
             entryC32.insert(0, shortener.shortened_urls[orig_url2])
-            entryC32.configure(text_color="white")  
+            entryC32.configure(text_color="white")
+            entryC32.configure(state="disabled")
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -1100,14 +1164,18 @@ def BlankPage3():
 
         error_message3 = shortener.shorten_link(orig_url3)
         if error_message3:
+            entryC33.configure(state="normal")
             entryC33.delete(0, END)
             entryC33.insert(0, "Error: The URL provided is invalid.")
             entryC33.configure(text_color="red")  # Make error text red
+            entryC33.configure(state="disabled")
             print(Fore.RED + "Error: The third URL provided is invalid." + Style.RESET_ALL)
         elif orig_url3 in shortener.shortened_urls:
+            entryC33.configure(state="normal")
             entryC33.delete(0, END)
             entryC33.insert(0, shortener.shortened_urls[orig_url3])
-            entryC33.configure(text_color="white")  
+            entryC33.configure(text_color="white")
+            entryC33.configure(state="disabled")  
             print(Fore.GREEN + "The third URL has been shortened successfully." + Style.RESET_ALL)
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
@@ -1118,6 +1186,7 @@ def BlankPage3():
                     print("The third shortened URL has been saved to 'URL Shortener/URLs.txt'.")
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
+
 
     def pasteText31():
         clipboard_text1 = pyperclip.paste()
