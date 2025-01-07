@@ -206,6 +206,185 @@ def MainTab():
             command=analytics_window.destroy
         )
         close_button.pack(pady=10)
+
+    def show_analytics():
+        analytics_window = Toplevel(window)
+        analytics_window.title("URL Analytics")
+        analytics_window.geometry("1260x700")
+        analytics_window.configure(bg="#FBF4C4")
+
+
+        title_label = customtkinter.CTkLabel(
+            analytics_window,
+            text="URL Usage Analytics",
+            font=('Georgia', 28, 'bold'),
+            text_color='black'
+        )
+        title_label.pack(pady=20)
+
+
+        frame = Frame(analytics_window, bg="#FFF3E0", relief="solid", borderwidth=2)
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+
+        scrollbar = Scrollbar(frame, orient="vertical")
+        scrollbar.pack(side="right", fill="y")
+
+
+        analytics_text = Text(
+            frame,
+            font=('Georgia', 12),
+            wrap='word',
+            bg="#FFF8E1",
+            fg="#3E2723",
+            relief='flat',
+            yscrollcommand=scrollbar.set,
+            padx=10,
+            pady=10,
+        )
+        analytics_text.pack(side="left", fill="both", expand=True)
+
+
+        scrollbar.config(command=analytics_text.yview)
+
+
+        analytics_text.config(state='normal')
+
+
+        # Populate analytics text
+        analytics_text.insert('end', f"Total URLs Shortened: {stats['total_urls_shortened']}\n")
+        analytics_text.insert('end', f"Total Invalid URLs: {stats['total_invalid_urls']}\n\n")
+       
+        analytics_text.insert('end', "Monthly Usage:\n")
+        for month, usage in stats['monthly_usage'].items():
+            analytics_text.insert('end', f"  {month}: {usage}\n")
+       
+        analytics_text.insert('end', "\nDaily Usage:\n")
+        for day, usage in stats['daily_usage'].items():
+            analytics_text.insert('end', f"  {day}: {usage}\n")
+       
+        analytics_text.insert('end', "\nURL History:\n")
+        for entry in stats['url_history']:
+            analytics_text.insert('end', f"  {entry['timestamp']}: {entry['url']} - {'Success' if entry['success'] else 'Failed'}\n")
+       
+        analytics_text.insert('end', "\nURL Usage Count:\n")
+        for short_url, count in url_usage_count.items():
+            analytics_text.insert('end', f"{short_url}: {count} accesses\n")
+
+
+        analytics_text.config(state='disabled')
+
+
+        def show_deletion_list():
+            deletion_window = Toplevel(analytics_window)
+            deletion_window.title("Delete URLs")
+            deletion_window.geometry("800x500")
+            deletion_window.configure(bg="#FBF4C4")
+
+
+            deletion_label = customtkinter.CTkLabel(
+                deletion_window,
+                text="Select URLs to Delete:",
+                font=('Georgia', 18),
+                text_color='black'
+            )
+            deletion_label.pack(pady=10)
+
+
+            # Frame for listbox and scrollbar
+            dropdown_frame = Frame(deletion_window, bg="#FBF4C4")
+            dropdown_frame.pack()
+
+
+            listbox = Listbox(
+                dropdown_frame,
+                selectmode=MULTIPLE,
+                bg="#FFF8E1",
+                fg="#3E2723",
+                font=('Georgia', 12),
+                width=80,
+                height=20,
+                relief='flat'
+            )
+            listbox.pack(side="left", padx=10)
+
+
+            dropdown_scrollbar = Scrollbar(dropdown_frame, orient="vertical", command=listbox.yview)
+            dropdown_scrollbar.pack(side="right", fill="y")
+            listbox.config(yscrollcommand=dropdown_scrollbar.set)
+
+
+            # Populate the listbox
+            for entry in stats['url_history']:
+                listbox.insert(END, entry['url'])
+
+
+            def delete_selected_urls():
+                selected_indices = listbox.curselection()
+                selected_urls = [listbox.get(i) for i in selected_indices]
+                if selected_urls:
+                    # Remove selected URLs from url_history and url_usage_count
+                    stats['url_history'] = [entry for entry in stats['url_history'] if entry['url'] not in selected_urls]
+                    for url in selected_urls:
+                        url_usage_count.pop(url, None)
+
+
+                    # Refresh the analytics window
+                    deletion_window.destroy()
+                    analytics_window.destroy()
+                    show_analytics()
+
+
+            delete_button = customtkinter.CTkButton(
+                deletion_window,
+                text="Delete Selected URLs",
+                font=('Georgia', 14, 'bold'),
+                corner_radius=300,
+                fg_color='#D32F2F',
+                text_color='#FBF4C4',
+                hover_color='#F44336',
+                command=delete_selected_urls
+            )
+            delete_button.pack(pady=10)
+
+
+            close_button = customtkinter.CTkButton(
+                deletion_window,
+                text="Close",
+                font=('Georgia', 14, 'bold'),
+                corner_radius=300,
+                fg_color='#21531C',
+                text_color='#FBF4C4',
+                hover_color='#3D6C38',
+                command=deletion_window.destroy
+            )
+            close_button.pack(pady=10)
+
+
+        view_list_button = customtkinter.CTkButton(
+            analytics_window,
+            text="View Deletion List",
+            font=('Georgia', 14, 'bold'),
+            corner_radius=300,
+            fg_color='#21531C',
+            text_color='#FBF4C4',
+            hover_color='#3D6C38',
+            command=show_deletion_list
+        )
+        view_list_button.pack(pady=10)
+
+
+        close_button = customtkinter.CTkButton(
+            analytics_window,
+            text="Close",
+            font=('Georgia', 14, 'bold'),
+            corner_radius=300,
+            fg_color='#21531C',
+            text_color='#FBF4C4',
+            hover_color='#3D6C38',
+            command=analytics_window.destroy
+        )
+        close_button.pack(pady=10)
         
     def pasteText():
         clipboard_text = pyperclip.paste()
