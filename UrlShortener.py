@@ -9,7 +9,35 @@ import re
 from PIL import Image, ImageTk
 from Functionality import URLShortener, is_valid_url
 from colorama import Fore, Style, init
+from datetime import datetime
+import json 
 init()
+
+# Load URL usage count from JSON file
+def load_url_usage_count():
+    global url_usage_count, stats
+    try:
+        with open("URL Shortener/usage_stats.json", "r") as file:
+            stats = json.load(file)
+            url_usage_count = {k: v for k, v in stats.items() if k not in ["total_urls_shortened", "total_invalid_urls", "monthly_usage", "daily_usage", "url_history"]}
+    except FileNotFoundError:
+        url_usage_count = {}
+        stats = {
+            "total_urls_shortened": 0,
+            "total_invalid_urls": 0,
+            "monthly_usage": {},
+            "daily_usage": {},
+            "url_history": []
+        }
+
+# Save URL usage count to JSON file
+def save_url_usage_count():
+    stats.update(url_usage_count)
+    with open("URL Shortener/usage_stats.json", "w") as file:
+        json.dump(stats, file, indent=4)
+
+# Load URL usage count when the application starts
+load_url_usage_count()
 
 window = Tk()
 window.title("G-URL Shortener")
@@ -27,6 +55,7 @@ def MainTab():
         orig_url = entry.get().strip()
         if orig_url:
             error_message = shortener.shorten_link(orig_url)
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if error_message:
                 entry1.configure(state='normal')  # Temporarily make it editable to insert text
                 entry1.delete(0, END)
@@ -34,6 +63,8 @@ def MainTab():
                 entry1.configure(text_color="red")  # Make error text red
                 entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.RED + "Error: The URL provided is invalid." + Style.RESET_ALL)
+                stats["total_invalid_urls"] += 1
+                stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": False})
             elif orig_url in shortener.shortened_urls:
                 entry1.configure(state='normal')  # Temporarily make it editable to insert text
                 entry1.delete(0, END)
@@ -41,6 +72,8 @@ def MainTab():
                 entry1.configure(text_color="white")
                 entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.GREEN + "The URL has been shortened successfully." + Style.RESET_ALL)
+                stats["total_urls_shortened"] += 1
+                stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
                 if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -50,6 +83,23 @@ def MainTab():
                     print("\nAll shortened URLs saved to 'URL Shortener/URLs.txt'.")
                 else:
                     print("\nNo valid URLs were shortened.")
+            
+            # Update monthly and daily usage
+            month_key = datetime.now().strftime("%Y-%m")
+            day_key = datetime.now().strftime("%Y-%m-%d")
+            if month_key not in stats["monthly_usage"]:
+                stats["monthly_usage"][month_key] = {"successful": 0, "failed": 0}
+            if day_key not in stats["daily_usage"]:
+                stats["daily_usage"][day_key] = {"successful": 0, "failed": 0}
+            
+            if error_message:
+                stats["monthly_usage"][month_key]["failed"] += 1
+                stats["daily_usage"][day_key]["failed"] += 1
+            else:
+                stats["monthly_usage"][month_key]["successful"] += 1
+                stats["daily_usage"][day_key]["successful"] += 1
+
+            save_url_usage_count()
         else:
             entry1.configure(state='normal')  # Temporarily make it editable to insert text
             entry1.delete(0, END)
@@ -78,6 +128,84 @@ def MainTab():
         else:
             webbrowser.open(short_url)
             print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
+            # Increments the usage count
+            if short_url in url_usage_count:
+                url_usage_count[short_url] += 1
+            else: 
+                url_usage_count[short_url] = 1
+            # Save the updated usage count 
+            save_url_usage_count()
+
+    def show_analytics():
+        analytics_window = Toplevel(window)
+        analytics_window.title("URL Analytics")
+        analytics_window.geometry("600x400")
+        analytics_window.configure(bg="#FBF4C4")
+
+        title_label = customtkinter.CTkLabel(
+            analytics_window,
+            text="URL Usage Analytics",
+            font=('Georgia', 28, 'bold'),
+            text_color='black'
+        )
+        title_label.pack(pady=20)
+
+        frame = Frame(analytics_window, bg="#FFF3E0", relief="solid", borderwidth=2)
+        frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+        scrollbar = Scrollbar(frame, orient="vertical")
+        scrollbar.pack(side="right", fill="y")
+
+        analytics_text = Text(
+            frame,
+            font=('Georgia', 12),
+            wrap='word',
+            bg="#FFF8E1",
+            fg="#3E2723",
+            relief='flat',
+            yscrollcommand=scrollbar.set,
+            padx=10,
+            pady=10,
+        )
+        analytics_text.pack(side="left", fill="both", expand=True)
+
+        scrollbar.config(command=analytics_text.yview)
+
+        analytics_text.config(state='normal')
+
+        analytics_text.config(state='normal')
+        analytics_text.insert('end', f"Total URLs Shortened: {stats['total_urls_shortened']}\n")
+        analytics_text.insert('end', f"Total Invalid URLs: {stats['total_invalid_urls']}\n\n")
+        
+        analytics_text.insert('end', "Monthly Usage:\n")
+        for month, usage in stats['monthly_usage'].items():
+            analytics_text.insert('end', f"  {month}: {usage}\n")
+        
+        analytics_text.insert('end', "\nDaily Usage:\n")
+        for day, usage in stats['daily_usage'].items():
+            analytics_text.insert('end', f"  {day}: {usage}\n")
+        
+        analytics_text.insert('end', "\nURL History:\n")
+        for entry in stats['url_history']:
+            analytics_text.insert('end', f"  {entry['timestamp']}: {entry['url']} - {'Success' if entry['success'] else 'Failed'}\n")
+        
+        analytics_text.insert('end', "\nURL Usage Count:\n")
+        for short_url, count in url_usage_count.items():
+            analytics_text.insert('end', f"{short_url}: {count} accesses\n")
+
+        analytics_text.config(state='disabled')
+
+        close_button = customtkinter.CTkButton(
+            analytics_window,
+            text="Close",
+            font=('Georgia', 14, 'bold'),
+            corner_radius=300,
+            fg_color='#21531C',
+            text_color='#FBF4C4',
+            hover_color='#3D6C38',
+            command=analytics_window.destroy
+        )
+        close_button.pack(pady=10)
         
     def pasteText():
         clipboard_text = pyperclip.paste()
@@ -90,7 +218,18 @@ def MainTab():
             BlankPage2()
         elif selected_value == '3':
              BlankPage3()
-            
+    
+    view_analytics_button = customtkinter.CTkButton(
+        window,
+        font=('Georgia', 12, 'bold'),
+        text='View Analytics',
+        fg_color='#FBF4C4',
+        text_color='#21531C',
+        hover='#FBF4C4',
+        command=show_analytics
+    )
+    view_analytics_button.place(x=625, y=560)
+
     #Syntax to add image using Pil or pillow
     image = Image.open("GURL LOGO.png")
     image = image.resize((150, 100))
@@ -264,7 +403,7 @@ def MainTab():
             hover='#FBF4C4',
             command=lambda: HistoryButton()  # Link to the HistoryButton function
         )
-    view_history_button.place(x=555, y=560)
+    view_history_button.place(x=505, y=560)
 
 def delete_history(file_path, history_text):
     try:
@@ -712,7 +851,7 @@ def AboutUsButton():
     Label_for_box4 = customtkinter.CTkLabel(about_us_frame4,
                                            text="Meet the team:\n" 
                                              "    Vince Adrian Besa             Bench Brian Bualat\n"
-                                             "    Michael Rua Maestre            Ciara Marie Condino\n" 
+                                             "    Michael Rua Maestre        Ciara Marie Condino\n" 
                                              "    Karl Caya                          Rica  Salespara\n" 
                                              "    Jan Alexa Gonato              Zcintilla Serquiña\n",
                                            text_color="#FBF4C4",

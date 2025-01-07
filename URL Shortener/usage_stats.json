@@ -1,0 +1,38 @@
+{
+    "total_urls_shortened": 3,
+    "total_invalid_urls": 1,
+    "monthly_usage": {
+        "2025-01": {
+            "successful": 2,
+            "failed": 1
+        }
+    },
+    "daily_usage": {
+        "2025-01-07": {
+            "successful": 2,
+            "failed": 1
+        }
+    },
+    "url_history": [
+        {
+            "timestamp": "2025-01-07 21:06:31",
+            "url": "rneanemns",
+            "success": false
+        },
+        {
+            "timestamp": "2025-01-07 21:06:42",
+            "url": "www.facebook.com",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-07 23:52:25",
+            "url": "https://www.mainframestechhelp.com/tutorials/cobol/basic-verbs.htm",
+            "success": true
+        }
+    ],
+    "https://tinyurl.com/5cbz6tky": 1,
+    "https://tinyurl.com/3e8pw8pb": 1,
+    "https://tinyurl.com/mtnmft3k": 1,
+    "https://tinyurl.com/nc2uwy2c": 3,
+    "https://tinyurl.com/s7af92w4": 1
+}
