@@ -201,18 +201,6 @@ def MainTab():
 
         analytics_text.config(state='disabled')
 
-        close_button = customtkinter.CTkButton(
-            analytics_window,
-            text="Close",
-            font=('Georgia', 14, 'bold'),
-            corner_radius=300,
-            fg_color='#21531C',
-            text_color='#FBF4C4',
-            hover_color='#3D6C38',
-            command=analytics_window.destroy
-        )
-        close_button.pack(pady=10)
-
         def show_deletion_list():
             deletion_window = Toplevel(analytics_window)
             deletion_window.title("Delete URLs")
