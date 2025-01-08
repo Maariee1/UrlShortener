@@ -1511,7 +1511,7 @@ def BlankPage3():
                 stats["monthly_usage"][month_key]["successful"] += 1
                 stats["daily_usage"][day_key]["successful"] += 1
 
-            save_url_usage_count()
+            save_url_usage_count() 
 
     def pasteText31():
         clipboard_text1 = pyperclip.paste()
