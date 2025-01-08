@@ -1514,7 +1514,7 @@ def BlankPage3():
             save_url_usage_count() 
 
     def pasteText31():
-        clipboard_text1 = pyperclip.paste()
+        clipboard_text1 = pyperclip.paste() 
         entryP31.delete(0, END)
         entryP31.insert(0, clipboard_text1)
         
