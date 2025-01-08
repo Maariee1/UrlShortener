@@ -1,9 +1,9 @@
 {
-    "total_urls_shortened": 38,
+    "total_urls_shortened": 42,
     "total_invalid_urls": 7,
     "monthly_usage": {
         "2025-01": {
-            "successful": 15,
+            "successful": 17,
             "failed": 3
         }
     },
@@ -15,6 +15,10 @@
         "2025-01-08": {
             "successful": 13,
             "failed": 2
+        },
+        "2025-01-09": {
+            "successful": 2,
+            "failed": 0
         }
     },
     "url_history": [
@@ -127,6 +131,26 @@
             "timestamp": "2025-01-08 09:49:45",
             "url": "https://github.com/Maariee1/UrlShortener",
             "success": true
+        },
+        {
+            "timestamp": "2025-01-09 04:41:41",
+            "url": "https://www.youtube.com/watch?v=G_L9HzeAqOM&list=RDJY3BEc2j1NI&index=11&pp=8AUB",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-09 04:41:41",
+            "url": "https://drive.google.com/drive/folders/19Bc10MrRemTeUcyy0dygf6KPdCViE1tP",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-09 04:45:16",
+            "url": "https://www.youtube.com/watch?v=NgYtTTogbQg&list=RDJY3BEc2j1NI&index=14&pp=8AUB",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-09 04:58:04",
+            "url": "https://www.youtube.com/watch?v=447yaU_4DF8&list=RDJY3BEc2j1NI&index=17",
+            "success": true
         }
     ],
     "https://tinyurl.com/5cbz6tky": 2,
@@ -139,5 +163,9 @@
     "https://tinyurl.com/yckr3kdu": 2,
     "https://tinyurl.com/mr3597rm": 1,
     "https://tinyurl.com/y4sadfcr": 1,
-    "https://tinyurl.com/yjmvjac7": 1
+    "https://tinyurl.com/yjmvjac7": 1,
+    "https://tinyurl.com/266yzcau": 1,
+    "https://tinyurl.com/4kznkfj6": 1,
+    "https://tinyurl.com/mt2c99pv": 1,
+    "https://tinyurl.com/59mes7uu": 1
 }

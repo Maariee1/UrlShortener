@@ -79,16 +79,8 @@ def MainTab():
                 stats["total_urls_shortened"] += 1
                 if {"timestamp": timestamp, "url": orig_url, "success": True} not in stats["url_history"]:
                     stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
-                if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_url, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_url} ==>> {short_url}\n"
-                            file.write(line)
-                    print("\nAll shortened URLs saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()  # Clear the dictionary to avoid duplication
-                else:
-                    print("\nNo valid URLs were shortened.")
+            else:
+                print("\nNo valid URLs were shortened.")
             
             # Update monthly and daily usage
             month_key = datetime.now().strftime("%Y-%m")
@@ -922,16 +914,8 @@ def BlankPage2():
             stats["total_urls_shortened"] += 1
             if {"timestamp": timestamp, "url": orig_urll, "success": True} not in stats["url_history"]:
                 stats["url_history"].append({"timestamp": timestamp, "url": orig_urll, "success": True})
-            if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_urll, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_urll} ==>> {short_url}\n"
-                            file.write(line)
-                    print(Fore.GREEN + "The first shortened URL has been saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()
-            else:
-                print(Fore.RED + "\nNo valid URLs were shortened.")
+        else:
+            print(Fore.RED + "\nNo valid URLs were shortened.")
 
     # Process second URL
         error_message = shortener.shorten_link(orig_url)
@@ -954,16 +938,9 @@ def BlankPage2():
             stats["total_urls_shortened"] += 1
             if {"timestamp": timestamp, "url": orig_url, "success": True} not in stats["url_history"]:
                 stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
-            if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_url, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_url} ==>> {short_url}\n"
-                            file.write(line)
-                    print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()
-            else:
-                print(Fore.RED + "\nNo valid URLs were shortened.")
+            
+        else:
+            print(Fore.RED + "\nNo valid URLs were shortened.")
 
             month_key = datetime.now().strftime("%Y-%m")
             day_key = datetime.now().strftime("%Y-%m-%d")
@@ -1260,16 +1237,8 @@ def BlankPage3():
             stats["total_urls_shortened"] += 1
             if {"timestamp": timestamp, "url": orig_url1, "success": True} not in stats["url_history"]:
                 stats["url_history"].append({"timestamp": timestamp, "url": orig_url1, "success": True})
-            if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_url1, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_url1} ==>> {short_url}\n"
-                            file.write(line)
-                    print("The first shortened URL has been saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()
-            else:
-                print(Fore.RED + "\nNo valid URLs were shortened.")
+        else:
+            print(Fore.RED + "\nNo valid URLs were shortened.")
 
         error_message2 = shortener.shorten_link(orig_url2)
         if error_message2:
@@ -1291,16 +1260,8 @@ def BlankPage3():
             stats["total_urls_shortened"] += 1
             if {"timestamp": timestamp, "url": orig_url2, "success": True} not in stats["url_history"]:
                 stats["url_history"].append({"timestamp": timestamp, "url": orig_url2, "success": True})
-            if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_url2, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_url2} ==>> {short_url}\n"
-                            file.write(line)
-                    print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()
-            else:
-                print(Fore.RED + "\nNo valid URLs were shortened.")
+        else:
+            print(Fore.RED + "\nNo valid URLs were shortened.")
 
         error_message3 = shortener.shorten_link(orig_url3)
         if error_message3:
@@ -1322,16 +1283,8 @@ def BlankPage3():
             stats["total_urls_shortened"] += 1
             if {"timestamp": timestamp, "url": orig_url3, "success": True} not in stats["url_history"]:
                 stats["url_history"].append({"timestamp": timestamp, "url": orig_url3, "success": True})
-            if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_url3, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_url3} ==>> {short_url}\n"
-                            file.write(line)
-                    print("The third shortened URL has been saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()
-            else:
-                print(Fore.RED + "\nNo valid URLs were shortened.")
+        else:
+            print(Fore.RED + "\nNo valid URLs were shortened.")
 
             month_key = datetime.now().strftime("%Y-%m")
             day_key = datetime.now().strftime("%Y-%m-%d")
