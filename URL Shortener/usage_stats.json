@@ -1,9 +1,9 @@
 {
-    "total_urls_shortened": 30,
+    "total_urls_shortened": 38,
     "total_invalid_urls": 7,
     "monthly_usage": {
         "2025-01": {
-            "successful": 12,
+            "successful": 15,
             "failed": 3
         }
     },
@@ -13,7 +13,7 @@
             "failed": 1
         },
         "2025-01-08": {
-            "successful": 10,
+            "successful": 13,
             "failed": 2
         }
     },
@@ -87,13 +87,57 @@
             "timestamp": "2025-01-08 01:02:07",
             "url": "https://www.youtube.com/watch?v=Sqc8CcXe0zY",
             "success": true
+        },
+        {
+            "timestamp": "2025-01-08 09:25:26",
+            "url": "https://www.geeksforgeeks.org/learn-data-structures-and-algorithms-dsa-tutorial/?ref=shm",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-08 09:25:26",
+            "url": "https://github.com/Maariee1/UrlShortener",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-08 09:25:26",
+            "url": "https://www.mainframestechhelp.com/tutorials/cobol/basic-verbs.htm",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-08 09:48:11",
+            "url": "https://www.mainframestechhelp.com/tutorials/cobol/basic-verbs.htm",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-08 09:48:11",
+            "url": "https://www.w3resource.com/cpp-exercises/index.php",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-08 09:48:11",
+            "url": "https://www.youtube.com/watch?v=sruAMHYutvU",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-08 09:49:45",
+            "url": "https://www.learncpp.com/",
+            "success": true
+        },
+        {
+            "timestamp": "2025-01-08 09:49:45",
+            "url": "https://github.com/Maariee1/UrlShortener",
+            "success": true
         }
     ],
-    "https://tinyurl.com/5cbz6tky": 1,
+    "https://tinyurl.com/5cbz6tky": 2,
     "https://tinyurl.com/3e8pw8pb": 1,
     "https://tinyurl.com/mtnmft3k": 1,
     "https://tinyurl.com/nc2uwy2c": 3,
-    "https://tinyurl.com/s7af92w4": 1,
+    "https://tinyurl.com/s7af92w4": 3,
     "https://tinyurl.com/693r8vew": 1,
-    "https://tinyurl.com/42kstt9s": 1
+    "https://tinyurl.com/42kstt9s": 1,
+    "https://tinyurl.com/yckr3kdu": 2,
+    "https://tinyurl.com/mr3597rm": 1,
+    "https://tinyurl.com/y4sadfcr": 1,
+    "https://tinyurl.com/yjmvjac7": 1
 }

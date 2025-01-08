@@ -4,6 +4,7 @@ from tkinter import messagebox
 import webbrowser
 import pyperclip
 import customtkinter
+import pickle
 import os
 import re
 from PIL import Image, ImageTk
@@ -13,7 +14,11 @@ from datetime import datetime
 import json 
 init()
 
-# Load URL usage count from JSON file
+# Loads the API key from the pickle file
+with open("api_key.pkl", "rb") as file:
+    API_KEY = pickle.load(file)
+
+# Loads URL usage count from JSON file
 def load_url_usage_count():
     global url_usage_count, stats
     try:
@@ -44,7 +49,6 @@ window.title("G-URL Shortener")
 window.configure(bg="#FBF4C4")
 window.geometry("1260x700")
 
-API_KEY = "Vyf64pu9k3P8aciCbr6ODAZLH22zcpjUBnKSidRDSDBzOb9ZDCCouA9S6tup"
 shortener = URLShortener(API_KEY)
 
 def MainTab():
@@ -73,7 +77,8 @@ def MainTab():
                 entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.GREEN + "The URL has been shortened successfully." + Style.RESET_ALL)
                 stats["total_urls_shortened"] += 1
-                stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
+                if {"timestamp": timestamp, "url": orig_url, "success": True} not in stats["url_history"]:
+                    stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
                 if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -81,6 +86,7 @@ def MainTab():
                             line = f"{orig_url} ==>> {short_url}\n"
                             file.write(line)
                     print("\nAll shortened URLs saved to 'URL Shortener/URLs.txt'.")
+                    shortener.shortened_urls.clear()  # Clear the dictionary to avoid duplication
                 else:
                     print("\nNo valid URLs were shortened.")
             
@@ -207,80 +213,11 @@ def MainTab():
         )
         close_button.pack(pady=10)
 
-    def show_analytics():
-        analytics_window = Toplevel(window)
-        analytics_window.title("URL Analytics")
-        analytics_window.geometry("1260x700")
-        analytics_window.configure(bg="#FBF4C4")
-
-
-        title_label = customtkinter.CTkLabel(
-            analytics_window,
-            text="URL Usage Analytics",
-            font=('Georgia', 28, 'bold'),
-            text_color='black'
-        )
-        title_label.pack(pady=20)
-
-
-        frame = Frame(analytics_window, bg="#FFF3E0", relief="solid", borderwidth=2)
-        frame.pack(fill="both", expand=True, padx=20, pady=20)
-
-
-        scrollbar = Scrollbar(frame, orient="vertical")
-        scrollbar.pack(side="right", fill="y")
-
-
-        analytics_text = Text(
-            frame,
-            font=('Georgia', 12),
-            wrap='word',
-            bg="#FFF8E1",
-            fg="#3E2723",
-            relief='flat',
-            yscrollcommand=scrollbar.set,
-            padx=10,
-            pady=10,
-        )
-        analytics_text.pack(side="left", fill="both", expand=True)
-
-
-        scrollbar.config(command=analytics_text.yview)
-
-
-        analytics_text.config(state='normal')
-
-
-        # Populate analytics text
-        analytics_text.insert('end', f"Total URLs Shortened: {stats['total_urls_shortened']}\n")
-        analytics_text.insert('end', f"Total Invalid URLs: {stats['total_invalid_urls']}\n\n")
-       
-        analytics_text.insert('end', "Monthly Usage:\n")
-        for month, usage in stats['monthly_usage'].items():
-            analytics_text.insert('end', f"  {month}: {usage}\n")
-       
-        analytics_text.insert('end', "\nDaily Usage:\n")
-        for day, usage in stats['daily_usage'].items():
-            analytics_text.insert('end', f"  {day}: {usage}\n")
-       
-        analytics_text.insert('end', "\nURL History:\n")
-        for entry in stats['url_history']:
-            analytics_text.insert('end', f"  {entry['timestamp']}: {entry['url']} - {'Success' if entry['success'] else 'Failed'}\n")
-       
-        analytics_text.insert('end', "\nURL Usage Count:\n")
-        for short_url, count in url_usage_count.items():
-            analytics_text.insert('end', f"{short_url}: {count} accesses\n")
-
-
-        analytics_text.config(state='disabled')
-
-
         def show_deletion_list():
             deletion_window = Toplevel(analytics_window)
             deletion_window.title("Delete URLs")
             deletion_window.geometry("800x500")
             deletion_window.configure(bg="#FBF4C4")
-
 
             deletion_label = customtkinter.CTkLabel(
                 deletion_window,
@@ -290,11 +227,9 @@ def MainTab():
             )
             deletion_label.pack(pady=10)
 
-
             # Frame for listbox and scrollbar
             dropdown_frame = Frame(deletion_window, bg="#FBF4C4")
             dropdown_frame.pack()
-
 
             listbox = Listbox(
                 dropdown_frame,
@@ -308,16 +243,13 @@ def MainTab():
             )
             listbox.pack(side="left", padx=10)
 
-
             dropdown_scrollbar = Scrollbar(dropdown_frame, orient="vertical", command=listbox.yview)
             dropdown_scrollbar.pack(side="right", fill="y")
             listbox.config(yscrollcommand=dropdown_scrollbar.set)
 
-
             # Populate the listbox
             for entry in stats['url_history']:
                 listbox.insert(END, entry['url'])
-
 
             def delete_selected_urls():
                 selected_indices = listbox.curselection()
@@ -328,12 +260,10 @@ def MainTab():
                     for url in selected_urls:
                         url_usage_count.pop(url, None)
 
-
                     # Refresh the analytics window
                     deletion_window.destroy()
                     analytics_window.destroy()
                     show_analytics()
-
 
             delete_button = customtkinter.CTkButton(
                 deletion_window,
@@ -347,7 +277,6 @@ def MainTab():
             )
             delete_button.pack(pady=10)
 
-
             close_button = customtkinter.CTkButton(
                 deletion_window,
                 text="Close",
@@ -360,7 +289,6 @@ def MainTab():
             )
             close_button.pack(pady=10)
 
-
         view_list_button = customtkinter.CTkButton(
             analytics_window,
             text="View Deletion List",
@@ -372,7 +300,6 @@ def MainTab():
             command=show_deletion_list
         )
         view_list_button.pack(pady=10)
-
 
         close_button = customtkinter.CTkButton(
             analytics_window,
@@ -1151,7 +1078,8 @@ def BlankPage2():
             entry_shortened1.configure(state="disabled")  # Make read-only
             print("The first URL has been shortened successfully." + Style.RESET_ALL)
             stats["total_urls_shortened"] += 1
-            stats["url_history"].append({"timestamp": timestamp, "url": orig_urll, "success": True})
+            if {"timestamp": timestamp, "url": orig_urll, "success": True} not in stats["url_history"]:
+                stats["url_history"].append({"timestamp": timestamp, "url": orig_urll, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1159,6 +1087,7 @@ def BlankPage2():
                             line = f"{orig_urll} ==>> {short_url}\n"
                             file.write(line)
                     print(Fore.GREEN + "The first shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+                    shortener.shortened_urls.clear()
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
@@ -1181,7 +1110,8 @@ def BlankPage2():
             entry_shortened2.configure(state="disabled")  # Make read-only
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
             stats["total_urls_shortened"] += 1
-            stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
+            if {"timestamp": timestamp, "url": orig_url, "success": True} not in stats["url_history"]:
+                stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1189,6 +1119,7 @@ def BlankPage2():
                             line = f"{orig_url} ==>> {short_url}\n"
                             file.write(line)
                     print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+                    shortener.shortened_urls.clear()
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
@@ -1445,7 +1376,6 @@ def BlankPage2():
         height=50,
         command=MainTab)
     back_btn.place(x=560, y=570)
-
     
 def BlankPage3():  
     for widget in window.winfo_children():
@@ -1486,7 +1416,8 @@ def BlankPage3():
             entryC31.configure(state="disabled")  # Disable editing
             print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
             stats["total_urls_shortened"] += 1
-            stats["url_history"].append({"timestamp": timestamp, "url": orig_url1, "success": True})
+            if {"timestamp": timestamp, "url": orig_url1, "success": True} not in stats["url_history"]:
+                stats["url_history"].append({"timestamp": timestamp, "url": orig_url1, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1494,6 +1425,7 @@ def BlankPage3():
                             line = f"{orig_url1} ==>> {short_url}\n"
                             file.write(line)
                     print("The first shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+                    shortener.shortened_urls.clear()
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
@@ -1515,7 +1447,8 @@ def BlankPage3():
             entryC32.configure(state="disabled")
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
             stats["total_urls_shortened"] += 1
-            stats["url_history"].append({"timestamp": timestamp, "url": orig_url2, "success": True})
+            if {"timestamp": timestamp, "url": orig_url2, "success": True} not in stats["url_history"]:
+                stats["url_history"].append({"timestamp": timestamp, "url": orig_url2, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1523,6 +1456,7 @@ def BlankPage3():
                             line = f"{orig_url2} ==>> {short_url}\n"
                             file.write(line)
                     print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+                    shortener.shortened_urls.clear()
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
@@ -1544,7 +1478,8 @@ def BlankPage3():
             entryC33.configure(state="disabled")  
             print(Fore.GREEN + "The third URL has been shortened successfully." + Style.RESET_ALL)
             stats["total_urls_shortened"] += 1
-            stats["url_history"].append({"timestamp": timestamp, "url": orig_url3, "success": True})
+            if {"timestamp": timestamp, "url": orig_url3, "success": True} not in stats["url_history"]:
+                stats["url_history"].append({"timestamp": timestamp, "url": orig_url3, "success": True})
             if shortener.shortened_urls:
                     os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
                     with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
@@ -1552,6 +1487,7 @@ def BlankPage3():
                             line = f"{orig_url3} ==>> {short_url}\n"
                             file.write(line)
                     print("The third shortened URL has been saved to 'URL Shortener/URLs.txt'.")
+                    shortener.shortened_urls.clear()
             else:
                 print(Fore.RED + "\nNo valid URLs were shortened.")
 
@@ -1591,7 +1527,6 @@ def BlankPage3():
         clipboard_text3 = pyperclip.paste()
         entryP33.delete(0, END)  
         entryP33.insert(0, clipboard_text3)
-    
 
     def copyText31():
         text1 = entryC31.get()
