@@ -8,9 +8,12 @@ import pickle
 import os
 import re
 from PIL import Image, ImageTk
-from Functionality import URLShortener, is_valid_url
+from Functionality import URLShortener, is_valid_url  
 from colorama import Fore, Style, init
 from datetime import datetime
+import sqlite3
+# from flask import Flask, redirect, request
+# import requests
 import json 
 init()
 
@@ -54,9 +57,15 @@ shortener = URLShortener(API_KEY)
 def MainTab():
     for widget in window.winfo_children():
         widget.destroy()
-    
+
+    connection = sqlite3.connect("Analytics.db")   
+
+    cursor = connection.cursor()
+
     def generateLink():
         orig_url = entry.get().strip()
+        month_key = datetime.now().strftime("%Y-%m")
+
         if orig_url:
             error_message = shortener.shorten_link(orig_url)
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -67,8 +76,18 @@ def MainTab():
                 entry1.configure(text_color="red")  # Make error text red
                 entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.RED + "Error: The URL provided is invalid." + Style.RESET_ALL)
-                stats["total_invalid_urls"] += 1
-                stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": False})
+                cursor.execute('''
+                            INSERT INTO History (Timestamps, LongUrl, ShortUrl)
+                            VALUES (?, ?, ?)
+                ''',(timestamp, "InvalidUrl", "No output"))
+                cursor.execute('''
+                            INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
+                            VALUES (?, ?)
+                            ON CONFLICT(Timestamps)
+                            DO UPDATE SET InvalidUrls = InvalidUrls + 1
+                ''',(month_key, 1))
+                connection.commit()
+
             elif orig_url in shortener.shortened_urls:
                 entry1.configure(state='normal')  # Temporarily make it editable to insert text
                 entry1.delete(0, END)
@@ -76,36 +95,19 @@ def MainTab():
                 entry1.configure(text_color="white")
                 entry1.configure(state='readonly')  # Make it readonly again
                 print(Fore.GREEN + "The URL has been shortened successfully." + Style.RESET_ALL)
-                stats["total_urls_shortened"] += 1
-                if {"timestamp": timestamp, "url": orig_url, "success": True} not in stats["url_history"]:
-                    stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
-                if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_url, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_url} ==>> {short_url}\n"
-                            file.write(line)
-                    print("\nAll shortened URLs saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()  # Clear the dictionary to avoid duplication
-                else:
-                    print("\nNo valid URLs were shortened.")
-            
-            # Update monthly and daily usage
-            month_key = datetime.now().strftime("%Y-%m")
-            day_key = datetime.now().strftime("%Y-%m-%d")
-            if month_key not in stats["monthly_usage"]:
-                stats["monthly_usage"][month_key] = {"successful": 0, "failed": 0}
-            if day_key not in stats["daily_usage"]:
-                stats["daily_usage"][day_key] = {"successful": 0, "failed": 0}
-            
-            if error_message:
-                stats["monthly_usage"][month_key]["failed"] += 1
-                stats["daily_usage"][day_key]["failed"] += 1
-            else:
-                stats["monthly_usage"][month_key]["successful"] += 1
-                stats["daily_usage"][day_key]["successful"] += 1
-
-            save_url_usage_count()
+                cursor.execute('''
+                            INSERT INTO History (Timestamps, LongUrl, ShortUrl)
+                            VALUES (?, ?, ?)
+                ''',(timestamp, orig_url, " "))
+                cursor.execute('''
+                            INSERT INTO TotalUrlShortened (Timestamps, ValidUrls)
+                            VALUES (?, ?)
+                            ON CONFLICT(Timestamps)
+                            DO UPDATE SET ValidUrls = ValidUrls + 1
+                ''',(month_key, 1))
+                shortened_url = entry1.get().strip()
+                short_url(shortened_url, timestamp)
+                
         else:
             entry1.configure(state='normal')  # Temporarily make it editable to insert text
             entry1.delete(0, END)
@@ -113,6 +115,14 @@ def MainTab():
             entry1.configure(text_color="red")  # Make error text red
             entry1.configure(state='readonly')  # Make it readonly again
             print(Fore.RED + "Error: Please enter a valid URL." + Style.RESET_ALL)
+
+    def short_url(shortened_url, timestamp):
+        cursor.execute('''
+                        UPDATE History
+                        SET ShortUrl = ?
+                        WHERE Timestamps = ?
+                ''',(shortened_url, timestamp))
+        connection.commit()
 
     def copyText():
         text = entry1.get()
@@ -134,13 +144,7 @@ def MainTab():
         else:
             webbrowser.open(short_url)
             print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
-            # Increments the usage count
-            if short_url in url_usage_count:
-                url_usage_count[short_url] += 1
-            else: 
-                url_usage_count[short_url] = 1
-            # Save the updated usage count 
-            save_url_usage_count() 
+
 
     def show_analytics():
         analytics_window = Toplevel(window)
@@ -910,8 +914,6 @@ def BlankPage2():
             entry_shortened1.configure(text_color="red")
             entry_shortened1.configure(state="disabled")  # Make read-only
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
-            stats["total_invalid_urls"] += 1
-            stats["url_history"].append({"timestamp": timestamp, "url": orig_urll, "success": False})
         elif orig_urll in shortener.shortened_urls:
             entry_shortened1.configure(state="normal")  # Temporarily enable editing
             entry_shortened1.delete(0, END)
@@ -919,19 +921,6 @@ def BlankPage2():
             entry_shortened1.configure(text_color="white")
             entry_shortened1.configure(state="disabled")  # Make read-only
             print("The first URL has been shortened successfully." + Style.RESET_ALL)
-            stats["total_urls_shortened"] += 1
-            if {"timestamp": timestamp, "url": orig_urll, "success": True} not in stats["url_history"]:
-                stats["url_history"].append({"timestamp": timestamp, "url": orig_urll, "success": True})
-            if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_urll, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_urll} ==>> {short_url}\n"
-                            file.write(line)
-                    print(Fore.GREEN + "The first shortened URL has been saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()
-            else:
-                print(Fore.RED + "\nNo valid URLs were shortened.")
 
     # Process second URL
         error_message = shortener.shorten_link(orig_url)
@@ -942,8 +931,7 @@ def BlankPage2():
             entry_shortened2.configure(text_color="red")
             entry_shortened2.configure(state="disabled")  # Make read-only
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
-            stats["total_invalid_urls"] += 1
-            stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": False})
+
         elif orig_url in shortener.shortened_urls:
             entry_shortened2.configure(state="normal")  # Temporarily enable editing
             entry_shortened2.delete(0, END)
@@ -951,38 +939,6 @@ def BlankPage2():
             entry_shortened2.configure(text_color="white")
             entry_shortened2.configure(state="disabled")  # Make read-only
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
-            stats["total_urls_shortened"] += 1
-            if {"timestamp": timestamp, "url": orig_url, "success": True} not in stats["url_history"]:
-                stats["url_history"].append({"timestamp": timestamp, "url": orig_url, "success": True})
-            if shortener.shortened_urls:
-                    os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-                    with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
-                        for orig_url, short_url in shortener.shortened_urls.items():
-                            line = f"{orig_url} ==>> {short_url}\n"
-                            file.write(line)
-                    print("The second shortened URL has been saved to 'URL Shortener/URLs.txt'.")
-                    shortener.shortened_urls.clear()
-            else:
-                print(Fore.RED + "\nNo valid URLs were shortened.")
-
-            month_key = datetime.now().strftime("%Y-%m")
-            day_key = datetime.now().strftime("%Y-%m-%d")
-            if month_key not in stats["monthly_usage"]:
-                stats["monthly_usage"][month_key] = {"successful": 0, "failed": 0}
-            if day_key not in stats["daily_usage"]:
-                stats["daily_usage"][day_key] = {"successful": 0, "failed": 0}
-            
-            if error_message1:
-                stats["monthly_usage"][month_key]["failed"] += 1
-                stats["daily_usage"][day_key]["failed"] += 1
-            elif error_message:
-                stats["monthly_usage"][month_key]["failed"] += 1
-                stats["daily_usage"][day_key]["failed"] += 1
-            else:
-                stats["monthly_usage"][month_key]["successful"] += 1
-                stats["daily_usage"][day_key]["successful"] += 1
-
-            save_url_usage_count()
 
     def pasteText1(entry1):
         clipboard_text = pyperclip.paste()
@@ -1233,7 +1189,7 @@ def BlankPage3():
     label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
     label1.pack()
     label1.image = photo  
-        
+
     def generateLink3():      
         orig_url1 = entryP31.get().strip()
         orig_url2 = entryP32.get().strip()
