@@ -5,7 +5,6 @@ import webbrowser
 import pyperclip
 import customtkinter
 import pickle
-import os
 import re
 from PIL import Image, ImageTk
 from Functionality import URLShortener, is_valid_url  
@@ -14,7 +13,6 @@ from datetime import datetime
 import sqlite3
 # from flask import Flask, redirect, request
 # import requests
-import json 
 init()
 
 # Loads the API key from the pickle file
@@ -39,10 +37,10 @@ def MainTab():
     def generateLink():
         orig_url = entry.get().strip()
         month_key = datetime.now().strftime("%Y-%m")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         if orig_url:
             error_message = shortener.shorten_link(orig_url)
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             if error_message:
                 entry1.configure(state='normal')  # Temporarily make it editable to insert text
                 entry1.delete(0, END)
@@ -89,6 +87,17 @@ def MainTab():
             entry1.configure(text_color="red")  # Make error text red
             entry1.configure(state='readonly')  # Make it readonly again
             print(Fore.RED + "Error: Please enter a valid URL." + Style.RESET_ALL)
+            cursor.execute('''
+                        INSERT INTO History (Timestamps, LongUrl, ShortUrl)
+                        VALUES (?, ?, ?)
+            ''',(timestamp, "InvalidUrl", "No output"))
+            cursor.execute('''
+                        INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
+                        VALUES (?, ?)
+                        ON CONFLICT(Timestamps)
+                        DO UPDATE SET InvalidUrls = InvalidUrls + 1
+            ''',(month_key, 1))
+            connection.commit()
 
     def short_url(shortened_url, timestamp):
         cursor.execute('''
@@ -157,24 +166,27 @@ def MainTab():
         analytics_text.config(state='normal')
 
         analytics_text.config(state='normal')
-        analytics_text.insert('end', f"Total URLs Shortened: {stats['total_urls_shortened']}\n")
-        analytics_text.insert('end', f"Total Invalid URLs: {stats['total_invalid_urls']}\n\n")
-        
-        analytics_text.insert('end', "Monthly Usage:\n")
-        for month, usage in stats['monthly_usage'].items():
-            analytics_text.insert('end', f"  {month}: {usage}\n")
-        
-        analytics_text.insert('end', "\nDaily Usage:\n")
-        for day, usage in stats['daily_usage'].items():
-            analytics_text.insert('end', f"  {day}: {usage}\n")
-        
-        analytics_text.insert('end', "\nURL History:\n")
-        for entry in stats['url_history']:
-            analytics_text.insert('end', f"  {entry['timestamp']}: {entry['url']} - {'Success' if entry['success'] else 'Failed'}\n")
-        
-        analytics_text.insert('end', "\nURL Usage Count:\n")
-        for short_url, count in url_usage_count.items():
-            analytics_text.insert('end', f"{short_url}: {count} accesses\n")
+
+        db_path = 'Analytics.db'
+
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT Timestamps, LongUrl, ShortUrl FROM History ORDER BY Timestamps DESC")
+        history_data = cursor.fetchall()
+
+        analytics_text.insert('end', "\nURL History:")
+        for Timestamp, LongUrl, ShortUrl in history_data:
+            analytics_text.insert('end', f"Timestamps: {Timestamp}, Long URL: {LongUrl}, Short URL: {ShortUrl}")
+
+        cursor.execute("SELECT Timestamps, ValidUrls, InvalidUrls FROM TotalUrlShortened ORDER BY Timestamps DESC")
+        Total_Url = cursor.fetchall()
+
+        analytics_text.insert('end', "\nTotal Shortened URLs:")
+        for Timestamp, valid_urls, invalid_urls in Total_Url:
+            analytics_text.insert('end', f"Timestamps: {Timestamp}, ValidUrls: {valid_urls}, InvalidUrls: {invalid_urls}")
+
+        conn.close()
 
         analytics_text.config(state='disabled')
 
@@ -1364,7 +1376,7 @@ def BlankPage3():
 
     def short_url2(shortened_url, timestamp):
         cursor.execute('''
-                        UPDATE History
+                        UPDATE History+6
                         SET ShortUrl = ?
                         WHERE ROWID = (
                         SELECT ROWID
