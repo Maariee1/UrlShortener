@@ -11,6 +11,8 @@ from Functionality import URLShortener, is_valid_url
 from colorama import Fore, Style, init
 from datetime import datetime
 import sqlite3
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # from flask import Flask, redirect, request
 # import requests
 init()
@@ -128,6 +130,8 @@ def MainTab():
             webbrowser.open(short_url)
             print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
 
+#------------------ANALYTICS OR URL------------------------------#  
+
     def show_analytics():
         analytics_window = Toplevel(window)
         analytics_window.title("URL Analytics")
@@ -160,11 +164,9 @@ def MainTab():
             pady=10,
         )
         analytics_text.pack(side="left", fill="both", expand=True)
-
+        
         scrollbar.config(command=analytics_text.yview)
-
         analytics_text.config(state='normal')
-
         analytics_text.config(state='normal')
 
         db_path = 'Analytics.db'
@@ -202,6 +204,84 @@ def MainTab():
         )
         close_button.pack(pady=10)
         
+        graph_button = customtkinter.CTkButton(
+            analytics_window,
+            text="View Graphs",
+            font=('Georgia', 14, 'bold'),
+            corner_radius=300,
+            fg_color='#21531C',
+            text_color='#FBF4C4',
+            hover_color='#3D6C38',
+            command=show_graph
+        )
+        graph_button.pack(pady=30)
+        
+#------------------GRAPH FOR INVALID AND VALID URL PER MONTH------------------------------#      
+  
+    def show_graph():
+        graph_window = Toplevel(window)
+        graph_window.title("Graphs - URL Analytics")
+        graph_window.geometry("1260x700")
+        graph_window.configure(bg="#FBF4C4")
+
+        title_label = customtkinter.CTkLabel(
+            graph_window,
+            text="URL Usage Graphs",
+            font=('Georgia', 28, 'bold'),
+            text_color='black'
+        )
+        title_label.pack(pady=20)
+
+        graph_frame = Frame(graph_window, bg="white", relief="solid", borderwidth=2)
+        graph_frame.pack(fill="both", expand=True, padx=20, pady=20)
+
+        db_path = 'Analytics.db'
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT Timestamps, ValidUrls, InvalidUrls FROM TotalUrlShortened ORDER BY Timestamps DESC")
+        total_url_data = cursor.fetchall()
+        conn.close()
+        
+        def plot_bar_chart(data):
+            timestamps = [row[0] for row in data]
+            valid_urls = [row[1] for row in data]
+            invalid_urls = [row[2] for row in data]
+
+            fig = Figure(figsize=(6, 5), dpi=100)
+            ax = fig.add_subplot(111)
+
+            bar_width = 0.4
+            x_positions = range(len(timestamps))
+
+            ax.bar([x - bar_width / 2 for x in x_positions], valid_urls, bar_width, label='Valid URLs', color='green')
+            ax.bar([x + bar_width / 2 for x in x_positions], invalid_urls, bar_width, label='Invalid URLs', color='red')
+
+            ax.set_title('Valid and Invalid URLs')
+            ax.set_ylabel('Counts')
+            ax.set_xticks(x_positions)
+            ax.set_xticklabels(timestamps, rotation=1, ha='center') 
+            ax.legend()
+
+            return fig
+
+        fig = plot_bar_chart(total_url_data)
+        canvas = FigureCanvasTkAgg(fig, master=graph_frame)
+        canvas.draw()
+        canvas.get_tk_widget().place(x=10,y=20)
+
+        close_button = customtkinter.CTkButton(
+            graph_window,
+            text="Close",
+            font=('Georgia', 14, 'bold'),
+            corner_radius=300,
+            fg_color='#21531C',
+            text_color='#FBF4C4',
+            hover_color='#3D6C38',
+            command=graph_window.destroy
+        )
+        close_button.pack(pady=10)
+             
     def pasteText():
         clipboard_text = pyperclip.paste()
         entry.delete(0, END)  
@@ -213,6 +293,28 @@ def MainTab():
             BlankPage2()
         elif selected_value == '3':
              BlankPage3()
+
+#------------------------------MAIN PAGE----------------------------------#
+
+    image = Image.open("GURL LOGO.png")
+    image = image.resize((150, 100))
+    photo = ImageTk.PhotoImage(image)
+
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label.place(x=545, y=580)
+    label.image = photo
+    
+    image = Image.open("GURL QUOTE.png")
+    image = image.resize((1270, 400))
+    photo = ImageTk.PhotoImage(image)
+
+    style = ttk.Style()
+    style.configure("Custom.TLabel", background='#FBF4C4')
+    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
+    label1.pack()
+    label1.image = photo
     
     view_analytics_button = customtkinter.CTkButton(
         window,
@@ -224,28 +326,6 @@ def MainTab():
         command=show_analytics
     )
     view_analytics_button.place(x=560, y=560)
-
-    #Syntax to add image using Pil or pillow
-    image = Image.open("GURL LOGO.png")
-    image = image.resize((150, 100))
-    photo = ImageTk.PhotoImage(image)
-
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label.place(x=545, y=580)
-    label.image = photo
-    
-    #Gurl and quote
-    image = Image.open("GURL QUOTE.png")
-    image = image.resize((1270, 400))
-    photo = ImageTk.PhotoImage(image)
-
-    style = ttk.Style()
-    style.configure("Custom.TLabel", background='#FBF4C4')
-    label1 = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
-    label1.pack()
-    label1.image = photo
     
     #GENERATE LINK
     label = customtkinter.CTkLabel(window,
@@ -334,7 +414,7 @@ def MainTab():
         command=copyText)
     copyText.place(x=920,y=403)
 
-    # DROPDOWN MENU
+#------------------------------DROP DOWN MENU----------------------------------#
     style = ttk.Style()
     style.theme_use('default')  
     style.configure(
@@ -389,7 +469,7 @@ def MainTab():
         command=TermButton)
     TermsCondition.place(x=960, y=600)
 
-#NEXT PAGE FOR TERMS AND CONDITION
+#------------------------------TERMS AND CONDITION PAGE----------------------------------#
 def TermButton():  
     for widget in window.winfo_children():  # Clear existing widgets
         widget.destroy()
@@ -549,12 +629,11 @@ def TermButton():
         command=AboutUsButton)
     GoTo_AboutUs.place(x=1025, y=620)
     
-#NEXT PAGE FOR ABOUT US
+#------------------------------ABOUT US PAGE----------------------------------#
 def AboutUsButton():  
-    for widget in window.winfo_children():  # Clear existing widgets
+    for widget in window.winfo_children():  
         widget.destroy()
-    
-    #Quote of GURL    
+       
     image = Image.open("GURL BIG QUOTE.png")
     image = image.resize((500, 200))
     photo = ImageTk.PhotoImage(image)
@@ -565,7 +644,6 @@ def AboutUsButton():
     label.place(x=360, y=70)
     label.image = photo
     
-    #LOGO of GURL    
     image = Image.open("GURL LOGO.png")
     image = image.resize((150, 100))
     photo = ImageTk.PhotoImage(image)
@@ -575,8 +653,7 @@ def AboutUsButton():
     label = ttk.Label(window, image=photo, style="Custom.TLabel", relief="flat", borderwidth=0)
     label.place(x=545, y=580)
     label.image = photo
-    
-    # First Upper Left Box in About Us
+
     about_us_frame = customtkinter.CTkFrame(window, 
                                             width=350, 
                                             height=80, 
@@ -590,10 +667,9 @@ def AboutUsButton():
                                            height=60,
                                            corner_radius=50, 
                                            fg_color="#FBF4C4",
-                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+                                           font=("Bookman Old Style", 25,'bold'))  
     Label_for_box.place(relx=0.5, rely=0.5, anchor="center")
-           
-    # #Second Upper Right Box in About Us
+
     about_us_frame1 = customtkinter.CTkFrame(window, 
                                             width=350, 
                                             height=80, 
