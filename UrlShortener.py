@@ -144,56 +144,84 @@ def MainTab():
             font=('Georgia', 28, 'bold'),
             text_color='black'
         )
-        title_label.pack(pady=20)
+        title_label.pack(pady=10)
 
-        frame = Frame(analytics_window, bg="#FFF3E0", relief="solid", borderwidth=2)
-        frame.pack(fill="both", expand=True, padx=20, pady=20)
+         # Create a frame for holding tables and their labels
+        main_frame = Frame(analytics_window, bg="#FBF4C4", relief="solid", borderwidth=0)
+        main_frame.pack(fill="both", expand=True, padx=5, pady=5)
 
-        scrollbar = Scrollbar(frame, orient="vertical")
-        scrollbar.pack(side="right", fill="y")
+        # Create a frame for URL History table
+        history_frame = Frame(main_frame, bg="#FFF3E0", relief="solid", borderwidth=2)
+        history_frame.pack(fill="both", expand=True, padx=3, pady=3)
 
-        analytics_text = Text(
-            frame,
-            font=('Georgia', 12),
-            wrap='word',
-            bg="#FFF8E1",
-            fg="#3E2723",
-            relief='flat',
-            yscrollcommand=scrollbar.set,
-            padx=10,
-            pady=10,
+        # Add label for URL History
+        history_label = Label(
+            history_frame,
+            text="URL History",
+            font=('Georgia', 16, 'bold'),
+            bg="#FFF3E0",
+            fg="#3E2723"
         )
-        analytics_text.pack(side="left", fill="both", expand=True)
-        
-        scrollbar.config(command=analytics_text.yview)
-        analytics_text.config(state='normal')
-        analytics_text.config(state='normal')
+        history_label.pack(anchor="w", pady=3)
 
+        # Add URL History table
+        history_table = ttk.Treeview(history_frame, columns=("Timestamp", "Long URL", "Short URL"), show="headings")
+        history_table.heading("Timestamp", text="Timestamp")
+        history_table.heading("Long URL", text="Long URL")
+        history_table.heading("Short URL", text="Short URL")
+        history_table.column("Timestamp", width=200, anchor="center")
+        history_table.column("Long URL", width=600, anchor="center")
+        history_table.column("Short URL", width=400, anchor="center")
+        history_table.pack(fill="both", expand=True, pady=3)
+
+        # Fetch data for URL History
         db_path = 'Analytics.db'
-
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
-
         cursor.execute("SELECT Timestamps, LongUrl, ShortUrl FROM History ORDER BY Timestamps DESC")
         history_data = cursor.fetchall()
+        for row in history_data:
+            history_table.insert('', 'end', values=row)
 
-        analytics_text.insert('end', "\nURL History:")
-        for Timestamp, LongUrl, ShortUrl in history_data:
-            analytics_text.insert('end', f"Timestamps: {Timestamp}, Long URL: {LongUrl}, Short URL: {ShortUrl}")
+        # Create a frame for Total Shortened URLs table
+        total_frame = Frame(main_frame, bg="#FFF3E0", relief="solid", borderwidth=2)
+        total_frame.pack(fill="both", expand=True, padx=3, pady=3)
 
+        # Add label for Total Shortened URLs
+        total_label = Label(
+            total_frame,
+            text="Total Shortened URLs",
+            font=('Georgia', 16, 'bold'),
+            bg="#FFF3E0",
+            fg="#3E2723"
+        )
+        total_label.pack(anchor="w", pady=3)
+
+        # Add Total Shortened URLs table
+        total_table = ttk.Treeview(total_frame, columns=("Timestamp", "Valid URLs", "Invalid URLs"), show="headings")
+        total_table.heading("Timestamp", text="Timestamp")
+        total_table.heading("Valid URLs", text="Valid URLs")
+        total_table.heading("Invalid URLs", text="Invalid URLs")
+        total_table.column("Timestamp", width=200, anchor="center")
+        total_table.column("Valid URLs", width=300, anchor="center")
+        total_table.column("Invalid URLs", width=300, anchor="center")
+        total_table.pack(fill="both", expand=True, pady=3)
+
+        # Fetch data for Total Shortened URLs
         cursor.execute("SELECT Timestamps, ValidUrls, InvalidUrls FROM TotalUrlShortened ORDER BY Timestamps DESC")
-        Total_Url = cursor.fetchall()
-
-        analytics_text.insert('end', "\nTotal Shortened URLs:")
-        for Timestamp, valid_urls, invalid_urls in Total_Url:
-            analytics_text.insert('end', f"Timestamps: {Timestamp}, ValidUrls: {valid_urls}, InvalidUrls: {invalid_urls}")
+        total_data = cursor.fetchall()
+        for row in total_data:
+            total_table.insert('', 'end', values=row)
 
         conn.close()
+        
+        # Create a frame for buttons
+        button_frame = Frame(analytics_window, bg="#FBF4C4")
+        button_frame.pack(pady=5)
 
-        analytics_text.config(state='disabled')
-
+        # Add Close button to the button_frame
         close_button = customtkinter.CTkButton(
-            analytics_window,
+            button_frame,
             text="Close",
             font=('Georgia', 14, 'bold'),
             corner_radius=300,
@@ -202,10 +230,11 @@ def MainTab():
             hover_color='#3D6C38',
             command=analytics_window.destroy
         )
-        close_button.pack(pady=10)
-        
+        close_button.pack(pady=2)
+
+        # Add Graph button to the button_frame
         graph_button = customtkinter.CTkButton(
-            analytics_window,
+            button_frame, 
             text="View Graphs",
             font=('Georgia', 14, 'bold'),
             corner_radius=300,
@@ -214,7 +243,7 @@ def MainTab():
             hover_color='#3D6C38',
             command=show_graph
         )
-        graph_button.pack(pady=30)
+        graph_button.pack(pady=2)
         
 #------------------GRAPH FOR INVALID AND VALID URL PER MONTH------------------------------#      
   
