@@ -142,36 +142,29 @@ def MainTab():
 #------------------ANALYTICS OR URL------------------------------#  
 
     def show_analytics():
+        # Create the analytics window
         analytics_window = Toplevel(window)
         analytics_window.title("URL Analytics")
-        analytics_window.geometry("1260x700")
+        analytics_window.geometry("1200x700")
         analytics_window.configure(bg="#FBF4C4")
 
-        title_label = customtkinter.CTkLabel(
-            analytics_window,
-            text="URL Usage Analytics",
-            font=('Georgia', 28, 'bold'),
-            text_color='black'
-        )
-        title_label.pack(pady=10)
-
-         # Create a frame for holding tables and their labels
-        main_frame = Frame(analytics_window, bg="#FBF4C4", relief="solid", borderwidth=0)
-        main_frame.pack(fill="both", expand=True, padx=5, pady=5)
-
-        # Create a frame for URL History table
-        history_frame = Frame(main_frame, bg="#FFF3E0", relief="solid", borderwidth=2)
-        history_frame.pack(fill="both", expand=True, padx=3, pady=3)
+        # Create the main frame
+        main_frame = Frame(analytics_window, bg="#FFF3E0", relief="solid", borderwidth=2)
+        main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
         # Add label for URL History
         history_label = Label(
-            history_frame,
+            main_frame,
             text="URL History",
             font=('Georgia', 16, 'bold'),
             bg="#FFF3E0",
             fg="#3E2723"
         )
         history_label.pack(anchor="w", pady=3)
+
+        # Create a frame for URL History table
+        history_frame = Frame(main_frame, bg="#FFF3E0", relief="solid", borderwidth=2)
+        history_frame.pack(fill="both", expand=True, padx=3, pady=3)
 
         # Add URL History table
         history_table = ttk.Treeview(history_frame, columns=("Timestamp", "Long URL", "Short URL"), show="headings")
@@ -182,15 +175,6 @@ def MainTab():
         history_table.column("Long URL", width=600, anchor="center")
         history_table.column("Short URL", width=400, anchor="center")
         history_table.pack(fill="both", expand=True, pady=3)
-
-        # Fetch data for URL History
-        db_path = 'Analytics.db'
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT Timestamps, LongUrl, ShortUrl FROM History ORDER BY Timestamps DESC")
-        history_data = cursor.fetchall()
-        for row in history_data:
-            history_table.insert('', 'end', values=row)
 
         # Create a frame for Total Shortened URLs table
         total_frame = Frame(main_frame, bg="#FFF3E0", relief="solid", borderwidth=2)
@@ -207,28 +191,45 @@ def MainTab():
         total_label.pack(anchor="w", pady=3)
 
         # Add Total Shortened URLs table
-        total_table = ttk.Treeview(total_frame, columns=("Timestamp", "Valid URLs", "Invalid URLs"), show="headings")
-        total_table.heading("Timestamp", text="Timestamp")
+        total_table = ttk.Treeview(total_frame, columns=("Daily", "Valid URLs", "Invalid URLs"), show="headings")
+        total_table.heading("Daily", text="Daily")
         total_table.heading("Valid URLs", text="Valid URLs")
         total_table.heading("Invalid URLs", text="Invalid URLs")
-        total_table.column("Timestamp", width=200, anchor="center")
+        total_table.column("Daily", width=200, anchor="center")
         total_table.column("Valid URLs", width=300, anchor="center")
         total_table.column("Invalid URLs", width=300, anchor="center")
         total_table.pack(fill="both", expand=True, pady=3)
 
-        # Fetch data for Total Shortened URLs
-        cursor.execute("SELECT Timestamps, ValidUrls, InvalidUrls FROM TotalUrlShortened ORDER BY Timestamps DESC")
-        total_data = cursor.fetchall()
-        for row in total_data:
-            total_table.insert('', 'end', values=row)
+        # Fetch data from the database
+        db_path = 'Analytics.db'
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
 
-        conn.close()
-        
+            # Fetch URL History
+            cursor.execute("SELECT Timestamps, LongUrl, ShortUrl FROM History ORDER BY Timestamps DESC")
+            history_data = cursor.fetchall()
+            for row in history_data:
+                history_table.insert('', 'end', values=row)
+
+            # Fetch Total Shortened URLs for the Daily key
+            cursor.execute("SELECT Daily, ValidUrls, InvalidUrls FROM TotalUrlShortened ORDER BY Daily DESC")
+            total_data = cursor.fetchall()
+            for row in total_data:
+                total_table.insert('', 'end', values=row)
+
+        except sqlite3.Error as e:
+            print(f"Error fetching data: {e}")
+
+        finally:
+            if 'conn' in locals():
+                conn.close()
+
         # Create a frame for buttons
         button_frame = Frame(analytics_window, bg="#FBF4C4")
-        button_frame.pack(pady=5)
+        button_frame.pack(pady=10)
 
-        # Add Close button to the button_frame
+        # Add Close button
         close_button = customtkinter.CTkButton(
             button_frame,
             text="Close",
@@ -239,32 +240,32 @@ def MainTab():
             hover_color='#3D6C38',
             command=analytics_window.destroy
         )
-        close_button.pack(pady=2)
+        close_button.pack(side=LEFT, padx=5)
 
-        # Add Graph button to the button_frame
+        # Add Graph button
         graph_button = customtkinter.CTkButton(
-            button_frame, 
+            button_frame,
             text="View Graphs",
             font=('Georgia', 14, 'bold'),
             corner_radius=300,
             fg_color='#21531C',
             text_color='#FBF4C4',
             hover_color='#3D6C38',
-            command=show_graph
+            command=show_graph  # Ensure `show_graph` is defined elsewhere
         )
-        graph_button.pack(pady=2)
-        
+        graph_button.pack(side=LEFT, padx=5)
+
 #------------------GRAPH FOR INVALID AND VALID URL PER MONTH------------------------------#      
   
     def show_graph():
         graph_window = Toplevel(window)
-        graph_window.title("Graphs - URL Analytics")
+        graph_window.title("Valid vs. Invalid URLs")
         graph_window.geometry("1260x700")
         graph_window.configure(bg="#FBF4C4")
 
         title_label = customtkinter.CTkLabel(
             graph_window,
-            text="URL Usage Graphs",
+            text="Valid vs. Invalid URLs",
             font=('Georgia', 28, 'bold'),
             text_color='black'
         )
@@ -274,40 +275,71 @@ def MainTab():
         graph_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
         db_path = 'Analytics.db'
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
 
-        cursor.execute("SELECT Timestamps, ValidUrls, InvalidUrls FROM TotalUrlShortened ORDER BY Timestamps DESC")
-        total_url_data = cursor.fetchall()
-        conn.close()
-        
-        def plot_bar_chart(data):
-            timestamps = [row[0] for row in data]
-            valid_urls = [row[1] for row in data]
-            invalid_urls = [row[2] for row in data]
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
 
-            fig = Figure(figsize=(6, 5), dpi=100)
-            ax = fig.add_subplot(111)
+            # Fetch total counts of valid and invalid URLs
+            cursor.execute("""
+                SELECT 
+                    SUM(ValidUrls) AS TotalValid,
+                    SUM(InvalidUrls) AS TotalInvalid
+                FROM TotalUrlShortened
+            """)
+            result = cursor.fetchone()
 
-            bar_width = 0.4
-            x_positions = range(len(timestamps))
+            total_valid = result[0] if result[0] is not None else 0
+            total_invalid = result[1] if result[1] is not None else 0
 
-            ax.bar([x - bar_width / 2 for x in x_positions], valid_urls, bar_width, label='Valid URLs', color='green')
-            ax.bar([x + bar_width / 2 for x in x_positions], invalid_urls, bar_width, label='Invalid URLs', color='red')
+            # Data for the bar chart
+            categories = ['Valid URLs', 'Invalid URLs']
+            counts = [total_valid, total_invalid]
 
-            ax.set_title('Valid and Invalid URLs')
-            ax.set_ylabel('Counts')
-            ax.set_xticks(x_positions)
-            ax.set_xticklabels(timestamps, rotation=1, ha='center') 
-            ax.legend()
+            # Create the bar chart
+            fig = Figure(figsize=(13, 5), dpi=100)
 
-            return fig
+            ax1 = fig.add_subplot(121)  # First subplot for bar chart
+            ax1.bar(categories, counts, color=['green', 'red'])
+            ax1.set_title("Comparison of Valid and Invalid URLs")
+            ax1.set_ylabel("Counts")
+            ax1.set_xlabel("URL Types")
 
-        fig = plot_bar_chart(total_url_data)
-        canvas = FigureCanvasTkAgg(fig, master=graph_frame)
-        canvas.draw()
-        canvas.get_tk_widget().place(x=10,y=20)
+            # Fetch daily data for the total URLs shortened per day
+            cursor.execute("""
+                SELECT strftime('%Y-%m-%d', Daily) AS FormattedDate, 
+                    SUM(ValidUrls + InvalidUrls) AS TotalUrls
+                FROM TotalUrlShortened
+                GROUP BY FormattedDate
+                ORDER BY FormattedDate
+            """)
+            daily_data = cursor.fetchall()
 
+            # Separate the data into dates and total URL counts
+            dates = [row[0] for row in daily_data]
+            total_urls = [row[1] for row in daily_data]
+
+            # Create the line graph
+            ax2 = fig.add_subplot(122)  # Second subplot for line chart
+            ax2.plot(dates, total_urls, label='Total URLs Shortened', color='blue', marker='o')
+            ax2.set_title("Total URLs Shortened per Day")
+            ax2.set_xlabel("Date")
+            ax2.set_ylabel("Total URLs")
+            ax2.legend()
+
+            # Display the graphs
+            canvas = FigureCanvasTkAgg(fig, master=graph_frame)
+            canvas.draw()
+            canvas.get_tk_widget().pack(pady=15,padx=25)
+
+        except sqlite3.Error as e:
+            print(f"Error fetching data from the database: {e}")
+
+        finally:
+            if 'conn' in locals():
+                conn.close()
+
+        # Close button
         close_button = customtkinter.CTkButton(
             graph_window,
             text="Close",
