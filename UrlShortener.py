@@ -58,7 +58,7 @@ def MainTab():
                 cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET InvalidUrls = InvalidUrls + 1
                 ''',(month_key, daily_key, 1))
                 connection.commit()
@@ -77,7 +77,7 @@ def MainTab():
                 cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET ValidUrls = ValidUrls + 1
                 ''',(month_key, daily_key, 1))
                 connection.commit()
@@ -98,7 +98,7 @@ def MainTab():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET InvalidUrls = InvalidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -969,7 +969,7 @@ def BlankPage2():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET InvalidUrls = InvalidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -988,7 +988,7 @@ def BlankPage2():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET ValidUrls = ValidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -1010,7 +1010,7 @@ def BlankPage2():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET InvalidUrls = InvalidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -1029,7 +1029,7 @@ def BlankPage2():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET ValidUrls = ValidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -1336,7 +1336,7 @@ def BlankPage3():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET InvalidUrls = InvalidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -1355,7 +1355,7 @@ def BlankPage3():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET ValidUrls = ValidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -1377,7 +1377,7 @@ def BlankPage3():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET InvalidUrls = InvalidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -1396,7 +1396,7 @@ def BlankPage3():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET ValidUrls = ValidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -1418,7 +1418,7 @@ def BlankPage3():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET InvalidUrls = InvalidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
@@ -1437,7 +1437,7 @@ def BlankPage3():
             cursor.execute('''
                             INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
                             VALUES (?, ?, ?)
-                            ON CONFLICT(Monthly)
+                            ON CONFLICT(Daily)
                             DO UPDATE SET ValidUrls = ValidUrls + 1
                 ''',(month_key, daily_key, 1))
             connection.commit()
