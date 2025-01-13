@@ -980,7 +980,7 @@ def BlankPage2():
             entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
             entry_shortened1.configure(text_color="white")
             entry_shortened1.configure(state="disabled")  # Make read-only
-            print("The first URL has been shortened successfully." + Style.RESET_ALL)
+            print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
             cursor.execute('''
                         INSERT INTO History (Timestamps, LongUrl, ShortUrl)
                         VALUES (?, ?, ?)
