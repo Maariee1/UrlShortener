@@ -39,6 +39,7 @@ def MainTab():
     def generateLink():
         orig_url = entry.get().strip()
         month_key = datetime.now().strftime("%Y-%m")
+        daily_key = datetime.now().strftime("%Y-%m-%d")
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         if orig_url:
@@ -55,11 +56,11 @@ def MainTab():
                             VALUES (?, ?, ?)
                 ''',(timestamp, "InvalidUrl", "No output"))
                 cursor.execute('''
-                            INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
-                            VALUES (?, ?)
-                            ON CONFLICT(Timestamps)
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
                             DO UPDATE SET InvalidUrls = InvalidUrls + 1
-                ''',(month_key, 1))
+                ''',(month_key, daily_key, 1))
                 connection.commit()
 
             elif orig_url in shortener.shortened_urls:
@@ -74,11 +75,12 @@ def MainTab():
                             VALUES (?, ?, ?)
                 ''',(timestamp, orig_url, " "))
                 cursor.execute('''
-                            INSERT INTO TotalUrlShortened (Timestamps, ValidUrls)
-                            VALUES (?, ?)
-                            ON CONFLICT(Timestamps)
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
                             DO UPDATE SET ValidUrls = ValidUrls + 1
-                ''',(month_key, 1))
+                ''',(month_key, daily_key, 1))
+                connection.commit()
                 shortened_url = entry1.get().strip()
                 short_url(shortened_url, timestamp)
                 
@@ -94,11 +96,11 @@ def MainTab():
                         VALUES (?, ?, ?)
             ''',(timestamp, "InvalidUrl", "No output"))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET InvalidUrls = InvalidUrls + 1
-            ''',(month_key, 1))
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET InvalidUrls = InvalidUrls + 1
+                ''',(month_key, daily_key, 1))
             connection.commit()
 
     def short_url(shortened_url, timestamp):
@@ -129,6 +131,13 @@ def MainTab():
         else:
             webbrowser.open(short_url)
             print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
+            cursor.execute('''
+                        INSERT INTO Analytics (ShortUrl, Clicks)
+                        VALUES (?, ?)
+                        ON CONFLICT(ShortUrl)
+                        DO UPDATE SET Clicks = Clicks + 1
+            ''',(short_url, 1))
+            connection.commit()
 
 #------------------ANALYTICS OR URL------------------------------#  
 
@@ -911,6 +920,7 @@ def BlankPage2():
         orig_url = entry2.get().strip()
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         month_key = datetime.now().strftime("%Y-%m")
+        daily_key = datetime.now().strftime("%Y-%m-%d")
 
         error_message1 = shortener.shorten_link(orig_urll)
         if error_message1:
@@ -925,11 +935,11 @@ def BlankPage2():
                         VALUES (?, ?, ?)
             ''',(timestamp, "InvalidUrl", "No output"))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET InvalidUrls = InvalidUrls + 1
-            ''',(month_key, 1))
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET InvalidUrls = InvalidUrls + 1
+                ''',(month_key, daily_key, 1))
             connection.commit()
             
         elif orig_urll in shortener.shortened_urls:
@@ -944,11 +954,12 @@ def BlankPage2():
                         VALUES (?, ?, ?)
             ''',(timestamp, orig_urll, " "))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, ValidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET ValidUrls = ValidUrls + 1
-            ''',(month_key, 1))
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET ValidUrls = ValidUrls + 1
+                ''',(month_key, daily_key, 1))
+            connection.commit()
             shortened_url = entry_shortened1.get().strip()
             short_url(shortened_url, timestamp)
 
@@ -965,11 +976,11 @@ def BlankPage2():
                         VALUES (?, ?, ?)
             ''',(timestamp, "InvalidUrl", "No output"))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET InvalidUrls = InvalidUrls + 1
-            ''',(month_key, 1))
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET InvalidUrls = InvalidUrls + 1
+                ''',(month_key, daily_key, 1))
             connection.commit()
             
         elif orig_url in shortener.shortened_urls:
@@ -984,11 +995,12 @@ def BlankPage2():
                         VALUES (?, ?, ?)
             ''',(timestamp, orig_url, " "))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, ValidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET ValidUrls = ValidUrls + 1
-            ''',(month_key, 1))
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET ValidUrls = ValidUrls + 1
+                ''',(month_key, daily_key, 1))
+            connection.commit()
             shortened_url = entry_shortened2.get().strip()
             short_url2(shortened_url, timestamp)
 
@@ -1069,6 +1081,13 @@ def BlankPage2():
         else:
             webbrowser.open(short_urll)
             print(Fore.GREEN + f"Opening link: {short_urll}" + Style.RESET_ALL)
+            cursor.execute('''
+                        INSERT INTO Analytics (ShortUrl, Clicks)
+                        VALUES (?, ?)
+                        ON CONFLICT(ShortUrl)
+                        DO UPDATE SET Clicks = Clicks + 1
+            ''',(short_urll, 1))
+            connection.commit()
 
         # Validate and open the second link
         if not short_url or not is_valid_url(short_url):
@@ -1079,6 +1098,13 @@ def BlankPage2():
         else:
             webbrowser.open(short_url)
             print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
+            cursor.execute('''
+                        INSERT INTO Analytics (ShortUrl, Clicks)
+                        VALUES (?, ?)
+                        ON CONFLICT(ShortUrl)
+                        DO UPDATE SET Clicks = Clicks + 1
+            ''',(short_url, 1))
+            connection.commit()
 
     # FIRST SET OF BOXES
     label1 = customtkinter.CTkLabel(window,
@@ -1261,6 +1287,7 @@ def BlankPage3():
         orig_url3 = entryP33.get().strip()
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         month_key = datetime.now().strftime("%Y-%m")
+        daily_key = datetime.now().strftime("%Y-%m-%d")
 
         error_message1 = shortener.shorten_link(orig_url1)
         if error_message1:
@@ -1275,11 +1302,11 @@ def BlankPage3():
                         VALUES (?, ?, ?)
             ''',(timestamp, "InvalidUrl", "No output"))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET InvalidUrls = InvalidUrls + 1
-            ''',(month_key, 1))
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET InvalidUrls = InvalidUrls + 1
+                ''',(month_key, daily_key, 1))
             connection.commit()
 
         elif orig_url1 in shortener.shortened_urls:
@@ -1294,13 +1321,14 @@ def BlankPage3():
                         VALUES (?, ?, ?)
             ''',(timestamp, orig_url1, " "))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, ValidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET ValidUrls = ValidUrls + 1
-            ''',(month_key, 1))
-            shortened_url = entryC31.get().strip()
-            short_url1(shortened_url, timestamp)
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET ValidUrls = ValidUrls + 1
+                ''',(month_key, daily_key, 1))
+            connection.commit()
+            shortened_url1 = entryC31.get().strip()
+            short_url1(shortened_url1, timestamp)
 
         error_message2 = shortener.shorten_link(orig_url2)
         if error_message2:
@@ -1315,11 +1343,11 @@ def BlankPage3():
                         VALUES (?, ?, ?)
             ''',(timestamp, "InvalidUrl", "No output"))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET InvalidUrls = InvalidUrls + 1
-            ''',(month_key, 1))
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET InvalidUrls = InvalidUrls + 1
+                ''',(month_key, daily_key, 1))
             connection.commit()
 
         elif orig_url2 in shortener.shortened_urls:
@@ -1334,13 +1362,14 @@ def BlankPage3():
                         VALUES (?, ?, ?)
             ''',(timestamp, orig_url2, " "))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, ValidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET ValidUrls = ValidUrls + 1
-            ''',(month_key, 1))
-            shortened_url = entryC32.get().strip()
-            short_url2(shortened_url, timestamp)
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET ValidUrls = ValidUrls + 1
+                ''',(month_key, daily_key, 1))
+            connection.commit()
+            shortened_url2 = entryC32.get().strip()
+            short_url2(shortened_url2, timestamp)
 
         error_message3 = shortener.shorten_link(orig_url3)
         if error_message3:
@@ -1355,11 +1384,11 @@ def BlankPage3():
                         VALUES (?, ?, ?)
             ''',(timestamp, "InvalidUrl", "No output"))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, InvalidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET InvalidUrls = InvalidUrls + 1
-            ''',(month_key, 1))
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, InvalidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET InvalidUrls = InvalidUrls + 1
+                ''',(month_key, daily_key, 1))
             connection.commit()
 
         elif orig_url3 in shortener.shortened_urls:
@@ -1374,26 +1403,27 @@ def BlankPage3():
                         VALUES (?, ?, ?)
             ''',(timestamp, orig_url3, " "))
             cursor.execute('''
-                        INSERT INTO TotalUrlShortened (Timestamps, ValidUrls)
-                        VALUES (?, ?)
-                        ON CONFLICT(Timestamps)
-                        DO UPDATE SET ValidUrls = ValidUrls + 1
-            ''',(month_key, 1))
-            shortened_url = entryC33.get().strip()
-            short_url3(shortened_url, timestamp)
+                            INSERT INTO TotalUrlShortened (Monthly, Daily, ValidUrls)
+                            VALUES (?, ?, ?)
+                            ON CONFLICT(Monthly)
+                            DO UPDATE SET ValidUrls = ValidUrls + 1
+                ''',(month_key, daily_key, 1))
+            connection.commit()
+            shortened_url3 = entryC33.get().strip()
+            short_url3(shortened_url3, timestamp)
 
 
-    def short_url1(shortened_url, timestamp):
+    def short_url1(shortened_url1, timestamp):
         cursor.execute('''
                         UPDATE History
                         SET ShortUrl = ?
                         WHERE Timestamps = ?
-                ''',(shortened_url, timestamp))
+                ''',(shortened_url1, timestamp))
         connection.commit()
 
-    def short_url2(shortened_url, timestamp):
+    def short_url2(shortened_url2, timestamp):
         cursor.execute('''
-                        UPDATE History+6
+                        UPDATE History
                         SET ShortUrl = ?
                         WHERE ROWID = (
                         SELECT ROWID
@@ -1402,10 +1432,10 @@ def BlankPage3():
                         ORDER BY ROWID ASC
                         LIMIT 1 OFFSET 1
         )
-                ''',(shortened_url, timestamp))
+                ''',(shortened_url2, timestamp))
         connection.commit()
 
-    def short_url3(shortened_url, timestamp):
+    def short_url3(shortened_url3, timestamp):
         cursor.execute('''
                         UPDATE History
                         SET ShortUrl = ?
@@ -1416,7 +1446,7 @@ def BlankPage3():
                         ORDER BY ROWID ASC
                         LIMIT 1 OFFSET 2
         )
-                ''',(shortened_url, timestamp))
+                ''',(shortened_url3, timestamp))
         connection.commit()
 
     def pasteText31():
@@ -1478,6 +1508,13 @@ def BlankPage3():
         else:
             webbrowser.open(short_url1)
             print(Fore.GREEN + f"Opening link: {short_url1}" + Style.RESET_ALL)
+            cursor.execute('''
+                        INSERT INTO Analytics (ShortUrl, Clicks)
+                        VALUES (?, ?)
+                        ON CONFLICT(ShortUrl)
+                        DO UPDATE SET Clicks = Clicks + 1
+            ''',(short_url1, 1))
+            connection.commit()
 
         # Validate and open the second link
         if not short_url2 or not is_valid_url(short_url2):
@@ -1488,6 +1525,13 @@ def BlankPage3():
         else:
             webbrowser.open(short_url2)
             print(Fore.GREEN + f"Opening link: {short_url2}" + Style.RESET_ALL)
+            cursor.execute('''
+                        INSERT INTO Analytics (ShortUrl, Clicks)
+                        VALUES (?, ?)
+                        ON CONFLICT(ShortUrl)
+                        DO UPDATE SET Clicks = Clicks + 1
+            ''',(short_url2, 1))
+            connection.commit()
 
         # Validate and open the third link
         if not short_url3 or not is_valid_url(short_url3):
@@ -1498,6 +1542,13 @@ def BlankPage3():
         else:
             webbrowser.open(short_url3)
             print(Fore.GREEN + f"Opening link: {short_url3}" + Style.RESET_ALL)
+            cursor.execute('''
+                        INSERT INTO Analytics (ShortUrl, Clicks)
+                        VALUES (?, ?)
+                        ON CONFLICT(ShortUrl)
+                        DO UPDATE SET Clicks = Clicks + 1
+            ''',(short_url3, 1))
+            connection.commit()
     
     #FIRST PASTE LINK SET
     labelP31 = customtkinter.CTkLabel(window,
