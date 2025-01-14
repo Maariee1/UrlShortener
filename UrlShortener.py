@@ -172,9 +172,40 @@ def MainTab():
 
 
 #------------------ANALYTICS OR URL------------------------------#  
+    def delete_all_history():
+        db_path = 'Analytics.db'
+        try:
+            # Confirmation dialog
+            confirm = messagebox.askyesno(
+                title="Confirm Delete",
+                message="Are you sure you want to delete all history? This action cannot be undone."
+            )
+            if not confirm:
+                return
+
+            # Connect to the database
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+
+            # Delete all records from the History table
+            cursor.execute("DELETE FROM History")
+            conn.commit()
+
+            # Clear the history_table in the UI
+            for row in history_table.get_children():
+                history_table.delete(row)
+
+            messagebox.showinfo(title="Success", message="All history has been deleted successfully.")
+        except sqlite3.Error as e:
+            print(f"Error deleting data: {e}")
+            messagebox.showerror(title="Error", message="An error occurred while deleting history.")
+        finally:
+            if 'conn' in locals():
+                conn.close()
 
     def show_analytics():
         # Create the analytics window
+
         analytics_window = Toplevel(window)
         analytics_window.title("URL Analytics")
         analytics_window.geometry("1200x700")
@@ -313,6 +344,18 @@ def MainTab():
             command=show_graph  # Ensure `show_graph` is defined elsewhere
         )
         graph_button.pack(side=LEFT, padx=5)
+
+        delete_all_button = customtkinter.CTkButton(
+            button_frame,
+            text="Delete All",
+            font=('Georgia', 14, 'bold'),
+            corner_radius=300,
+            fg_color='#D32F2F',
+            text_color='#FBF4C4',
+            hover_color='#B71C1C',
+            command=delete_all_history
+        )
+        delete_all_button.pack(side=LEFT, padx=5)
 
 #------------------GRAPH FOR INVALID AND VALID URL PER MONTH------------------------------#      
   
