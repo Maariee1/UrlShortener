@@ -794,7 +794,7 @@ def AboutUsButton():
                                            height=60,
                                            corner_radius=50, 
                                            fg_color="#FBF4C4",
-                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+                                           font=("Bookman Old Style", 25,'bold'))  
     Label_for_box1.place(relx=0.5, rely=0.5, anchor="center")
     #Left Big Box
     about_us_frame3 = customtkinter.CTkFrame(window, 
@@ -810,7 +810,7 @@ def AboutUsButton():
                                            width=290, 
                                            height=60,
                                            corner_radius=50, 
-                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+                                           font=("Bookman Old Style", 25,'bold')) 
     Label_for_box3.place(x=50, y=1)
     
     Label_for_box3 = customtkinter.CTkLabel(about_us_frame3,
@@ -827,7 +827,7 @@ def AboutUsButton():
                                            height=60,
                                            corner_radius=50, 
                                            justify='left',
-                                           font=("Bookman Old Style", 14,'bold'))  # Optional, to customize font and size
+                                           font=("Bookman Old Style", 14,'bold'))  
     Label_for_box3.place(x=0, y=55)
     Label_for_box3 = customtkinter.CTkLabel(about_us_frame3,
                                            text="This system includes additional features such as the \n"
@@ -843,7 +843,7 @@ def AboutUsButton():
                                            height=60,
                                            corner_radius=50, 
                                            justify='left',
-                                           font=("Bookman Old Style", 13,'bold'))  # Optional, to customize font and size
+                                           font=("Bookman Old Style", 13,'bold'))  
     Label_for_box3.place(x=0, y=220)
     
     about_us_frame4 = customtkinter.CTkFrame(window, 
@@ -897,7 +897,6 @@ def AboutUsButton():
                                            font=("Bookman Old Style", 11,'bold'))  
     Label_for_box4.place(x=30, y=310)
     
-    #Middle Big Box
     about_us_frame5 = customtkinter.CTkFrame(window, 
                                             width=300, 
                                             height=250, 
@@ -918,7 +917,7 @@ def AboutUsButton():
                                             height=10,
                                             corner_radius=50, 
                                             justify='left',
-                                        font=("Bookman Old Style", 14,'bold'))  # Optional, to customize font and size
+                                        font=("Bookman Old Style", 14,'bold'))  
     Label_for_box5.place(x=15, y=70)
 
     Label_for_box6 = customtkinter.CTkLabel(about_us_frame5,
@@ -928,7 +927,7 @@ def AboutUsButton():
                                             height=10,
                                             corner_radius=50, 
                                             justify='left',
-                                        font=("Bookman Old Style", 27,'bold'))  # Optional, to customize font and size
+                                        font=("Bookman Old Style", 27,'bold'))  
     Label_for_box6.place(x=55, y=20)
     
     Back_button = customtkinter.CTkButton(
@@ -965,7 +964,6 @@ def BlankPage2():
     for widget in window.winfo_children():
         widget.destroy()
         
-    #Syntax to add image using Pil or pillow
     image = Image.open("GURL LOGO.png")
     image = image.resize((150, 120))
     photo = ImageTk.PhotoImage(image)
@@ -976,7 +974,6 @@ def BlankPage2():
     label.place(x=535, y=595)
     label.image = photo
     
-    # Gurl and quote
     image = Image.open("GURL QUOTE.png")
     image = image.resize((1290, 450))
     photo = ImageTk.PhotoImage(image)
@@ -996,11 +993,11 @@ def BlankPage2():
 
         error_message1 = shortener.shorten_link(orig_urll)
         if error_message1:
-            entry_shortened1.configure(state="normal")  # Temporarily enable editing
+            entry_shortened1.configure(state="normal")  
             entry_shortened1.delete(0, END)
             entry_shortened1.insert(0, "Error: The URL provided is invalid.")
             entry_shortened1.configure(text_color="red")
-            entry_shortened1.configure(state="disabled")  # Make read-only
+            entry_shortened1.configure(state="disabled")  
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
             cursor.execute('''
                         INSERT INTO History (Timestamps, LongUrl, ShortUrl)
@@ -1015,11 +1012,11 @@ def BlankPage2():
             connection.commit()
             
         elif orig_urll in shortener.shortened_urls:
-            entry_shortened1.configure(state="normal")  # Temporarily enable editing
+            entry_shortened1.configure(state="normal")  
             entry_shortened1.delete(0, END)
             entry_shortened1.insert(0, shortener.shortened_urls[orig_urll])
             entry_shortened1.configure(text_color="white")
-            entry_shortened1.configure(state="disabled")  # Make read-only
+            entry_shortened1.configure(state="disabled")  
             print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
             cursor.execute('''
                         INSERT INTO History (Timestamps, LongUrl, ShortUrl)
@@ -1037,11 +1034,11 @@ def BlankPage2():
 
         error_message = shortener.shorten_link(orig_url)
         if error_message:
-            entry_shortened2.configure(state="normal")  # Temporarily enable editing
+            entry_shortened2.configure(state="normal")  
             entry_shortened2.delete(0, END)
             entry_shortened2.insert(0, "Error: The URL provided is invalid.")
             entry_shortened2.configure(text_color="red")
-            entry_shortened2.configure(state="disabled")  # Make read-only
+            entry_shortened2.configure(state="disabled")  
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
             cursor.execute('''
                         INSERT INTO History (Timestamps, LongUrl, ShortUrl)
@@ -1056,11 +1053,11 @@ def BlankPage2():
             connection.commit()
             
         elif orig_url in shortener.shortened_urls:
-            entry_shortened2.configure(state="normal")  # Temporarily enable editing
+            entry_shortened2.configure(state="normal")  
             entry_shortened2.delete(0, END)
             entry_shortened2.insert(0, shortener.shortened_urls[orig_url])
             entry_shortened2.configure(text_color="white")
-            entry_shortened2.configure(state="disabled")  # Make read-only
+            entry_shortened2.configure(state="disabled")  
             print(Fore.GREEN + "The second URL has been shortened successfully." + Style.RESET_ALL)
             cursor.execute('''
                         INSERT INTO History (Timestamps, LongUrl, ShortUrl)
@@ -1115,7 +1112,7 @@ def BlankPage2():
             entry_shortened1.configure(text_color="white")
             print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            entry_shortened1.configure(text_color="red")  # Keep error messages red
+            entry_shortened1.configure(text_color="red")  
             print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)
 
     def copyText2():
@@ -1125,30 +1122,28 @@ def BlankPage2():
             entry_shortened2.configure(text_color="white")
             print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            entry_shortened2.configure(text_color="red")  # Keep error messages red
+            entry_shortened2.configure(text_color="red")  
             print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)
             
     def is_valid_url(url):
-        # Regex pattern for validating a URL
         pattern = re.compile(
-            r'^(https?://)?'  # http:// or https:// (optional)
-            r'(www\.)?'       # www. (optional)
-            r'[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}'  # Domain
-            r'(:[0-9]+)?'     # Port (optional)
-            r'(/.*)?$'        # Path (optional)
+            r'^(https?://)?'  
+            r'(www\.)?'       
+            r'[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}'  
+            r'(:[0-9]+)?'     
+            r'(/.*)?$'        
         )
         return pattern.match(url) is not None
 
-    # OpenLink1 with URL validation
     def OpenLink():
-        short_urll = entry_shortened1.get().strip()  # First link
-        short_url = entry_shortened2.get().strip()   # Second link
+        short_urll = entry_shortened1.get().strip()  
+        short_url = entry_shortened2.get().strip()   
 
         # Validate and open the first link
         if not short_urll or not is_valid_url(short_urll):
             entry_shortened1.delete(0, END)
             entry_shortened1.insert(0, "Error: The URL is invalid or empty.")
-            entry_shortened1.configure(text_color="red")  # Make the error message red in the GUI
+            entry_shortened1.configure(text_color="red")  
             print(Fore.RED + "Error: The first URL is invalid or empty." + Style.RESET_ALL)
         else:
             webbrowser.open(short_urll)
@@ -1178,7 +1173,6 @@ def BlankPage2():
             ''',(short_url, 1))
             connection.commit()
 
-    # FIRST SET OF BOXES
     label1 = customtkinter.CTkLabel(window,
         font=('Consolas', 17, 'bold'),
         text='Paste your link below',
@@ -1363,11 +1357,11 @@ def BlankPage3():
 
         error_message1 = shortener.shorten_link(orig_url1)
         if error_message1:
-            entryC31.configure(state="normal")  # Enable editing
+            entryC31.configure(state="normal")  
             entryC31.delete(0, END)
             entryC31.insert(0, "Error: The URL provided is invalid.")
-            entryC31.configure(text_color="red")  # Make error text red
-            entryC31.configure(state="disabled")  # Disable editing
+            entryC31.configure(text_color="red")  
+            entryC31.configure(state="disabled")  
             print(Fore.RED + "Error: The first URL provided is invalid." + Style.RESET_ALL)
             cursor.execute('''
                         INSERT INTO History (Timestamps, LongUrl, ShortUrl)
@@ -1382,11 +1376,11 @@ def BlankPage3():
             connection.commit()
 
         elif orig_url1 in shortener.shortened_urls:
-            entryC31.configure(state="normal")  # Enable editing
+            entryC31.configure(state="normal")  
             entryC31.delete(0, END)
             entryC31.insert(0, shortener.shortened_urls[orig_url1])
             entryC31.configure(text_color="white")  
-            entryC31.configure(state="disabled")  # Disable editing
+            entryC31.configure(state="disabled")  
             print(Fore.GREEN + "The first URL has been shortened successfully." + Style.RESET_ALL)
             cursor.execute('''
                         INSERT INTO History (Timestamps, LongUrl, ShortUrl)
@@ -1407,7 +1401,7 @@ def BlankPage3():
             entryC32.configure(state="normal")
             entryC32.delete(0, END)
             entryC32.insert(0, "Error: The URL provided is invalid.")
-            entryC32.configure(text_color="red")  # Make error text red
+            entryC32.configure(text_color="red")  
             entryC32.configure(state="disabled")
             print(Fore.RED + "Error: The second URL provided is invalid." + Style.RESET_ALL)
             cursor.execute('''
@@ -1448,7 +1442,7 @@ def BlankPage3():
             entryC33.configure(state="normal")
             entryC33.delete(0, END)
             entryC33.insert(0, "Error: The URL provided is invalid.")
-            entryC33.configure(text_color="red")  # Make error text red
+            entryC33.configure(text_color="red")  
             entryC33.configure(state="disabled")
             print(Fore.RED + "Error: The third URL provided is invalid." + Style.RESET_ALL)
             cursor.execute('''
@@ -1543,7 +1537,7 @@ def BlankPage3():
             entryC31.configure(text_color="white")
             print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            entryC31.configure(text_color="red")  # Keep error messages red
+            entryC31.configure(text_color="red")  
             print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)
          
     def copyText32():
@@ -1553,7 +1547,7 @@ def BlankPage3():
             entryC32.configure(text_color="white")
             print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            entryC32.configure(text_color="red")  # Keep error messages red
+            entryC32.configure(text_color="red")  
             print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)       
 
     def copyText33():
@@ -1563,7 +1557,7 @@ def BlankPage3():
             entryC33.configure(text_color="white")
             print(Fore.GREEN + "The shortened URL has been copied to the clipboard." + Style.RESET_ALL)
         else:
-            entryC33.configure(text_color="red")  # Keep error messages red
+            entryC33.configure(text_color="red")  
             print(Fore.RED + "Error: There is no valid shortened URL to copy." + Style.RESET_ALL)       
         
     def OpenLink3():
@@ -1727,8 +1721,6 @@ def BlankPage3():
         height=50, 
         command = generateLink3)
     generateLink_btn.place(x=200,y=550)
-
-    #SHORTENED LINK
     
     #FIRST COPY LINK SET
     labelC31 = customtkinter.CTkLabel(window,
