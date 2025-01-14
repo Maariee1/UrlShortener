@@ -300,18 +300,6 @@ def MainTab():
         )
         graph_button.pack(side=LEFT, padx=5)
 
-        delete_all_button = customtkinter.CTkButton(
-            button_frame,
-            text="Delete All",
-            font=('Georgia', 14, 'bold'),
-            corner_radius=300,
-            fg_color='#D32F2F',
-            text_color='#FBF4C4',
-            hover_color='#B71C1C',
-            command=delete_all_history
-        )
-        delete_all_button.pack(side=LEFT, padx=5)
-
 #------------------GRAPH FOR INVALID AND VALID URL PER MONTH------------------------------#      
   
     def show_graph():
