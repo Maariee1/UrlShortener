@@ -170,52 +170,16 @@ def MainTab():
             if 'conn' in locals():
                 conn.close()
 
-
 #------------------ANALYTICS OR URL------------------------------#  
-    def delete_all_history():
-        db_path = 'Analytics.db'
-        try:
-            # Confirmation dialog
-            confirm = messagebox.askyesno(
-                title="Confirm Delete",
-                message="Are you sure you want to delete all history? This action cannot be undone."
-            )
-            if not confirm:
-                return
-
-            # Connect to the database
-            conn = sqlite3.connect(db_path)
-            cursor = conn.cursor()
-
-            # Delete all records from the History table
-            cursor.execute("DELETE FROM History")
-            conn.commit()
-
-            # Clear the history_table in the UI
-            for row in history_table.get_children():
-                history_table.delete(row)
-
-            messagebox.showinfo(title="Success", message="All history has been deleted successfully.")
-        except sqlite3.Error as e:
-            print(f"Error deleting data: {e}")
-            messagebox.showerror(title="Error", message="An error occurred while deleting history.")
-        finally:
-            if 'conn' in locals():
-                conn.close()
-
     def show_analytics():
-        # Create the analytics window
-
         analytics_window = Toplevel(window)
         analytics_window.title("URL Analytics")
         analytics_window.geometry("1200x700")
         analytics_window.configure(bg="#FBF4C4")
 
-        # Create the main frame
         main_frame = Frame(analytics_window, bg="#FFF3E0", relief="solid", borderwidth=2)
         main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
-        # Add label for URL History
         history_label = Label(
             main_frame,
             text="URL History and Clicks",
@@ -225,7 +189,6 @@ def MainTab():
         )
         history_label.pack(anchor="w", pady=3)
 
-        # Create a frame for URL History table
         history_frame = Frame(main_frame, bg="#FFF3E0", relief="solid", borderwidth=2)
         history_frame.pack(fill="both", expand=True, padx=3, pady=3)
 
@@ -269,11 +232,9 @@ def MainTab():
             if 'conn' in locals():
                 conn.close()
 
-        # Create a frame for Total Shortened URLs table
         total_frame = Frame(main_frame, bg="#FFF3E0", relief="solid", borderwidth=2)
         total_frame.pack(fill="both", expand=True, padx=3, pady=3)
 
-        # Add label for Total Shortened URLs
         total_label = Label(
             total_frame,
             text="Total Shortened URLs",
@@ -283,7 +244,6 @@ def MainTab():
         )
         total_label.pack(anchor="w", pady=3)
 
-        # Add Total Shortened URLs table
         total_table = ttk.Treeview(
             total_frame,
             columns=("Daily", "Valid URLs", "Invalid URLs"),
@@ -301,7 +261,6 @@ def MainTab():
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
 
-            # Fetch Total Shortened URLs for the Daily key
             cursor.execute("SELECT Daily, ValidUrls, InvalidUrls FROM TotalUrlShortened ORDER BY Daily DESC")
             total_data = cursor.fetchall()
             for row in total_data:
@@ -314,12 +273,9 @@ def MainTab():
             if 'conn' in locals():
                 conn.close()
 
-
-        # Create a frame for buttons
         button_frame = Frame(analytics_window, bg="#FBF4C4")
         button_frame.pack(pady=10)
 
-        # Add Close button
         close_button = customtkinter.CTkButton(
             button_frame,
             text="Close",
@@ -332,7 +288,6 @@ def MainTab():
         )
         close_button.pack(side=LEFT, padx=5)
 
-        # Add Graph button
         graph_button = customtkinter.CTkButton(
             button_frame,
             text="View Graphs",
@@ -394,11 +349,9 @@ def MainTab():
             total_valid = result[0] if result[0] is not None else 0
             total_invalid = result[1] if result[1] is not None else 0
 
-            # Data for the bar chart
             categories = ['Valid URLs', 'Invalid URLs']
             counts = [total_valid, total_invalid]
 
-            # Create the bar chart
             fig = Figure(figsize=(13, 5), dpi=100)
 
             ax1 = fig.add_subplot(121)  # First subplot for bar chart
@@ -429,7 +382,6 @@ def MainTab():
             ax2.set_ylabel("Total URLs")
             ax2.legend()
 
-            # Display the graphs
             canvas = FigureCanvasTkAgg(fig, master=graph_frame)
             canvas.draw()
             canvas.get_tk_widget().pack(pady=15,padx=25)
@@ -441,7 +393,6 @@ def MainTab():
             if 'conn' in locals():
                 conn.close()
 
-        # Close button
         close_button = customtkinter.CTkButton(
             graph_window,
             text="Close",
@@ -643,7 +594,7 @@ def MainTab():
 
 #------------------------------TERMS AND CONDITION PAGE----------------------------------#
 def TermButton():  
-    for widget in window.winfo_children():  # Clear existing widgets
+    for widget in window.winfo_children():  
         widget.destroy()
     
     #Quote of GURL    
@@ -907,7 +858,6 @@ def AboutUsButton():
                                            font=("Bookman Old Style", 13,'bold'))  # Optional, to customize font and size
     Label_for_box3.place(x=0, y=220)
     
-    #Right Big Box
     about_us_frame4 = customtkinter.CTkFrame(window, 
                                             width=420, 
                                             height=400, 
@@ -920,7 +870,7 @@ def AboutUsButton():
                                            width=290, 
                                            height=60,
                                            corner_radius=50, 
-                                           font=("Bookman Old Style", 25,'bold'))  # Optional, to customize font and size
+                                           font=("Bookman Old Style", 25,'bold'))  
     Label_for_box4.place(x=55, y=1)
     Label_for_box4 = customtkinter.CTkLabel(about_us_frame4,
                                            text="We are a team of second-year Information Technology\n"
@@ -943,7 +893,7 @@ def AboutUsButton():
                                            height=60,
                                            corner_radius=50, 
                                            justify='left',
-                                           font=("Bookman Old Style", 13,'bold'))  # Optional, to customize font and size
+                                           font=("Bookman Old Style", 13,'bold'))  
     Label_for_box4.place(x=0, y=55)
     Label_for_box4 = customtkinter.CTkLabel(about_us_frame4,
                                            text="Meet the team:\n" 
@@ -956,7 +906,7 @@ def AboutUsButton():
                                            height=60,
                                            corner_radius=50, 
                                            justify='left',
-                                           font=("Bookman Old Style", 11,'bold'))  # Optional, to customize font and size
+                                           font=("Bookman Old Style", 11,'bold'))  
     Label_for_box4.place(x=30, y=310)
     
     #Middle Big Box
