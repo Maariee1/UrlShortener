@@ -123,21 +123,53 @@ def MainTab():
 
     def OpenLink():
         short_url = entry1.get().strip()
+
+        # Check if the URL is valid
         if not short_url or not is_valid_url(short_url):
             entry1.delete(0, END)
             entry1.insert(0, "Error: The URL is invalid or empty.")
-            entry1.configure(text_color="red")  # Make the error message red in the GUI
-            print(Fore.RED + "Error: The URL is invalid or empty." + Style.RESET_ALL)
-        else:
+            entry1.configure(text_color="red")  # Display error in red in GUI
+            print("Error: The URL is invalid or empty.")
+            return
+
+        try:
+            # Open the short URL in the browser
             webbrowser.open(short_url)
-            print(Fore.GREEN + f"Opening link: {short_url}" + Style.RESET_ALL)
+            print(f"Opening link: {short_url}")
+
+            # Connect to the database
+            conn = sqlite3.connect('Analytics.db')
+            cursor = conn.cursor()
+
+            # Update the clicks count for the short URL
             cursor.execute('''
-                        INSERT INTO Analytics (ShortUrl, Clicks)
-                        VALUES (?, ?)
-                        ON CONFLICT(ShortUrl)
-                        DO UPDATE SET Clicks = Clicks + 1
-            ''',(short_url, 1))
-            connection.commit()
+                INSERT INTO Analytics (ShortUrl, Clicks)
+                VALUES (?, 1)
+                ON CONFLICT(ShortUrl)
+                DO UPDATE SET Clicks = Clicks + 1
+            ''', (short_url,))
+            conn.commit()
+
+            # Fetch the updated click count
+            cursor.execute("SELECT Clicks FROM Analytics WHERE ShortUrl = ?", (short_url,))
+            clicks = cursor.fetchone()[0]
+
+            # Display the updated click count in the GUI
+            entry1.delete(0, END)
+            entry1.insert(0, f"URL opened! Total clicks: {clicks}")
+            entry1.configure(text_color="green")
+            print(f"Total clicks for {short_url}: {clicks}")
+
+        except sqlite3.Error as e:
+            print(f"Database error: {e}")
+            entry1.delete(0, END)
+            entry1.insert(0, "Error: Unable to update clicks.")
+            entry1.configure(text_color="red")
+
+        finally:
+            if 'conn' in locals():
+                conn.close()
+
 
 #------------------ANALYTICS OR URL------------------------------#  
 
@@ -155,7 +187,7 @@ def MainTab():
         # Add label for URL History
         history_label = Label(
             main_frame,
-            text="URL History",
+            text="URL History and Clicks",
             font=('Georgia', 16, 'bold'),
             bg="#FFF3E0",
             fg="#3E2723"
@@ -167,14 +199,44 @@ def MainTab():
         history_frame.pack(fill="both", expand=True, padx=3, pady=3)
 
         # Add URL History table
-        history_table = ttk.Treeview(history_frame, columns=("Timestamp", "Long URL", "Short URL"), show="headings")
+        history_table = ttk.Treeview(
+            history_frame,
+            columns=("Timestamp", "Long URL", "Short URL", "Clicks"),
+            show="headings"
+        )
         history_table.heading("Timestamp", text="Timestamp")
         history_table.heading("Long URL", text="Long URL")
         history_table.heading("Short URL", text="Short URL")
+        history_table.heading("Clicks", text="Clicks")
         history_table.column("Timestamp", width=200, anchor="center")
-        history_table.column("Long URL", width=600, anchor="center")
+        history_table.column("Long URL", width=400, anchor="center")
         history_table.column("Short URL", width=400, anchor="center")
+        history_table.column("Clicks", width=100, anchor="center")
         history_table.pack(fill="both", expand=True, pady=3)
+
+        # Fetch data from the database
+        db_path = 'Analytics.db'
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+
+            # Fetch URL History along with click counts
+            cursor.execute("""
+                SELECT h.Timestamps, h.LongUrl, h.ShortUrl, a.Clicks
+                FROM History h
+                LEFT JOIN Analytics a ON h.ShortUrl = a.ShortUrl
+                ORDER BY h.Timestamps DESC
+            """)
+            history_data = cursor.fetchall()
+            for row in history_data:
+                history_table.insert('', 'end', values=row)
+
+        except sqlite3.Error as e:
+            print(f"Error fetching data: {e}")
+
+        finally:
+            if 'conn' in locals():
+                conn.close()
 
         # Create a frame for Total Shortened URLs table
         total_frame = Frame(main_frame, bg="#FFF3E0", relief="solid", borderwidth=2)
@@ -191,7 +253,11 @@ def MainTab():
         total_label.pack(anchor="w", pady=3)
 
         # Add Total Shortened URLs table
-        total_table = ttk.Treeview(total_frame, columns=("Daily", "Valid URLs", "Invalid URLs"), show="headings")
+        total_table = ttk.Treeview(
+            total_frame,
+            columns=("Daily", "Valid URLs", "Invalid URLs"),
+            show="headings"
+        )
         total_table.heading("Daily", text="Daily")
         total_table.heading("Valid URLs", text="Valid URLs")
         total_table.heading("Invalid URLs", text="Invalid URLs")
@@ -200,17 +266,9 @@ def MainTab():
         total_table.column("Invalid URLs", width=300, anchor="center")
         total_table.pack(fill="both", expand=True, pady=3)
 
-        # Fetch data from the database
-        db_path = 'Analytics.db'
         try:
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-
-            # Fetch URL History
-            cursor.execute("SELECT Timestamps, LongUrl, ShortUrl FROM History ORDER BY Timestamps DESC")
-            history_data = cursor.fetchall()
-            for row in history_data:
-                history_table.insert('', 'end', values=row)
 
             # Fetch Total Shortened URLs for the Daily key
             cursor.execute("SELECT Daily, ValidUrls, InvalidUrls FROM TotalUrlShortened ORDER BY Daily DESC")
@@ -219,11 +277,12 @@ def MainTab():
                 total_table.insert('', 'end', values=row)
 
         except sqlite3.Error as e:
-            print(f"Error fetching data: {e}")
+            print(f"Error fetching total shortened URLs: {e}")
 
         finally:
             if 'conn' in locals():
                 conn.close()
+
 
         # Create a frame for buttons
         button_frame = Frame(analytics_window, bg="#FBF4C4")
