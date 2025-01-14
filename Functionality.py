@@ -1,20 +1,19 @@
-import requests # To send HTTP requests to TinyURL API
+import requests 
 import os 
-import webbrowser # Opens webpages in the default browser 
-import re # Provides regular executions for URL Validation 
-from concurrent.futures import ThreadPoolExecutor # Allows multiple URLs to be shortened all at the same time
+import webbrowser  
+import re 
+from concurrent.futures import ThreadPoolExecutor 
 
 os.system('cls')
 
-# Backend Code
 def is_valid_url(url):
-    # Regex pattern for validating a URL
+    
     pattern = re.compile(
-        r'^(https?://)?'  # http:// or https:// (optional)
-        r'(www\.)?'       # www. (optional)
-        r'[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}'  # Domain
-        r'(:[0-9]+)?'     # Port (optional)
-        r'(/.*)?$'        # Path (optional)
+        r'^(https?://)?'  
+        r'(www\.)?'       
+        r'[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}'  
+        r'(:[0-9]+)?'     
+        r'(/.*)?$'       
     )
     return pattern.match(url) is not None
 
@@ -22,8 +21,8 @@ class URLShortener:
     def __init__(self, api_key):
         self.api_key = api_key
         self.base_url = "https://api.tinyurl.com/create"
-        self.shortened_urls = {}  # Store valid original and shortened URLs
-        self.invalid_urls = []    # Store invalid URLs
+        self.shortened_urls = {}  
+        self.invalid_urls = []    
 
     def shorten_link(self, orig_url):
         if not is_valid_url(orig_url):
@@ -46,7 +45,7 @@ class URLShortener:
             if 'data' in data and 'tiny_url' in data['data']:
                 short_link = data['data']['tiny_url']
                 self.shortened_urls[orig_url] = short_link
-                return None  # No error
+                return None  
             else:
                 error_message = data.get('errors', 'Unknown error occurred.')
                 return f"Error for {orig_url}: {error_message}"
@@ -60,14 +59,14 @@ class URLShortener:
         
         for result in results:
             if result:
-                print(result)  # Print error messages
+                print(result)  
 
         self.display_shortened_urls()
 
     def display_shortened_urls(self):
         if self.shortened_urls:
-            os.makedirs("URL Shortener", exist_ok=True)  # Ensure the directory exists
-            with open("URL Shortener/URLs.txt", "a") as file:  # Append new links
+            os.makedirs("URL Shortener", exist_ok=True)  
+            with open("URL Shortener/URLs.txt", "a") as file:  
                 for orig_url, short_url in self.shortened_urls.items():
                     line = f"{orig_url} ==>> {short_url}\n"
                     file.write(line)
